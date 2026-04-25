@@ -38,13 +38,14 @@
             border: 2px solid #333; cursor: pointer; transition: 0.3s; 
             background: #222; object-fit: cover;
         }
-        .profile-pic.active { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.4); }
+        /* Aura (neon) removida, apenas muda a cor da borda sutilmente */
+        .profile-pic.active { border-color: #00ffcc; }
 
         /* MENU DROPDOWN */
         .dropdown { 
             display: none; position: absolute; top: 50px; right: 0; 
             background: #121212; border: 1px solid #333; border-radius: 8px; 
-            padding: 15px; width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+            padding: 15px; width: 220px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
             z-index: 200;
         }
         .dropdown p { margin: 0 0 10px 0; font-size: 13px; color: #fff; }
@@ -57,6 +58,15 @@
         .menu-btn:hover { background: #00ffcc; color: #000; border-color: #00ffcc; }
         .logout-btn { color: #ff4444; border-color: #3a1111; }
         .logout-btn:hover { background: #ff4444; color: #fff; }
+        
+        /* BOTÃO GOOGLE ESTILIZADO */
+        .google-btn {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #fff; color: #333; border: none; font-weight: bold;
+            padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-size: 12px;
+            transition: 0.2s;
+        }
+        .google-btn:hover { background-color: #f1f1f1; color: #000; }
 
         /* ÁREA PRINCIPAL CENTRALIZADA */
         .main-view { 
@@ -64,9 +74,9 @@
             justify-content: center; background-color: #050505;
         }
         
-        /* CHAT CONTAINER (AGORA OCUPA O CENTRO DA TELA) */
+        /* CHAT CONTAINER (CENTRO DA TELA) */
         #chat-side { 
-            width: 100%; max-width: 1000px; /* Limita a largura para ficar elegante */
+            width: 100%; max-width: 1000px; 
             display: flex; flex-direction: column; 
             background-color: #0a0a0a; 
             border-left: 1px solid #1f1f1f;
@@ -134,7 +144,15 @@
                 {% else %}
                     <p>Modo Visitante Ativo</p>
                     <hr>
-                    <button class="menu-btn" onclick="location.href='/login'">Entrar com Google</button>
+                    <button class="google-btn" onclick="location.href='/login'">
+                        <svg style="width:16px; height:16px;" viewBox="0 0 48 48">
+                            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                        </svg>
+                        Entrar com Google
+                    </button>
                 {% endif %}
             </div>
         </div>
@@ -151,10 +169,8 @@
     </main>
 
     <script>
-        // Lida com o usuário injetado pelo Flask
         const activeUser = {{ user|tojson|safe if user else 'null' }};
 
-        // Atualiza a interface caso o usuário esteja logado
         if (activeUser) {
             document.getElementById('avatar-img').src = activeUser.picture;
             document.getElementById('avatar-img').classList.add('active');
@@ -162,13 +178,11 @@
             document.getElementById('user-status').style.color = "#00ffcc";
         }
 
-        // Função para abrir/fechar o menu de perfil
         function toggleDropdown() {
             const menu = document.getElementById('user-dropdown');
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Fechar menu ao clicar fora
         window.onclick = function(event) {
             if (!event.target.matches('#avatar-img')) {
                 const dropdowns = document.getElementsByClassName("dropdown");
@@ -181,11 +195,9 @@
             }
         }
 
-        // Truque Mestre para as crases no Regex não quebrarem o Canvas
         const tick = String.fromCharCode(96);
         const tripleTick = tick + tick + tick;
 
-        // Enviar mensagens para o backend
         async function processSend() {
             const input = document.getElementById('user-msg');
             const msg = input.value.trim();
@@ -194,7 +206,6 @@
             const msgDiv = document.getElementById('messages');
             const userLabel = activeUser ? activeUser.given_name : "VISITANTE";
 
-            // MOSTRAR MSG DO USUÁRIO
             msgDiv.innerHTML += `
                 <div class="msg-card">
                     <span class="label-user">${userLabel}:</span>
@@ -203,7 +214,6 @@
             input.value = '';
             msgDiv.scrollTop = msgDiv.scrollHeight;
 
-            // LOADING DA ANK
             const loadID = 'ank-load-' + Date.now();
             msgDiv.innerHTML += `
                 <div id="${loadID}" class="msg-card">
@@ -213,7 +223,6 @@
             msgDiv.scrollTop = msgDiv.scrollHeight;
 
             try {
-                // Fetch na API do Flask
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -225,12 +234,10 @@
 
                 const rawResponse = data.response;
 
-                // FORMATAR RESPOSTA NO CHAT (Texto limpo e blocos de código)
                 let formattedText = rawResponse
-                    .replace(/</g, "&lt;").replace(/>/g, "&gt;") // Escapar tags html pra não quebrar a UI
-                    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); // Converte negrito
+                    .replace(/</g, "&lt;").replace(/>/g, "&gt;") 
+                    .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
                 
-                // Extrai blocos de código markdown para div bonitas no chat
                 const displayRegex = new RegExp(tripleTick + "(?:html|css|js|python)?\\s*([\\s\\S]*?)" + tripleTick, "g");
                 formattedText = formattedText.replace(displayRegex, '<div class="code-snippet">$1</div>');
 
