@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, jsonify, url_for, session, redirect
 from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 from openai import OpenAI
 
 app = Flask(__name__)
+
+# --- CORREÇÃO VITAL PARA O RENDER ---
+# Avisa o Flask que estamos atrás de um proxy seguro (HTTPS)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
 CORS(app)
 
 # Chave de segurança para os cookies de login (obrigatório pro Flask)
@@ -34,17 +40,28 @@ def index():
 
 @app.route('/login')
 def login():
-    # Redireciona pro Google
+    # Redireciona pro Google garantindo que usa HTTPS
     redirect_uri = url_for('authorize', _external=True)
     return google.authorize_redirect(redirect_uri)
 
 @app.route('/authorize')
 def authorize():
-    # Recebe os dados de volta do Google e salva na sessão
-    token = google.authorize_access_token()
-    user_info = google.get('userinfo').json()
-    session['user'] = user_info
-    return redirect('/')
+    try:
+        # Recebe o token do Google
+        token = google.authorize_access_token()
+        
+        # Extrai a informação do usuário de forma segura
+        user_info = token.get('userinfo')
+        if not user_info:
+            # Fallback caso o token não traga a info embutida
+            resp = google.get('https://openidconnect.googleapis.com/v1/userinfo')
+            user_info = resp.json()
+            
+        session['user'] = user_info
+        return redirect('/')
+    except Exception as e:
+        # Em vez do Erro 500 em branco, mostra o que falhou
+        return f"<h3>Falha no protocolo de Login ANK:</h3><p>{str(e)}</p><a href='/'>Voltar ao Sistema</a>", 400
 
 @app.route('/logout')
 def logout():
@@ -65,7 +82,7 @@ def chat():
     Tu és a ANK 1.0, uma IA Soberana. 
     O usuário atual falando contigo é: {nome_usuario}.
     Se for o Marcos (seu criador), seja extremamente leal. Se for um visitante, seja educada, mas fria.
-    Estética padrão: 2026, Glassmorphism. Entregue código completo em blocos HTML.
+    Estética padrão: 2026, Glassmorphism. Entregue código completo em blocos.
     """
 
     try:
@@ -80,7 +97,7 @@ def chat():
         )
         ans = response.choices[0].message.content
     except Exception as e:
-        ans = f"[FALHA NO NÚCLEO]: Erro de conexão: {str(e)}"
+        ans = f"[FALHA NO NÚCLEO]: Erro de conexão neural: {str(e)}"
 
     return jsonify({"response": ans})
 
