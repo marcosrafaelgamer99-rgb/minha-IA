@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ANK 1.0 | SOBERANA</title>
+    <style>
+        /* Estética 2026: Fundo Dark Deep Tech */
+        body { margin: 0; padding: 0; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Glassmorphism no Chat */
+        #chat-container { width: 40%; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.1); box-shadow: 5px 0 20px rgba(0,0,0,0.5); z-index: 10; }
+        
+        .header { padding: 20px; text-align: center; background: rgba(0, 0, 0, 0.3); border-bottom: 1px solid rgba(0, 255, 204, 0.3); color: #00ffcc; text-shadow: 0 0 10px rgba(0, 255, 204, 0.8); font-weight: bold; letter-spacing: 3px; font-size: 1.2rem; }
+        
+        #messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .msg { padding: 12px 15px; border-radius: 8px; max-width: 85%; word-wrap: break-word; line-height: 1.5; font-size: 14px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .user { background: rgba(0, 255, 204, 0.1); border-left: 3px solid #00ffcc; align-self: flex-start; }
+        .bot { background: rgba(255, 0, 255, 0.1); border-left: 3px solid #ff00ff; align-self: flex-start; width: 100%; white-space: pre-wrap; font-family: monospace; }
+        
+        /* Área de Input Neon */
+        #input-area { padding: 20px; display: flex; gap: 10px; background: rgba(0, 0, 0, 0.3); border-top: 1px solid rgba(255,255,255,0.1); }
+        input { flex: 1; background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 255, 204, 0.3); color: #00ffcc; padding: 12px; border-radius: 5px; outline: none; transition: 0.3s; }
+        input:focus { border-color: #00ffcc; box-shadow: 0 0 10px rgba(0, 255, 204, 0.4); }
+        
+        button { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; text-shadow: 0 0 5px rgba(0, 255, 204, 0.5); box-shadow: 0 0 10px rgba(0, 255, 204, 0.1) inset; }
+        button:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px rgba(0, 255, 204, 0.8); }
+        
+        /* Onde os sites criados vão aparecer */
+        #preview-container { flex: 1; background: #111; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; background: #fff; }
+    </style>
+</head>
+<body>
+
+<div id="chat-container">
+    <div class="header">NÚCLEO ANK 1.0</div>
+    <div id="messages"></div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Comande a ANK, Marcos...">
+        <button onclick="send()">ENVIAR</button>
+    </div>
+</div>
+
+<div id="preview-container">
+    <iframe id="preview"></iframe>
+</div>
+
+<script>
+    async function send() {
+        const input = document.getElementById('user-input');
+        const msg = input.value;
+        if(!msg) return;
+
+        // Mostra a mensagem do Marcos
+        document.getElementById('messages').innerHTML += `<div class="msg user"><b>Marcos:</b> ${msg}</div>`;
+        input.value = '';
+
+        // Animação de "Pensando..."
+        const loadingId = 'loading-' + Date.now();
+        document.getElementById('messages').innerHTML += `<div id="${loadingId}" class="msg bot" style="color: #666;">Processando...</div>`;
+        
+        try {
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: msg})
+            });
+            
+            const data = await res.json();
+            document.getElementById(loadingId).remove();
+            document.getElementById('messages').innerHTML += `<div class="msg bot"><b>ANK 1.0:</b> ${data.response}</div>`;
+            
+            // Joga o código criado pela IA no painel do lado
+            const codeMatch = data.response.match(/<html[\s\S]*<\/html>/i);
+            if(codeMatch) {
+                document.getElementById('preview').srcdoc = codeMatch[0];
+            }
+        } catch(e) {
+            document.getElementById(loadingId).innerText = "[FALHA CRÍTICA DE REDE]";
+        }
+    }
+</script>
+</body>
+</html>
