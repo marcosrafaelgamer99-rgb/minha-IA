@@ -3,12 +3,11 @@ from flask_cors import CORS
 import os
 from openai import OpenAI
 
-# Inicialização do App - O Gunicorn vai procurar por este "app"
+# Inicialização do App para o Gunicorn
 app = Flask(__name__)
 CORS(app)
 
 # --- NÚCLEO SOBERANO: CEREBRAS ---
-# Pega a chave das Environment Variables do Render para total segurança
 CEREBRAS_API_KEY = os.environ.get("CEREBRAS_API_KEY")
 
 client = OpenAI(
@@ -35,9 +34,9 @@ def chat():
     """
 
     try:
-        # Chamada ultra-rápida via Cerebras
+        # CORREÇÃO: Usando o modelo 8B gratuito e ultra-rápido
         response = client.chat.completions.create(
-            model="llama3.1-70b", 
+            model="llama3.1-8b", 
             messages=[
                 {"role": "system", "content": instrucoes},
                 {"role": "user", "content": user_msg}
@@ -52,6 +51,5 @@ def chat():
     return jsonify({"response": ans})
 
 if __name__ == '__main__':
-    # Configuração de porta para rodar localmente ou no Render
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
