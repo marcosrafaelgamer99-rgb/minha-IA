@@ -1,190 +1,60 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>ANK 1.0 // COMMAND CENTER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>ANK 1.0 | SOBERANA</title>
     <style>
-        :root { --bg: #020202; --accent: #00ff88; --glass: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08); }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: #e0e0e0; font-family: 'Inter', sans-serif; height: 100vh; display: flex; overflow: hidden; }
-
-        /* SIDEBAR */
-        .sidebar { width: 300px; background: #080808; border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 15px; }
-        .brand { font-family: 'Orbitron'; color: var(--accent); font-weight: 900; font-size: 1.2rem; text-align: center; letter-spacing: 5px; padding: 20px 0; border-bottom: 1px solid var(--border); }
-        .new-chat { background: var(--accent); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; margin: 20px 0; cursor: pointer; transition: 0.3s; width: 100%; }
-
-        /* VIEWPORT */
-        .viewport { flex: 1; display: flex; flex-direction: column; background: radial-gradient(circle at center, #0a0a0a 0%, #020202 100%); }
-        #chat-flow { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 30px; }
-
-        /* MESSAGES */
-        .msg { max-width: 85%; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .user { align-self: flex-end; background: #111; padding: 15px 25px; border-radius: 20px 20px 4px 20px; border: 1px solid var(--border); }
-        .ank { align-self: flex-start; width: 100%; }
-        .ank .label { font-family: 'Orbitron'; font-size: 0.65rem; color: var(--accent); margin-bottom: 8px; display: block; }
-        .ank .content { background: var(--glass); padding: 25px; border-radius: 12px; border: 1px solid var(--border); line-height: 1.6; }
-
-        /* BLOCO DE CÓDIGO PREMIUM */
-        .code-container {
-            background: #0d0d0d;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            margin: 20px 0;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #161616;
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .copy-group { display: flex; gap: 10px; }
-        .btn-action {
-            background: rgba(255,255,255,0.05);
-            color: #ccc;
-            border: 1px solid #333;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-action:hover {
-            background: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
-        }
-        pre { padding: 20px; overflow-x: auto; background: transparent !important; }
-        code { font-family: 'JetBrains Mono', monospace !important; font-size: 0.9rem !important; }
-
-        /* INPUT */
-        .input-zone { padding: 30px 50px; display: flex; justify-content: center; }
-        .input-capsule { width: 100%; max-width: 900px; background: #0d0d0d; border: 1px solid var(--border); border-radius: 15px; display: flex; align-items: center; padding: 5px 20px; }
-        input { flex: 1; background: transparent; border: none; color: #fff; padding: 15px; outline: none; font-size: 1rem; }
-        .send-btn { background: var(--accent); border: none; width: 45px; height: 45px; border-radius: 12px; cursor: pointer; color: #000; }
+        body { background: #0a0a0a; color: #00ffcc; font-family: sans-serif; display: flex; height: 100vh; margin: 0; }
+        #chat-container { flex: 1; display: flex; flex-direction: column; border-right: 1px solid #333; }
+        #messages { flex: 1; overflow-y: auto; padding: 20px; }
+        .msg { margin-bottom: 15px; padding: 10px; border-radius: 5px; background: #1a1a1a; }
+        .user { border-left: 3px solid #00ffcc; }
+        .bot { border-left: 3px solid #ff00ff; white-space: pre-wrap; }
+        #input-area { padding: 20px; display: flex; gap: 10px; }
+        input { flex: 1; background: #222; border: 1px solid #333; color: white; padding: 10px; }
+        button { background: #00ffcc; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        #preview-container { flex: 1; background: white; }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="brand">ANK 1.0</div>
-        <button class="new-chat" onclick="iniciarNovoChat()"><i class="fas fa-plus"></i> NOVO CHAT</button>
-        <div class="chat-list" id="historyList"></div>
+
+<div id="chat-container">
+    <div id="messages"></div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Comande a ANK, Marcos...">
+        <button onclick="send()">ENVIAR</button>
     </div>
+</div>
 
-    <div class="viewport">
-        <header style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
-            <div id="chatTitle" style="font-weight: bold; color: var(--accent);">SESSÃO ATIVA</div>
-            <div style="font-family: 'Orbitron'; font-size: 0.7rem; opacity: 0.5;">SYNDICATE_MODE_ON</div>
-        </header>
-        <div id="chat-flow"></div>
-        <div class="input-zone">
-            <div class="input-capsule">
-                <input type="text" id="userInput" placeholder="Envie uma ordem ao Sindicato..." onkeypress="if(event.key==='Enter') send()">
-                <button class="send-btn" onclick="send()"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
+<div id="preview-container">
+    <iframe id="preview"></iframe>
+</div>
 
-    <script>
-        const flow = document.getElementById('chat-flow');
-        let currentChatId = localStorage.getItem('lastChatId') || "chat_" + Date.now();
+<script>
+    async function send() {
+        const input = document.getElementById('user-input');
+        const msg = input.value;
+        if(!msg) return;
 
-        const renderer = new marked.Renderer();
-        renderer.code = function(code, language) {
-            const validLang = language || 'code';
-            const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-            let previewBtn = '';
-            if(validLang.toLowerCase() === 'html') {
-                previewBtn = `<button class="btn-action" onclick="previewCode(this)" style="background: var(--accent); color: #000;"><i class="fas fa-eye"></i> VISUALIZAR</button>`;
-            }
-            return `
-                <div class="code-container">
-                    <div class="code-header">
-                        <span style="font-size: 0.7rem; color: #888; font-weight: bold;">${validLang.toUpperCase()}</span>
-                        <div class="copy-group">
-                            ${previewBtn}
-                            <button class="btn-action" onclick="copyCode(this)"><i class="far fa-copy"></i> COPIAR</button>
-                        </div>
-                    </div>
-                    <pre><code class="hljs ${validLang}">${escapedCode}</code></pre>
-                </div>
-            `;
-        };
+        document.getElementById('messages').innerHTML += `<div class="msg user"><b>Marcos:</b> ${msg}</div>`;
+        input.value = '';
 
-        marked.setOptions({ renderer: renderer, highlight: (c, l) => hljs.highlightAuto(c).value });
-
-        async function selectChat(id) {
-            currentChatId = id; localStorage.setItem('lastChatId', id);
-            const res = await fetch(`/get_chat/${id}`); const data = await res.json();
-            flow.innerHTML = ""; data.mensagens.forEach(msg => renderMsg(msg.content, msg.role === 'assistant' ? 'ank' : 'user', false));
-            atualizarListaLateral();
+        const res = await fetch('/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: msg})
+        });
+        
+        const data = await res.json();
+        document.getElementById('messages').innerHTML += `<div class="msg bot"><b>ANK 1.0:</b> ${data.response}</div>`;
+        
+        // Tenta extrair código para o iframe
+        const codeMatch = data.response.match(/<html[\s\S]*<\/html>/i);
+        if(codeMatch) {
+            document.getElementById('preview').srcdoc = codeMatch[0];
         }
-
-        async function send() {
-            const input = document.getElementById('userInput'); const msg = input.value.trim(); if(!msg) return;
-            renderMsg(msg, 'user'); input.value = '';
-            const res = await fetch('/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: msg, chat_id: currentChatId}) });
-            const data = await res.json(); renderMsg(data.response, 'ank', true); atualizarListaLateral();
-        }
-
-        function renderMsg(text, type, animate = false) {
-            const div = document.createElement('div'); div.className = `msg ${type}`;
-            if(type === 'user') div.innerHTML = `<div class="content">${text}</div>`;
-            else div.innerHTML = `<span class="label">ANK_REPLY</span><div class="content"></div>`;
-            flow.appendChild(div);
-            const target = div.querySelector('.content');
-            if(animate && type === 'ank') typeWriter(target, text);
-            else if(type === 'ank') target.innerHTML = marked.parse(text);
-            flow.scrollTop = flow.scrollHeight; hljs.highlightAll();
-        }
-
-        function typeWriter(el, text) {
-            let i = 0; function type() {
-                if (i < text.length) { el.innerHTML = marked.parse(text.substring(0, i + 20)); i += 20; flow.scrollTop = flow.scrollHeight; setTimeout(type, 1); }
-                else { el.innerHTML = marked.parse(text); hljs.highlightAll(); }
-            } type();
-        }
-
-        function copyCode(btn) {
-            const code = btn.closest('.code-container').querySelector('code').innerText;
-            navigator.clipboard.writeText(code); btn.innerHTML = '<i class="fas fa-check"></i> OK!';
-            setTimeout(() => btn.innerHTML = '<i class="far fa-copy"></i> COPIAR', 2000);
-        }
-
-        function previewCode(btn) {
-            const code = btn.closest('.code-container').querySelector('code').innerText;
-            const blob = new Blob([code], {type: 'text/html'}); window.open(URL.createObjectURL(blob), '_blank');
-        }
-
-        async function atualizarListaLateral() {
-            const res = await fetch('/get_history'); const chats = await res.json();
-            const list = document.getElementById('historyList'); list.innerHTML = "";
-            Object.keys(chats).reverse().forEach(id => {
-                const item = document.createElement('div'); item.className = 'chat-item';
-                item.style.padding = '10px'; item.style.cursor = 'pointer';
-                item.innerHTML = chats[id].titulo; item.onclick = () => selectChat(id); list.appendChild(item);
-            });
-        }
-
-        function iniciarNovoChat() { currentChatId = "chat_" + Date.now(); flow.innerHTML = ""; atualizarListaLateral(); }
-        selectChat(currentChatId);
-    </script>
+    }
+</script>
 </body>
 </html>

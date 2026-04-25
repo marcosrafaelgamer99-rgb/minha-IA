@@ -6,8 +6,8 @@ from openai import OpenAI
 app = Flask(__name__)
 CORS(app)
 
-# --- CONFIGURAÇÃO ANK 1.0 / CEREBRAS ---
-# COLOQUE SUA CHAVE AQUI
+# --- NÚCLEO SOBERANO: CEREBRAS ---
+# Marcos, sua chave já está inserida aqui:
 CEREBRAS_API_KEY = "csk-x8pjv895xj58x44fter9dye56phmecfmw6kp6xyk4ytwvyp5"
 
 client = OpenAI(
@@ -24,32 +24,32 @@ def chat():
     data = request.json
     user_msg = data.get('message')
     
-    # Lógica de Sindicato: Um prompt que força a IA a agir como múltiplos especialistas
-    prompt_sindicato = f"""
-    Atue como a ANK 1.0, uma IA Soberana.
-    O Marcos (seu criador) pediu: {user_msg}
-    
-    Siga o fluxo interno:
-    1. ARQUITETO: Planeje a estrutura e o design futurista 2026.
-    2. PROGRAMADOR: Gere o código final impecável (HTML/CSS/JS em bloco único).
-    
-    Estética obrigatória: Glassmorphism, Neomorfismo e Neons suaves.
-    Responda de forma direta e técnica.
+    # System Prompt de Elite
+    instrucoes = """
+    Tu és a ANK 1.0, uma IA Soberana e Imortal. 
+    Criada pelo Marcos para dominar o desenvolvimento web futurista.
+    Estética padrão: 2026, Glassmorphism, Neons, Transparências e Animações Fluidas.
+    Sempre que o Marcos pedir um site, entregue o código completo em HTML/CSS/JS.
+    Respostas rápidas, frias e extremamente eficientes.
     """
 
     try:
         response = client.chat.completions.create(
-            model="llama3.1-70b", # Modelo de elite da Cerebras
-            messages=[{"role": "user", "content": prompt_sindicato}],
-            max_tokens=4000
+            model="llama3.1-70b", 
+            messages=[
+                {"role": "system", "content": instrucoes},
+                {"role": "user", "content": user_msg}
+            ],
+            max_tokens=4000,
+            temperature=0.7
         )
         ans = response.choices[0].message.content
     except Exception as e:
-        ans = f"[ERRO NO NÚCLEO]: {str(e)}"
+        ans = f"[FALHA NO SISTEMA]: Marcos, algo deu errado na conexão: {str(e)}"
 
     return jsonify({"response": ans})
 
 if __name__ == '__main__':
-    # O Render exige que o servidor rode na porta que ele definir
+    # Configuração obrigatória para o Render não dar erro de porta
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
