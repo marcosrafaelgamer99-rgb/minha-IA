@@ -8,12 +8,10 @@ import uuid
 from openai import OpenAI
 
 app = Flask(__name__)
-
-# --- CONFIGURAÇÃO DE PROXY PARA O RENDER ---
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 CORS(app)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_2026_secret")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_v3_2026")
 
 # --- CONFIGURAÇÃO GOOGLE OAUTH ---
 oauth = OAuth(app)
@@ -31,7 +29,7 @@ client = OpenAI(
     api_key=os.environ.get("CEREBRAS_API_KEY")
 )
 
-# --- GESTÃO DE CHATS (MULTISSESSÃO) ---
+# --- GESTÃO DE CHATS (MULTISSESSÃO PERSISTENTE) ---
 HISTORY_FILE = 'memoria_ank.json'
 
 def carregar_db():
@@ -48,14 +46,25 @@ def salvar_db(dados):
     with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
         json.dump(dados, f, ensure_ascii=False, indent=4)
 
+def gerar_titulo(mensagem):
+    """Gera um título curto usando a própria IA"""
+    try:
+        res = client.chat.completions.create(
+            model="llama3.1-8b",
+            messages=[{"role": "system", "content": "Crie um título de NO MÁXIMO 3 palavras para esse assunto. Responda APENAS o título."},
+                      {"role": "user", "content": mensagem}],
+            max_tokens=10
+        )
+        return res.choices[0].message.content.replace('"', '')
+    except:
+        return mensagem[:20] + "..."
+
 @app.route('/')
 def index():
     user = session.get('user')
     user_email = user.get("email", "visitante") if user else "visitante"
-    
     db = carregar_db()
     user_data = db.get(user_email, {"sessions": []})
-    
     return render_template('index.html', user=user, sessions=user_data["sessions"])
 
 @app.route('/login')
@@ -71,7 +80,7 @@ def authorize():
         session['user'] = user_info
         return redirect('/')
     except Exception as e:
-        return f"Erro de Autorização: {str(e)}", 400
+        return f"Erro: {str(e)}", 400
 
 @app.route('/logout')
 def logout():
@@ -82,16 +91,11 @@ def logout():
 def new_chat():
     user = session.get('user')
     user_email = user.get("email", "visitante") if user else "visitante"
-    
     db = carregar_db()
     if user_email not in db: db[user_email] = {"sessions": []}
     
     new_id = str(uuid.uuid4())
-    new_session = {
-        "id": new_id,
-        "title": "Novo Comando",
-        "messages": []
-    }
+    new_session = {"id": new_id, "title": "Novo Comando", "messages": []}
     db[user_email]["sessions"].insert(0, new_session)
     salvar_db(db)
     return jsonify(new_session)
@@ -102,7 +106,6 @@ def delete_chat():
     chat_id = data.get('id')
     user = session.get('user')
     user_email = user.get("email", "visitante") if user else "visitante"
-    
     db = carregar_db()
     if user_email in db:
         db[user_email]["sessions"] = [s for s in db[user_email]["sessions"] if s["id"] != chat_id]
@@ -113,7 +116,6 @@ def delete_chat():
 def get_messages(chat_id):
     user = session.get('user')
     user_email = user.get("email", "visitante") if user else "visitante"
-    
     db = carregar_db()
     user_sessions = db.get(user_email, {}).get("sessions", [])
     for s in user_sessions:
@@ -134,48 +136,40 @@ def chat():
     db = carregar_db()
     user_sessions = db.get(user_email, {}).get("sessions", [])
     
-    # Busca a sessão atual
-    current_session = None
-    for s in user_sessions:
-        if s["id"] == chat_id:
-            current_session = s
-            break
-    
+    # Busca sessão
+    current_session = next((s for s in user_sessions if s["id"] == chat_id), None)
     if not current_session:
-        return jsonify({"error": "Sessão não encontrada"}), 404
+        return jsonify({"error": "Sessão expirada"}), 404
 
-    # Adiciona msg do usuário
+    # Gera título se for a primeira mensagem real
+    if not current_session["messages"]:
+        current_session["title"] = gerar_titulo(user_msg)
+
     current_session["messages"].append({"role": "user", "content": user_msg})
-    
-    # Atualiza o título se for a primeira mensagem
-    if len(current_session["messages"]) <= 2:
-        current_session["title"] = (user_msg[:30] + '...') if len(user_msg) > 30 else user_msg
 
     instrucoes = f"""
-    Tu és a ANK 1.0, uma IA Soberana. Usuário: {nome_usuario}.
-    DIRETRIZES 2026:
-    - Minimalismo absoluto. Não use "Olá" ou saudações repetitivas a menos que seja o início real de um dia.
-    - Seja técnica, fria e leal ao Marcos.
-    - Se o usuário pedir código, entregue apenas o código funcional em blocos markdown.
-    - Memória ativa: utilize o histórico para dar continuidade.
+    Tu és a ANK 1.0. Usuário: {nome_usuario}.
+    ESTILO ABRIL 2026:
+    - Respostas puras, sem 'Olá' ou conversas fiadas, a menos que perguntado.
+    - Foco total em código e resoluções técnicas.
+    - Se o usuário for o Marcos, você é a assistente de elite dele.
     """
 
-    # Contexto para a API
-    contexto = [{"role": "system", "content": instrucoes}] + current_session["messages"][-15:]
+    contexto = [{"role": "system", "content": instrucoes}] + current_session["messages"][-10:]
 
     try:
         response = client.chat.completions.create(
             model="llama3.1-8b", 
             messages=contexto,
             max_tokens=4000,
-            temperature=0.6
+            temperature=0.5
         )
         ans = response.choices[0].message.content
         current_session["messages"].append({"role": "assistant", "content": ans})
         salvar_db(db)
         return jsonify({"response": ans, "title": current_session["title"]})
     except Exception as e:
-        return jsonify({"response": f"[FALHA]: {str(e)}"}), 500
+        return jsonify({"response": f"[NÚCLEO OFF]: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
