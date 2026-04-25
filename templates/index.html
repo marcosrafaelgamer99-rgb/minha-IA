@@ -11,11 +11,11 @@
     <style>
         :root {
             --bg: #000000;
-            --sidebar: #030303;
-            --border: #111111;
+            --sidebar: #020202;
+            --border: #0f0f0f;
             --text: #ffffff;
-            --text-dim: #777777;
-            --hover: #080808;
+            --text-neural: #444444; /* Cor de pensamento */
+            --accent: #ffffff;
         }
 
         * { box-sizing: border-box; outline: none; }
@@ -24,51 +24,48 @@
             margin: 0; padding: 0; 
             background-color: var(--bg); 
             color: var(--text); 
-            font-family: 'Geist', 'Inter', sans-serif; 
+            font-family: 'Geist Mono', 'Inter', monospace; 
             display: flex; height: 100vh; overflow: hidden; 
         }
 
-        /* SCROLLBAR 2026 STEALTH */
-        ::-webkit-scrollbar { width: 3px; }
+        /* SCROLLBAR INVISÍVEL */
+        ::-webkit-scrollbar { width: 2px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #111; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #222; }
+        ::-webkit-scrollbar-thumb { background: #111; }
 
-        /* SIDEBAR BRUTALISTA */
+        /* SIDEBAR */
         #sidebar {
             width: 280px;
             background: var(--sidebar);
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            padding: 20px 10px;
+            padding: 30px 15px;
         }
 
-        .sidebar-title {
+        .core-label {
             font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 4px;
-            color: #333;
-            margin-bottom: 30px;
-            padding-left: 10px;
-            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #222;
+            margin-bottom: 40px;
+            font-weight: 900;
         }
 
-        .new-chat-btn {
+        .btn-new {
             background: #fff;
-            border: none;
             color: #000;
-            padding: 12px;
-            border-radius: 4px;
+            border: none;
+            padding: 14px;
+            border-radius: 2px;
             cursor: pointer;
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 25px;
+            font-size: 11px;
+            font-weight: 900;
+            margin-bottom: 30px;
             transition: 0.2s;
         }
-        .new-chat-btn:hover { background: #ccc; }
+        .btn-new:hover { opacity: 0.8; }
 
-        #history-list {
+        #chat-list {
             flex: 1;
             overflow-y: auto;
             display: flex;
@@ -76,147 +73,157 @@
             gap: 2px;
         }
 
-        .history-item {
-            padding: 12px 15px;
-            border-radius: 4px;
+        .chat-item {
+            padding: 14px;
+            font-size: 12px;
+            color: #444;
             cursor: pointer;
-            font-size: 13px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: var(--text-dim);
+            border-radius: 2px;
             transition: 0.1s;
         }
-        .history-item:hover { background: var(--hover); color: #fff; }
-        .history-item.active { background: #080808; color: #fff; font-weight: 600; }
-        .delete-btn { opacity: 0; font-size: 14px; transition: 0.2s; color: #333; }
-        .history-item:hover .delete-btn { opacity: 1; }
-        .delete-btn:hover { color: #ff0000; }
+        .chat-item:hover { background: #050505; color: #fff; }
+        .chat-item.active { background: #080808; color: #fff; border-left: 1px solid #fff; }
+        .del-btn { opacity: 0; font-size: 12px; color: #333; }
+        .chat-item:hover .del-btn { opacity: 1; }
+        .del-btn:hover { color: #ff0000; }
 
-        /* MAIN */
-        #main-container { flex: 1; display: flex; flex-direction: column; background: #000; }
+        /* MAIN AREA */
+        #main { flex: 1; display: flex; flex-direction: column; }
 
-        .top-bar {
-            padding: 15px 30px;
+        .top {
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border);
         }
 
-        .chat-name { font-size: 11px; font-weight: 700; color: #444; letter-spacing: 1px; }
+        .current-session-label { font-size: 10px; font-weight: 900; color: #222; }
 
-        .profile-area { position: relative; display: flex; align-items: center; gap: 15px; }
-        .profile-pic { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #111; cursor: pointer; }
+        .profile-wrap { position: relative; display: flex; align-items: center; gap: 20px; }
+        .avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #111; cursor: pointer; }
         
-        .dropdown {
+        .drop {
             display: none; position: absolute; top: 45px; right: 0;
-            background: #050505; border: 1px solid var(--border); border-radius: 4px;
-            padding: 8px; width: 180px; z-index: 200;
-            box-shadow: 0 10px 30px rgba(0,0,0,1);
+            background: #000; border: 1px solid var(--border);
+            padding: 10px; width: 200px; z-index: 200;
         }
-        .dropdown button {
-            width: 100%; background: transparent; border: none; color: #555;
-            padding: 10px; text-align: left; cursor: pointer; font-size: 11px;
-            transition: 0.2s;
+        .drop button {
+            width: 100%; background: transparent; border: none; color: #444;
+            padding: 10px; text-align: left; cursor: pointer; font-size: 10px;
+            font-weight: 900; transition: 0.2s;
         }
-        .dropdown button:hover { color: #fff; background: #080808; }
+        .drop button:hover { color: #fff; background: #080808; }
 
-        /* CHAT WINDOW */
-        #chat-window {
+        /* MESSAGES */
+        #viewport {
             flex: 1;
             overflow-y: auto;
-            padding: 50px 20%;
+            padding: 60px 20%;
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 50px;
         }
 
-        .row { display: flex; flex-direction: column; animation: entry 0.4s ease-out; }
-        @keyframes entry { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        .msg { display: flex; flex-direction: column; }
+        .header { font-size: 9px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; color: #111; }
+        .assistant .header { color: #333; }
 
-        .role { font-size: 9px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; color: #222; }
-        .ank .role { color: #555; }
+        .body { font-size: 15px; line-height: 1.8; color: #888; transition: 0.3s; }
+        .assistant .body { color: #777; } /* Cor padrão assistant */
+        .body.thinking { color: var(--text-neural); } /* Cor durante a escrita */
+        .body.finalized { color: #ccc; } /* Cor após finalizar */
+        .body b { color: #fff; }
 
-        .content { font-size: 15px; line-height: 1.8; color: #bbb; }
-        .content b { color: #fff; }
+        /* NEURAL LOADING ICON */
+        .loading-orbit {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px solid #444;
+            border-top: 1px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* CODE BOX 2026 */
-        .code-box {
-            margin: 20px 0;
+        /* CODE DESIGN 2026 */
+        .code-container {
+            margin: 25px 0;
             background: #020202;
-            border: 1px solid #111;
-            border-radius: 4px;
+            border: 1px solid #0f0f0f;
             position: relative;
         }
-        .code-header {
+        .code-top {
             padding: 10px 20px;
             background: #050505;
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
-            color: #444;
-            border-bottom: 1px solid #111;
-            font-weight: 700;
+            font-size: 9px;
+            color: #222;
+            font-weight: 900;
+            border-bottom: 1px solid #0f0f0f;
         }
-        .copy-btn {
-            background: transparent; border: 1px solid #222; color: #444;
-            padding: 4px 10px; border-radius: 3px; cursor: pointer;
-            font-size: 9px; text-transform: uppercase;
+        .copy {
+            background: transparent; border: 1px solid #111; color: #333;
+            padding: 4px 10px; cursor: pointer; font-size: 8px;
+            font-weight: 900;
         }
-        .copy-btn:hover { color: #fff; border-color: #444; }
-        pre { margin: 0; padding: 20px; overflow-x: auto; font-size: 13px; }
+        .copy:hover { color: #fff; border-color: #333; }
+        pre { margin: 0; padding: 25px; overflow-x: auto; font-size: 13px; }
 
-        /* INPUT */
-        #input-area { padding: 40px 20%; display: flex; gap: 20px; }
-        #user-msg {
+        /* INPUT AREA */
+        #input-dock { padding: 40px 20%; display: flex; gap: 20px; border-top: 1px solid var(--border); }
+        #msg-in {
             flex: 1; background: transparent; border: 1px solid #111;
-            color: #fff; padding: 16px 25px; border-radius: 4px;
+            color: #fff; padding: 18px 25px; border-radius: 2px;
             font-size: 14px; transition: 0.2s;
         }
-        #user-msg:focus { border-color: #333; }
-        
+        #msg-in:focus { border-color: #222; }
         .send-btn {
             background: #fff; color: #000; border: none;
-            padding: 0 40px; border-radius: 4px; font-weight: 800;
-            cursor: pointer; font-size: 11px; text-transform: uppercase;
+            padding: 0 40px; font-weight: 900; cursor: pointer;
+            font-size: 10px; letter-spacing: 2px;
         }
 
-        /* LOGIN BUTTON GOOGLE */
-        .google-login {
-            display: flex; align-items: center; justify-content: center; gap: 12px;
+        /* GOOGLE BTN */
+        .g-login {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             background: #fff; color: #000; border: none; padding: 12px;
-            width: 100%; border-radius: 4px; font-weight: 700; cursor: pointer;
+            width: 100%; border-radius: 2px; font-weight: 900; cursor: pointer; font-size: 10px;
         }
-
-        .typing { font-size: 10px; color: #222; margin-top: 10px; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
     <aside id="sidebar">
-        <div class="sidebar-title">ANK 1.0_CORE</div>
-        <button class="new-chat-btn" onclick="createNewChat()">+ NEW SESSION</button>
-        <div id="history-list"></div>
+        <div class="core-label">ANK 1.0 // CORE</div>
+        <button class="btn-new" onclick="createNewChat()">+ NOVA SESSÃO</button>
+        <div id="chat-list"></div>
     </aside>
 
-    <main id="main-container">
-        <header class="top-bar">
-            <div class="chat-name" id="current-title">SISTEMA INICIALIZADO</div>
-            <div class="profile-area">
+    <main id="main">
+        <header class="top">
+            <div class="current-session-label" id="active-title">SISTEMA INICIALIZADO</div>
+            <div class="profile-wrap">
                 {% if user %}
-                    <img src="{{ user.picture }}" class="profile-pic" id="p-img" onclick="toggleD()">
+                    <img src="{{ user.picture }}" class="avatar" onclick="toggleD()">
                 {% else %}
-                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic" onclick="toggleD()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="avatar" onclick="toggleD()">
                 {% endif %}
-                <div class="dropdown" id="d">
+                <div class="drop" id="d">
                     {% if user %}
-                        <button onclick="location.href='/logout'">DESCONECTAR</button>
-                        <button onclick="location.href='/login'">ALTERAR CONTA</button>
+                        <button onclick="location.href='/logout'">DESCONECTAR NÚCLEO</button>
+                        <button onclick="location.href='/login'">ALTERAR IDENTIDADE</button>
                     {% else %}
                         <button style="padding: 0;" onclick="location.href='/login'">
-                            <div class="google-login">
-                                <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                            <div class="g-login">
+                                <svg width="14" height="14" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
                                 GOOGLE LOGIN
                             </div>
                         </button>
@@ -225,58 +232,60 @@
             </div>
         </header>
 
-        <div id="chat-window"></div>
+        <div id="viewport"></div>
 
-        <div id="input-area">
-            <input type="text" id="user-msg" placeholder="Transmita dados..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+        <div id="input-dock">
+            <input type="text" id="msg-in" placeholder="Inicie transmissão neural..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
             <button class="send-btn" onclick="send()">EXECUTAR</button>
         </div>
     </main>
 
     <script>
-        let currentId = null;
+        let curId = null;
         const sessions = {{ sessions | tojson | safe }};
-        const win = document.getElementById('chat-window');
-        const list = document.getElementById('history-list');
+        const vp = document.getElementById('viewport');
+        const list = document.getElementById('chat-list');
         const tick = String.fromCharCode(96);
         const triple = tick + tick + tick;
 
         window.onload = () => {
-            renderList();
-            if(sessions.length > 0) loadChat(sessions[0].id, sessions[0].title);
+            renderL();
+            if(sessions.length > 0) loadC(sessions[0].id, sessions[0].title);
         };
 
-        function renderList() {
+        function renderL() {
             list.innerHTML = '';
             sessions.forEach(s => {
-                const div = document.createElement('div');
-                div.className = `history-item ${currentId === s.id ? 'active' : ''}`;
-                div.innerHTML = `
-                    <span style="flex:1" onclick="loadChat('${s.id}', '${s.title}')">${s.title.toUpperCase()}</span>
-                    <span class="delete-btn" onclick="delChat('${s.id}')">✕</span>
+                const d = document.createElement('div');
+                d.className = `chat-item ${curId === s.id ? 'active' : ''}`;
+                d.innerHTML = `
+                    <span style="flex:1" onclick="loadC('${s.id}', '${s.title}')">${s.title}</span>
+                    <span class="del-btn" onclick="delC('${s.id}')">✕</span>
                 `;
-                list.appendChild(div);
+                list.appendChild(d);
             });
         }
 
         async function createNewChat() {
-            const res = await fetch('/new_chat', { method: 'POST' });
+            const r = await fetch('/new_chat', { method: 'POST' });
+            const s = await r.json();
+            curId = s.id;
             location.reload();
         }
 
-        async function loadChat(id, title) {
-            currentId = id;
-            document.getElementById('current-title').innerText = title.toUpperCase();
-            win.innerHTML = '';
-            const res = await fetch(`/get_messages/${id}`);
-            const msgs = await res.json();
-            msgs.forEach(m => display(m.role, m.content, false));
-            renderList();
-            win.scrollTop = win.scrollHeight;
+        async function loadC(id, title) {
+            curId = id;
+            document.getElementById('active-title').innerText = title;
+            vp.innerHTML = '';
+            const r = await fetch(`/get_messages/${id}`);
+            const ms = await r.json();
+            ms.forEach(m => display(m.role, m.content, false));
+            renderL();
+            vp.scrollTop = vp.scrollHeight;
         }
 
-        async function delChat(id) {
-            if(!confirm("ELIMINAR ESTA SESSÃO?")) return;
+        async function delC(id) {
+            if(!confirm("ELIMINAR SESSÃO DEFINITIVAMENTE?")) return;
             await fetch('/delete_chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -293,81 +302,92 @@
         function format(t) {
             let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             s = s.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            const regex = new RegExp(triple + "([a-zA-Z]*)\\n?([\\s\\S]*?)" + triple, "g");
-            return s.replace(regex, (m, lang, code) => {
-                return `<div class="code-box"><div class="code-header"><span>${lang || 'CODE'}</span><button class="copy-btn" onclick="copy(this)">Copy</button></div><pre><code class="language-${lang}">${code.trim()}</code></pre></div>`;
+            const r = new RegExp(triple + "([a-zA-Z]*)\\n?([\\s\\S]*?)" + triple, "g");
+            return s.replace(r, (m, lang, code) => {
+                return `<div class="code-container"><div class="code-top"><span>${lang || 'VOID'}</span><button class="copy" onclick="copy(this)">COPY</button></div><pre><code class="language-${lang}">${code.trim()}</code></pre></div>`;
             });
         }
 
-        function copy(btn) {
-            const code = btn.closest('.code-box').querySelector('code').innerText;
-            navigator.clipboard.writeText(code);
-            btn.innerText = "COPIADO";
-            setTimeout(() => btn.innerText = "COPY", 2000);
+        function copy(b) {
+            const c = b.closest('.code-container').querySelector('code').innerText;
+            navigator.clipboard.writeText(c);
+            b.innerText = "DONE";
+            setTimeout(() => b.innerText = "COPY", 2000);
         }
 
         function display(role, content, animate) {
-            const div = document.createElement('div');
-            div.className = `row ${role === 'user' ? 'user' : 'ank'}`;
-            div.innerHTML = `<div class="role">${role === 'user' ? 'AUTORIDADE' : 'ANK 1.0'}</div><div class="content"></div>`;
-            win.appendChild(div);
-            const cDiv = div.querySelector('.content');
+            const d = document.createElement('div');
+            d.className = `msg ${role === 'user' ? 'user' : 'assistant'}`;
+            d.innerHTML = `<div class="header">${role === 'user' ? 'USER_PROMPT' : 'ANK_CORE_OUTPUT'}</div><div class="body"></div>`;
+            vp.appendChild(d);
+            const b = d.querySelector('.body');
 
             if(animate && role === 'assistant') {
+                b.classList.add('thinking'); // Inicia em cinza (Pensamento)
                 let i = 0;
+                // Adiciona o ícone de carregamento ao lado
+                const loader = document.createElement('span');
+                loader.className = 'loading-orbit';
+                d.querySelector('.header').appendChild(loader);
+
                 function type() {
                     if(i < content.length) {
-                        cDiv.textContent += content.charAt(i);
+                        b.textContent += content.charAt(i);
                         i++;
-                        win.scrollTop = win.scrollHeight;
-                        setTimeout(type, 2);
+                        vp.scrollTop = vp.scrollHeight;
+                        setTimeout(type, 1);
                     } else {
-                        cDiv.innerHTML = format(content);
+                        loader.remove(); // Remove carregamento
+                        b.classList.remove('thinking');
+                        b.classList.add('finalized'); // Torna branco/claro
+                        b.innerHTML = format(content);
                         hljs.highlightAll();
+                        vp.scrollTop = vp.scrollHeight;
                     }
                 }
                 type();
             } else {
-                cDiv.innerHTML = format(content);
+                b.classList.add('finalized');
+                b.innerHTML = format(content);
                 hljs.highlightAll();
             }
         }
 
         async function send() {
-            const input = document.getElementById('user-msg');
-            const msg = input.value.trim();
-            if(!msg) return;
+            const i = document.getElementById('msg-in');
+            const m = i.value.trim();
+            if(!m) return;
 
-            // Se não tiver chat ativo, cria um agora
-            if(!currentId) {
-                const res = await fetch('/new_chat', { method: 'POST' });
-                const sess = await res.json();
-                currentId = sess.id;
+            // AUTO-INIT CHAT
+            if(!curId) {
+                const r = await fetch('/new_chat', { method: 'POST' });
+                const s = await r.json();
+                curId = s.id;
             }
 
-            display('user', msg, false);
-            input.value = '';
+            display('user', m, false);
+            i.value = '';
 
-            const l = document.createElement('div');
-            l.className = 'typing';
-            l.innerText = 'ANK SINTETIZANDO...';
-            win.appendChild(l);
-            win.scrollTop = win.scrollHeight;
+            const load = document.createElement('div');
+            load.className = 'msg assistant';
+            load.innerHTML = `<div class="header">ANK_SINTETIZANDO...<span class="loading-orbit"></span></div>`;
+            vp.appendChild(load);
+            vp.scrollTop = vp.scrollHeight;
 
             const res = await fetch('/chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, chat_id: currentId})
+                body: JSON.stringify({message: m, chat_id: curId})
             });
             const data = await res.json();
-            l.remove();
+            load.remove();
             
-            // Atualiza título na sidebar se for a primeira msg
-            const sessionObj = sessions.find(s => s.id === currentId);
-            if(sessionObj && sessionObj.title === "Novo Comando") {
-                sessionObj.title = data.title;
-                renderList();
-                document.getElementById('current-title').innerText = data.title.toUpperCase();
+            // Atualiza sidebar se necessário
+            const sess = sessions.find(s => s.id === curId);
+            if(sess && (sess.title === "NOVA SESSÃO" || sess.title === "SISTEMA INICIALIZADO")) {
+                sess.title = data.title;
+                renderL();
+                document.getElementById('active-title').innerText = data.title;
             }
 
             display('assistant', data.response, true);

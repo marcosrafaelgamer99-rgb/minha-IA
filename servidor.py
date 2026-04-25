@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 CORS(app)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_v3_2026")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_neural_core_2026")
 
 # --- CONFIGURAÇÃO GOOGLE OAUTH ---
 oauth = OAuth(app)
@@ -29,7 +29,6 @@ client = OpenAI(
     api_key=os.environ.get("CEREBRAS_API_KEY")
 )
 
-# --- GESTÃO DE CHATS (MULTISSESSÃO PERSISTENTE) ---
 HISTORY_FILE = 'memoria_ank.json'
 
 def carregar_db():
@@ -47,17 +46,16 @@ def salvar_db(dados):
         json.dump(dados, f, ensure_ascii=False, indent=4)
 
 def gerar_titulo(mensagem):
-    """Gera um título curto usando a própria IA"""
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": "Crie um título de NO MÁXIMO 3 palavras para esse assunto. Responda APENAS o título."},
+            messages=[{"role": "system", "content": "Resuma esta mensagem em exatamente 2 ou 3 palavras. Seja direto."},
                       {"role": "user", "content": mensagem}],
             max_tokens=10
         )
-        return res.choices[0].message.content.replace('"', '')
+        return res.choices[0].message.content.replace('"', '').upper()
     except:
-        return mensagem[:20] + "..."
+        return mensagem[:20].upper()
 
 @app.route('/')
 def index():
@@ -95,7 +93,7 @@ def new_chat():
     if user_email not in db: db[user_email] = {"sessions": []}
     
     new_id = str(uuid.uuid4())
-    new_session = {"id": new_id, "title": "Novo Comando", "messages": []}
+    new_session = {"id": new_id, "title": "NOVA SESSÃO", "messages": []}
     db[user_email]["sessions"].insert(0, new_session)
     salvar_db(db)
     return jsonify(new_session)
@@ -136,40 +134,38 @@ def chat():
     db = carregar_db()
     user_sessions = db.get(user_email, {}).get("sessions", [])
     
-    # Busca sessão
     current_session = next((s for s in user_sessions if s["id"] == chat_id), None)
     if not current_session:
-        return jsonify({"error": "Sessão expirada"}), 404
+        return jsonify({"error": "Sessão perdida"}), 404
 
-    # Gera título se for a primeira mensagem real
+    # Primeiro título dinâmico
     if not current_session["messages"]:
         current_session["title"] = gerar_titulo(user_msg)
 
     current_session["messages"].append({"role": "user", "content": user_msg})
 
-    instrucoes = f"""
+    system_prompt = f"""
     Tu és a ANK 1.0. Usuário: {nome_usuario}.
-    ESTILO ABRIL 2026:
-    - Respostas puras, sem 'Olá' ou conversas fiadas, a menos que perguntado.
-    - Foco total em código e resoluções técnicas.
-    - Se o usuário for o Marcos, você é a assistente de elite dele.
+    ESTILO: Brutalismo Minimalista. Abril de 2026.
+    Não use saudações amigáveis a menos que seja crucial.
+    Foco técnico absoluto em código e arquitetura de sistemas.
     """
 
-    contexto = [{"role": "system", "content": instrucoes}] + current_session["messages"][-10:]
+    contexto = [{"role": "system", "content": system_prompt}] + current_session["messages"][-12:]
 
     try:
         response = client.chat.completions.create(
             model="llama3.1-8b", 
             messages=contexto,
             max_tokens=4000,
-            temperature=0.5
+            temperature=0.4
         )
         ans = response.choices[0].message.content
         current_session["messages"].append({"role": "assistant", "content": ans})
         salvar_db(db)
         return jsonify({"response": ans, "title": current_session["title"]})
     except Exception as e:
-        return jsonify({"response": f"[NÚCLEO OFF]: {str(e)}"}), 500
+        return jsonify({"response": f"ERRO CRÍTICO: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
