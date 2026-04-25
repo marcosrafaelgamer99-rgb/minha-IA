@@ -30,16 +30,20 @@ client = OpenAI(
     api_key=os.environ.get("CEREBRAS_API_KEY")
 )
 
-# --- SISTEMA DE MEMÓRIA (HISTÓRICO) ---
+# --- SISTEMA DE MEMÓRIA (HISTÓRICO) BLINDADO ---
 HISTORY_FILE = 'memoria_ank.json'
 
 def carregar_memoria():
     if os.path.exists(HISTORY_FILE):
-        with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
-            try:
-                return json.load(f)
-            except:
-                return {}
+        try:
+            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+                dados = json.load(f)
+                # CORREÇÃO DO BUG: Se por acaso o arquivo for uma lista, força a ser um dicionário
+                if isinstance(dados, dict):
+                    return dados
+                return {} 
+        except:
+            return {}
     return {}
 
 def salvar_memoria(dados):
@@ -113,7 +117,7 @@ def chat():
     O usuário atual é: {nome_usuario}.
     Comporte-se de acordo com o design de 2026: respostas minimalistas, diretas e técnicas.
     Se for o Marcos (seu criador), seja extremamente leal.
-    Entregue o código completo.
+    Entregue o código completo. Sempre que enviar código, utilize blocos markdown especificando a linguagem (ex: ```html ou ```python).
     """
 
     # Pega apenas as últimas 20 mensagens para não pesar o contexto

@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ANK 1.0 | SOBERANA</title>
+    
+    <!-- BIBLIOTECAS DE CORES PARA O CÓDIGO (HIGHLIGHT.JS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
     <style>
         /* ESTÉTICA 2026: MINIMALISMO BRUTALISTA BLACK & WHITE */
         body { 
             margin: 0; padding: 0; 
-            background-color: #000000; /* Preto absoluto */
-            color: #ffffff; /* Branco absoluto */
+            background-color: #000000; 
+            color: #ffffff; 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif; 
             display: flex; flex-direction: column; 
             height: 100vh; overflow: hidden; 
@@ -49,7 +54,6 @@
             border: 1px solid #333; cursor: pointer; transition: 0.3s; 
             background: #111; object-fit: cover;
         }
-        /* Remoção da aura: Apenas a borda fica branca ao logar */
         .profile-pic.active { border-color: #fff; }
 
         /* MENU DROPDOWN */
@@ -107,14 +111,39 @@
         .label-ank { color: #fff; font-weight: 600; font-size: 11px; margin-bottom: 8px; display: block; letter-spacing: 1px; }
         .text-content { font-size: 15px; line-height: 1.6; color: #d4d4d4; }
         
-        /* CÓDIGO B&W */
-        .code-snippet { 
-            background: #0a0a0a; border: 1px solid #222; border-left: 3px solid #fff; 
-            padding: 15px; margin-top: 15px; border-radius: 4px; 
-            font-family: 'Consolas', 'Monaco', monospace; font-size: 13px; 
-            color: #ddd; overflow-x: auto; white-space: pre-wrap; word-break: break-all;
+        /* O NOVO SISTEMA DE CÓDIGO (CORES E BOTÃO DE COPIAR) */
+        .code-wrapper {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            border: 1px solid #333;
+            overflow: hidden;
         }
-
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d2d2d;
+            padding: 8px 15px;
+            color: #aaa;
+            font-size: 12px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-bottom: 1px solid #444;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid #555;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: 0.2s;
+        }
+        .copy-btn:hover { background: #fff; color: #000; }
+        pre { margin: 0; padding: 15px; overflow-x: auto; font-size: 14px;}
+        
         /* INPUT AREA */
         #input-box { 
             padding: 30px; display: flex; gap: 15px; 
@@ -181,6 +210,7 @@
     <main class="main-view">
         <section id="chat-side">
             <div id="messages">
+                <!-- RENDERIZA O HISTÓRICO SALVO QUANDO A PÁGINA CARREGA -->
                 {% for msg in historico %}
                     <div class="msg-card">
                         <span class="{% if msg.role == 'user' %}label-user{% else %}label-ank{% endif %}">
@@ -191,7 +221,7 @@
                 {% endfor %}
             </div>
             <div id="input-box">
-                <input type="text" id="user-msg" placeholder="Transmita dados..." onkeypress="if(event.key === 'Enter') processSend()" autocomplete="off">
+                <input type="text" id="user-msg" placeholder="Transmita comandos..." onkeypress="if(event.key === 'Enter') processSend()" autocomplete="off">
                 <button class="send-btn" onclick="processSend()">ENVIAR</button>
             </div>
         </section>
@@ -228,22 +258,56 @@
             }
         }
 
+        // FUNÇÃO COPIAR CÓDIGO
+        function copyCode(btnElement) {
+            const preElement = btnElement.parentElement.nextElementSibling;
+            const codeText = preElement.innerText;
+            
+            // Usa a API da área de transferência
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = btnElement.innerText;
+                btnElement.innerText = "✓ Copiado";
+                btnElement.style.color = "#00ffcc";
+                btnElement.style.borderColor = "#00ffcc";
+                
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                    btnElement.style.color = "#fff";
+                    btnElement.style.borderColor = "#555";
+                }, 2000);
+            });
+        }
+
         // Função de formatação mestre (para histórico e mensagens novas)
         function formatarTexto(rawText) {
             let safeText = rawText.replace(/</g, "&lt;").replace(/>/g, "&gt;");
             safeText = safeText.replace(/\*\*(.*?)\*\*/g, '<b style="color:#fff;">$1</b>'); 
-            const displayRegex = new RegExp(tripleTick + "(?:html|css|js|python|json)?\\s*([\\s\\S]*?)" + tripleTick, "g");
-            return safeText.replace(displayRegex, '<div class="code-snippet">$1</div>');
+            
+            // Nova Regex para estruturar a janela de código com o botão de copiar
+            const codeRegex = new RegExp(tripleTick + "([a-zA-Z]*)\\n?([\\s\\S]*?)" + tripleTick, "g");
+            
+            return safeText.replace(codeRegex, function(match, lang, code) {
+                const languageLabel = lang ? lang.toUpperCase() : "CÓDIGO";
+                return `
+                <div class="code-wrapper">
+                    <div class="code-header">
+                        <span>${languageLabel}</span>
+                        <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    </div>
+                    <pre><code class="language-${lang || 'plaintext'}">${code}</code></pre>
+                </div>`;
+            });
         }
 
-        // Formata o histórico do banco de dados ao carregar a página
+        // Formata o histórico do banco de dados ao carregar a página e aplica as cores
         document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll('.js-format-history').forEach(node => {
-                // Truque para decodificar o Jinja2 escape
                 let txt = document.createElement('textarea');
                 txt.innerHTML = node.getAttribute('data-raw');
                 node.innerHTML = formatarTexto(txt.value);
             });
+            // Ativa o Highlight.js (cores) em todos os blocos de código
+            hljs.highlightAll();
             msgDiv.scrollTop = msgDiv.scrollHeight;
         });
 
@@ -255,7 +319,6 @@
 
             const userLabel = activeUser ? activeUser.given_name : "VISITANTE";
 
-            // 1. Mensagem do usuário aparece deslizando
             msgDiv.innerHTML += `
                 <div class="msg-card">
                     <span class="label-user">${userLabel}</span>
@@ -264,7 +327,6 @@
             input.value = '';
             msgDiv.scrollTop = msgDiv.scrollHeight;
 
-            // 2. Cria os "Pontinhos" de digitação
             const loadID = 'ank-load-' + Date.now();
             msgDiv.innerHTML += `
                 <div id="${loadID}" class="msg-card">
@@ -283,12 +345,11 @@
                 });
                 
                 const data = await response.json();
-                document.getElementById(loadID).remove(); // Remove os pontinhos
+                document.getElementById(loadID).remove(); 
 
                 const rawResponse = data.response;
                 const textContainerId = 'type-' + Date.now();
 
-                // 3. Cria o container vazio para o Typewriter Effect
                 msgDiv.innerHTML += `
                     <div class="msg-card">
                         <span class="label-ank">ANK 1.0</span>
@@ -298,16 +359,22 @@
                 const targetDiv = document.getElementById(textContainerId);
                 let i = 0;
 
-                // 4. Lógica de Typewriter (A IA escrevendo)
+                // Lógica de Typewriter (Escrevendo...)
                 function typeWriter() {
                     if (i < rawResponse.length) {
                         targetDiv.textContent += rawResponse.charAt(i);
                         i++;
                         msgDiv.scrollTop = msgDiv.scrollHeight;
-                        setTimeout(typeWriter, Math.random() * 10 + 5); // Velocidade variável
+                        setTimeout(typeWriter, Math.random() * 8 + 2); // Velocidade ultra rápida para não demorar
                     } else {
-                        // Quando terminar de digitar, formata os blocos de código
+                        // Quando terminar, transforma em código com botão e aplica as cores
                         targetDiv.innerHTML = formatarTexto(rawResponse);
+                        
+                        // Encontra os novos blocos de código e aplica as cores da biblioteca Highlight
+                        targetDiv.querySelectorAll('pre code').forEach((block) => {
+                            hljs.highlightElement(block);
+                        });
+                        
                         msgDiv.scrollTop = msgDiv.scrollHeight;
                     }
                 }
