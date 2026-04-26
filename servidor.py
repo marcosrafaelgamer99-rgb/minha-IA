@@ -8,11 +8,11 @@ import uuid
 from openai import OpenAI
 
 app = Flask(__name__)
-# Garante que o Render use HTTPS para o Google não bloquear
+# Configuração obrigatória para o Render (Proxy Seguro)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 CORS(app)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_2026_final")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_core_soberana_v4_2026")
 
 # --- CONFIGURAÇÃO GOOGLE OAUTH ---
 oauth = OAuth(app)
@@ -24,7 +24,7 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'}
 )
 
-# --- NÚCLEO SOBERANO (CEREBRAS) ---
+# --- NÚCLEO SOBERANO: CEREBRAS ---
 client = OpenAI(
     base_url="https://api.cerebras.ai/v1",
     api_key=os.environ.get("CEREBRAS_API_KEY")
@@ -49,7 +49,7 @@ def gerar_titulo(mensagem):
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": "Cria um título de 2 palavras para este chat. APENAS O TÍTULO."},
+            messages=[{"role": "system", "content": "Resuma a mensagem do utilizador em 2 palavras para um título de chat. Apenas o título."},
                       {"role": "user", "content": mensagem}],
             max_tokens=10
         )
@@ -70,9 +70,13 @@ def login():
 
 @app.route('/authorize')
 def authorize():
-    token = google.authorize_access_token()
-    session['user'] = token.get('userinfo') or google.get('https://openidconnect.googleapis.com/v1/userinfo').json()
-    return redirect('/')
+    try:
+        token = google.authorize_access_token()
+        user_info = token.get('userinfo') or google.get('https://openidconnect.googleapis.com/v1/userinfo').json()
+        session['user'] = user_info
+        return redirect('/')
+    except Exception as e:
+        return f"Erro Crítico de Login: {str(e)}", 400
 
 @app.route('/logout')
 def logout():
@@ -84,6 +88,7 @@ def new_chat():
     user_email = session.get('user', {}).get("email", "visitante")
     db = carregar_db()
     if user_email not in db: db[user_email] = {"sessions": []}
+    
     new_id = str(uuid.uuid4())
     new_sess = {"id": new_id, "title": "NOVA SESSÃO", "messages": []}
     db[user_email]["sessions"].insert(0, new_sess)
@@ -114,6 +119,7 @@ def chat():
     msg, cid = data.get('message'), data.get('chat_id')
     user = session.get('user')
     u_email = user.get("email", "visitante") if user else "visitante"
+    nome_usuario = user.get("given_name", "Visitante") if user else "Visitante"
     
     db = carregar_db()
     sessions = db.get(u_email, {}).get("sessions", [])
@@ -124,17 +130,28 @@ def chat():
     
     sess["messages"].append({"role": "user", "content": msg})
     
+    # INSTRUÇÕES BLINDADAS PARA EVITAR ALUCINAÇÕES MÉDICAS
+    system_prompt = f"""
+    Tu és a ANK 1.0, uma Inteligência Artificial Soberana criada pelo Marcos.
+    ESTILO: Abril de 2026. Minimalista, técnica, precisa e fria.
+    CONTEXTO: Tu NÃO és uma vacina. Tu és um assistente digital de elite focado em código, lógica e soberania de dados.
+    REGRAS:
+    - Se o Marcos falar contigo, sê leal.
+    - Responde de forma direta. Nunca uses saudações genéricas como 'Olá' em todas as frases.
+    - Se o utilizador falar sobre 'Soberana', refere-te sempre ao teu próprio núcleo de IA.
+    """
+
     try:
         response = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": "ANK 1.0 Soberana. Abril 2026. Direta."}] + sess["messages"][-10:],
+            messages=[{"role": "system", "content": system_prompt}] + sess["messages"][-12:],
             max_tokens=4000
         )
         ans = response.choices[0].message.content
         sess["messages"].append({"role": "assistant", "content": ans})
         salvar_db(db)
         return jsonify({"response": ans, "title": sess["title"]})
-    except Exception as e: return jsonify({"response": f"ERRO: {str(e)}"}), 500
+    except Exception as e: return jsonify({"response": f"ERRO NEURAL: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
