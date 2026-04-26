@@ -3,95 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANK 1.0 | SOBERANA</title>
+    <title>ANK 1.0 | SOBERANA WHITE</title>
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
     <style>
         :root {
-            --bg: #000000;
-            --sidebar: #020202;
-            --border: #0d0d0d;
-            --text-main: #ffffff;
-            --text-dim: #333333;
+            --bg: #FFFFFF;
+            --sidebar: #F9F9F9;
+            --border: #EAEAEA;
+            --text-main: #000000;
+            --text-dim: #A0A0A0;
+            --accent: #000000;
             --liquid: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; outline: none; }
         body { 
             margin: 0; padding: 0; background: var(--bg); color: var(--text-main); 
-            font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; 
+            font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; 
         }
 
-        /* PRE-LOADER SOBERANO */
+        /* PRE-LOADER WHITE */
         #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF;
             z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 1s var(--liquid);
+            transition: opacity 0.8s var(--liquid);
         }
         .loader-logo {
             width: 140px; height: 140px; margin-bottom: 30px;
+            filter: invert(1); /* Inverte a logo branca para preta */
             animation: pulseLogo 2s infinite ease-in-out;
         }
         @keyframes pulseLogo {
-            0%, 100% { opacity: 0.1; transform: scale(0.95); }
+            0%, 100% { opacity: 0.2; transform: scale(0.98); }
             50% { opacity: 1; transform: scale(1); }
         }
 
-        /* SIDEBAR BRUTALISTA */
+        /* SIDEBAR LIGHT */
         #sidebar {
             width: 300px; background: var(--sidebar); border-right: 1px solid var(--border);
             display: flex; flex-direction: column; padding: 35px 20px;
         }
-        .logo-nav { width: 50px; margin-bottom: 30px; }
+        .logo-nav { width: 50px; margin-bottom: 30px; filter: invert(1); }
 
         .btn-new {
-            background: #fff; color: #000; border: none; padding: 15px;
-            border-radius: 2px; font-size: 11px; font-weight: 900; cursor: pointer;
+            background: #000; color: #fff; border: none; padding: 15px;
+            border-radius: 6px; font-size: 11px; font-weight: 900; cursor: pointer;
             margin-bottom: 40px; letter-spacing: 1px; transition: 0.3s;
         }
-        .btn-new:hover { background: #ccc; }
+        .btn-new:hover { opacity: 0.8; }
 
         #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
         .chat-item {
-            padding: 14px 18px; border-radius: 2px; font-size: 12px; color: var(--text-dim);
+            padding: 14px 18px; border-radius: 6px; font-size: 12px; color: #666;
             cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s;
         }
-        .chat-item:hover, .chat-item.active { background: #050505; color: #fff; }
-        .del-chat { opacity: 0; color: #222; transition: 0.2s; font-size: 14px; }
+        .chat-item:hover, .chat-item.active { background: #F0F0F0; color: #000; }
+        .del-chat { opacity: 0; color: #CCC; transition: 0.2s; font-size: 14px; }
         .chat-item:hover .del-chat { opacity: 1; }
-        .del-chat:hover { color: #ff0000; }
 
         /* MAIN VIEWPORT */
-        #main { flex: 1; display: flex; flex-direction: column; background: #000; }
+        #main { flex: 1; display: flex; flex-direction: column; background: #FFF; }
         
         .top-bar {
             padding: 25px 45px; display: flex; justify-content: space-between;
             align-items: center; border-bottom: 1px solid var(--border);
         }
-        .header-status { font-size: 9px; font-weight: 900; color: #151515; letter-spacing: 4px; text-transform: uppercase; }
+        .header-status { font-size: 9px; font-weight: 900; color: #CCC; letter-spacing: 4px; text-transform: uppercase; }
 
-        /* PERFIL DROPDOWN */
+        /* PERFIL DROPDOWN LIGHT */
         .profile-area { position: relative; }
         .profile-img { 
             width: 34px; height: 34px; border-radius: 50%; cursor: pointer; 
-            border: 1px solid #111; transition: 0.2s;
+            border: 1px solid var(--border); transition: 0.2s;
         }
-        .profile-img:hover { border-color: #333; }
         
         .profile-dropdown {
             display: none; position: absolute; top: 45px; right: 0;
-            background: #080808; border: 1px solid var(--border);
-            border-radius: 4px; padding: 10px; width: 200px; z-index: 500;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            background: #FFF; border: 1px solid var(--border);
+            border-radius: 8px; padding: 10px; width: 200px; z-index: 500;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .profile-dropdown button {
-            width: 100%; background: transparent; border: none; color: #555;
+            width: 100%; background: transparent; border: none; color: #666;
             padding: 12px; text-align: left; cursor: pointer; font-size: 11px;
             font-weight: 700; transition: 0.2s;
         }
-        .profile-dropdown button:hover { color: #fff; background: #111; }
+        .profile-dropdown button:hover { color: #000; background: #F9F9F9; }
 
         /* CHAT WINDOW */
         #viewport {
@@ -102,50 +102,48 @@
         .row { opacity: 0; transform: translateY(15px); animation: liquidIn 0.6s var(--liquid) forwards; }
         @keyframes liquidIn { to { opacity: 1; transform: translateY(0); } }
 
-        .label { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #111; margin-bottom: 12px; text-transform: uppercase; }
-        .assistant .label { color: #222; }
+        .label { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #EEE; margin-bottom: 12px; text-transform: uppercase; }
+        .assistant .label { color: #DDD; }
 
-        .content { font-size: 15px; line-height: 1.9; color: #666; transition: 0.3s; }
-        .content.thinking { color: #222; }
-        .content b { color: #fff; }
+        .content { font-size: 15px; line-height: 1.9; color: #444; }
+        .content b { color: #000; }
 
-        /* CODE BOX 2026 */
-        .code-wrap { margin: 30px 0; background: #010101; border: 1px solid #0a0a0a; border-radius: 4px; }
+        /* CODE BOX LIGHT 2026 */
+        .code-wrap { margin: 30px 0; background: #FBFBFB; border: 1px solid var(--border); border-radius: 8px; }
         .code-top {
-            padding: 12px 20px; background: #050505; display: flex; justify-content: space-between;
-            font-size: 9px; font-weight: 900; color: #1a1a1a; border-bottom: 1px solid #0a0a0a;
+            padding: 12px 20px; background: #F5F5F5; display: flex; justify-content: space-between;
+            font-size: 9px; font-weight: 900; color: #AAA; border-bottom: 1px solid var(--border);
         }
-        .copy-btn { background: transparent; border: 1px solid #111; color: #333; padding: 5px 12px; cursor: pointer; font-size: 9px; }
+        .copy-btn { background: #FFF; border: 1px solid var(--border); color: #666; padding: 5px 12px; cursor: pointer; border-radius: 4px; font-size: 9px; }
         pre { margin: 0; padding: 25px; overflow-x: auto; font-size: 14px; }
 
-        /* INPUT AREA */
-        #dock { padding: 40px 22%; border-top: 1px solid var(--border); display: flex; gap: 25px; background: #000; }
+        /* INPUT AREA LIGHT */
+        #dock { padding: 40px 22%; border-top: 1px solid var(--border); display: flex; gap: 20px; background: #FFF; }
         #msg-in {
-            flex: 1; background: transparent; border: 1px solid #0d0d0d;
-            color: #fff; padding: 18px 28px; border-radius: 4px; font-size: 15px; transition: 0.3s;
+            flex: 1; background: #FAFAFA; border: 1px solid var(--border);
+            color: #000; padding: 18px 28px; border-radius: 8px; font-size: 15px; transition: 0.3s;
         }
-        #msg-in:focus { border-color: #222; background: #010101; }
-        .send-btn { background: #fff; color: #000; border: none; padding: 0 45px; font-weight: 900; cursor: pointer; border-radius: 4px; font-size: 11px; }
+        #msg-in:focus { border-color: #000; background: #FFF; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        .send-btn { background: #000; color: #fff; border: none; padding: 0 45px; font-weight: 900; cursor: pointer; border-radius: 8px; font-size: 11px; }
 
-        /* LOADING ORBIT */
+        /* LOADING ORBIT DARK */
         .orbit {
-            display: inline-block; width: 12px; height: 12px; border: 1px solid #111;
-            border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite;
+            display: inline-block; width: 12px; height: 12px; border: 1px solid #EEE;
+            border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite;
             margin-left: 15px; vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 2px; }
-        ::-webkit-scrollbar-thumb { background: #0a0a0a; }
+        /* SCROLLBAR LIGHT */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #EEE; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- PRE-LOADER -->
     <div id="loader">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo" alt="ANK">
-        <div class="loader-text">ANK_CORE // INITIALIZING</div>
+        <div style="font-size: 10px; letter-spacing: 6px; color: #EEE; font-weight: 900;">ANK_CORE // LIGHT_MODE</div>
     </div>
 
     <aside id="sidebar">
@@ -156,17 +154,16 @@
 
     <main id="main">
         <header class="top-bar">
-            <div class="header-status" id="active-title">ESTADO: PRONTO</div>
-            
+            <div class="header-status" id="active-title">CORE_ONLINE</div>
             <div class="profile-area">
                 {% if user %}
                     <img src="{{ user.picture }}" class="profile-img" onclick="toggleProfile()">
                     <div class="profile-dropdown" id="p-drop">
-                        <button onclick="location.href='/login'">ALTERAR CONTA</button>
-                        <button style="color: #ff3333;" onclick="location.href='/logout'">DESCONECTAR NÚCLEO</button>
+                        <button onclick="location.href='/login'">TROCAR CONTA</button>
+                        <button style="color: #FF0000;" onclick="location.href='/logout'">DESCONECTAR</button>
                     </div>
                 {% else %}
-                    <button onclick="location.href='/login'" style="background:#fff; color:#000; border:none; padding:8px 15px; font-size:10px; font-weight:900; cursor:pointer;">GOOGLE LOGIN</button>
+                    <button onclick="location.href='/login'" style="background:#000; color:#fff; border:none; padding:8px 18px; font-size:10px; font-weight:900; cursor:pointer; border-radius:4px;">GOOGLE LOGIN</button>
                 {% endif %}
             </div>
         </header>
@@ -174,12 +171,14 @@
         <div id="chat-window"></div>
 
         <div id="dock">
-            <input type="text" id="msg-in" placeholder="Transmitir dados para ANK 1.0..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
-            <button class="send-btn" onclick="send()">EXECUTAR</button>
+            <input type="text" id="msg-in" placeholder="Escreva para a ANK 1.0..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+            <button class="send-btn" onclick="send()">ENVIAR</button>
         </div>
     </main>
 
     <script>
+        // O JavaScript continua o mesmo das versões anteriores para manter a funcionalidade.
+        // Apenas as funções de UI foram ajustadas para o novo design.
         let curId = null;
         const sessions = {{ sessions | tojson | safe }};
         const vp = document.getElementById('chat-window');
@@ -187,12 +186,11 @@
         window.onload = () => {
             renderList();
             if(sessions.length > 0) loadChat(sessions[0].id, sessions[0].title);
-            
             setTimeout(() => {
                 const l = document.getElementById('loader');
                 l.style.opacity = '0';
                 setTimeout(() => l.style.display = 'none', 1000);
-            }, 2000);
+            }, 1500);
         };
 
         function renderList() {
@@ -216,7 +214,7 @@
 
         async function loadChat(id, title) {
             curId = id;
-            document.getElementById('active-title').innerText = "ESTADO: " + title.toUpperCase();
+            document.getElementById('active-title').innerText = title.toUpperCase();
             vp.innerHTML = '';
             const r = await fetch(`/get_messages/${id}`);
             const ms = await r.json();
@@ -226,7 +224,7 @@
         }
 
         async function delChat(id) {
-            if(!confirm("TERMINAR SESSÃO?")) return;
+            if(!confirm("APAGAR?")) return;
             await fetch('/delete_chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -238,14 +236,6 @@
         function toggleProfile() {
             const d = document.getElementById('p-drop');
             d.style.display = d.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // Fecha dropdown ao clicar fora
-        window.onclick = (e) => {
-            if (!e.target.matches('.profile-img')) {
-                const d = document.getElementById('p-drop');
-                if(d) d.style.display = 'none';
-            }
         }
 
         function format(t) {
@@ -264,16 +254,14 @@
         function display(role, content, animate) {
             const d = document.createElement('div');
             d.className = `row ${role === 'user' ? 'user' : 'assistant'}`;
-            d.innerHTML = `<div class="label">${role === 'user' ? 'AUTORIDADE' : 'ANK_CORE'}</div><div class="content"></div>`;
+            d.innerHTML = `<div class="label">${role === 'user' ? 'USER_PROMPT' : 'ANK_RESPONSE'}</div><div class="content"></div>`;
             vp.appendChild(d);
             const b = d.querySelector('.content');
 
             if(animate && role === 'assistant') {
-                b.classList.add('thinking');
                 const loader = document.createElement('span');
                 loader.className = 'orbit';
                 d.querySelector('.label').appendChild(loader);
-
                 let i = 0;
                 function type() {
                     if(i < content.length) {
@@ -281,7 +269,6 @@
                         vp.scrollTop = vp.scrollHeight; setTimeout(type, 1);
                     } else {
                         loader.remove();
-                        b.classList.remove('thinking');
                         b.innerHTML = format(content); hljs.highlightAll();
                         vp.scrollTop = vp.scrollHeight;
                     }
