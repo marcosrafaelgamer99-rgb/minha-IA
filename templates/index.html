@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANK 1.0 | SOBERANA CAPSULE</title>
+    <title>ANK 1.0 | SOBERANA</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -11,161 +11,181 @@
     <style>
         :root {
             --bg: #FFFFFF;
-            --sidebar: #F7F7F7;
-            --border: #EEEEEE;
-            --text-main: #000000;
-            --text-dim: #999999;
-            --liquid: cubic-bezier(0.16, 1, 0.3, 1);
+            --sidebar: #FFFFFF;
+            --border: #F0F0F0;
+            --text: #000000;
+            --text-light: #888888;
+            --liquid: cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         * { box-sizing: border-box; outline: none; }
         body { 
-            margin: 0; padding: 0; background: var(--bg); color: var(--text-main); 
+            margin: 0; padding: 0; background: var(--bg); color: var(--text); 
             font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; 
         }
 
-        /* PRE-LOADER WHITE */
+        /* PRE-LOADER CLEAN */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF;
-            z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s var(--liquid);
+            z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.6s var(--liquid);
         }
-        .loader-logo {
-            width: 120px; height: 120px; margin-bottom: 25px;
-            filter: invert(1);
-            animation: pulse 2s infinite ease-in-out;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1); } }
+        .loader-logo { width: 120px; filter: invert(1); animation: breathe 3s infinite ease-in-out; }
+        @keyframes breathe { 0%, 100% { opacity: 0.1; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1); } }
 
-        /* SIDEBAR */
+        /* SIDEBAR (ESTILO GEMINI) */
         #sidebar {
             width: 280px; background: var(--sidebar); border-right: 1px solid var(--border);
-            display: flex; flex-direction: column; padding: 30px 20px;
+            display: flex; flex-direction: column; padding: 25px; transition: 0.3s;
         }
-        .logo-nav { width: 45px; margin-bottom: 25px; filter: invert(1); }
+        .logo-box { padding: 10px 0 30px 0; }
+        .logo-nav { width: 40px; filter: invert(1); }
 
         .btn-new {
-            background: #000; color: #fff; border: none; padding: 14px;
-            border-radius: 12px; font-size: 11px; font-weight: 900; cursor: pointer;
-            margin-bottom: 35px; letter-spacing: 1px; transition: 0.3s;
+            background: #F8F8F8; color: #000; border: none; padding: 14px;
+            border-radius: 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+            margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: 0.2s;
         }
-        .btn-new:hover { opacity: 0.8; transform: translateY(-1px); }
+        .btn-new:hover { background: #F0F0F0; }
 
-        #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+        #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; }
         .chat-item {
-            padding: 12px 15px; border-radius: 10px; font-size: 12px; color: #555;
-            cursor: pointer; display: flex; justify-content: space-between; transition: 0.2s;
+            padding: 12px 15px; border-radius: 10px; font-size: 13px; color: #555;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
         }
-        .chat-item:hover, .chat-item.active { background: #FFFFFF; color: #000; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .del-chat { opacity: 0; color: #EEE; transition: 0.2s; }
-        .chat-item:hover .del-chat { opacity: 1; color: #CCC; }
+        .chat-item:hover, .chat-item.active { background: #F8F8F8; color: #000; }
+        .del-chat { opacity: 0; font-size: 12px; color: #CCC; transition: 0.2s; }
+        .chat-item:hover .del-chat { opacity: 1; }
 
-        /* MAIN AREA */
-        #main { flex: 1; display: flex; flex-direction: column; background: #FFF; position: relative; }
+        /* MAIN VIEWPORT */
+        #main { flex: 1; display: flex; flex-direction: column; position: relative; }
         
         .top-bar {
-            padding: 20px 40px; display: flex; justify-content: space-between;
-            align-items: center; background: #FFF; border-bottom: 1px solid var(--border);
-            z-index: 10;
-        }
-        .header-status { font-size: 9px; font-weight: 900; color: #DDD; letter-spacing: 3px; }
-
-        /* PERFIL DROPDOWN */
-        .profile-area { position: relative; }
-        .profile-img { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border); }
-        .profile-dropdown {
-            display: none; position: absolute; top: 45px; right: 0;
-            background: #FFF; border: 1px solid var(--border);
-            border-radius: 12px; padding: 8px; width: 180px; z-index: 500;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.06);
-        }
-        .profile-dropdown button {
-            width: 100%; background: transparent; border: none; color: #666;
-            padding: 12px; text-align: left; cursor: pointer; font-size: 11px;
-            font-weight: 700; border-radius: 8px;
-        }
-        .profile-dropdown button:hover { color: #000; background: #F9F9F9; }
-
-        /* CHAT WINDOW (AQUI FICAM AS MENSAGENS) */
-        #viewport {
-            flex: 1; overflow-y: auto; padding: 40px 20% 120px 20%; /* Padding extra embaixo pro dock não cobrir */
-            display: flex; flex-direction: column; gap: 40px; scroll-behavior: smooth;
-        }
-
-        .row { opacity: 0; transform: translateY(10px); animation: in 0.5s var(--liquid) forwards; }
-        @keyframes in { to { opacity: 1; transform: translateY(0); } }
-
-        .label { font-size: 9px; font-weight: 900; letter-spacing: 2px; color: #EEE; margin-bottom: 10px; }
-        .content { font-size: 15px; line-height: 1.8; color: #333; }
-        .content b { color: #000; }
-
-        /* CODE DESIGN */
-        .code-wrap { margin: 25px 0; background: #FAFAFA; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .code-top {
-            padding: 10px 20px; background: #F5F5F5; display: flex; justify-content: space-between;
-            font-size: 9px; font-weight: 900; color: #BBB; border-bottom: 1px solid var(--border);
-        }
-        .copy-btn { background: #FFF; border: 1px solid var(--border); color: #999; padding: 4px 10px; cursor: pointer; border-radius: 6px; font-size: 8px; }
-
-        /* INPUT DOCK (A CÁPSULA REDONDINHA) */
-        #dock-container {
-            position: absolute; bottom: 30px; left: 0; width: 100%;
-            display: flex; justify-content: center; padding: 0 20%;
+            padding: 15px 30px; display: flex; justify-content: space-between;
+            align-items: center; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
             z-index: 100;
         }
+        .header-title { font-size: 11px; font-weight: 700; color: #BBB; letter-spacing: 1px; }
+
+        /* PROFILE & DROPDOWN */
+        .profile-area { position: relative; }
+        .profile-img { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border); }
+        .dropdown {
+            display: none; position: absolute; top: 45px; right: 0;
+            background: #FFF; border: 1px solid var(--border);
+            border-radius: 16px; padding: 8px; width: 220px; z-index: 500;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .dropdown button {
+            width: 100%; background: transparent; border: none; color: #444;
+            padding: 12px 15px; text-align: left; cursor: pointer; font-size: 13px;
+            border-radius: 10px; transition: 0.2s;
+        }
+        .dropdown button:hover { background: #F8F8F8; color: #000; }
+
+        /* MODAL CONFIGURAÇÕES */
+        #modal-settings {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(5px);
+            z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: #FFF; border: 1px solid var(--border); width: 400px;
+            padding: 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .modal-header { font-size: 18px; font-weight: 800; margin-bottom: 30px; }
+        .setting-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #F9F9F9; }
+        .setting-label { font-size: 13px; color: #888; }
+        .setting-value { font-size: 13px; font-weight: 700; color: #000; }
+        .close-modal { margin-top: 30px; width: 100%; padding: 12px; background: #000; color: #FFF; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; }
+
+        /* VIEWPORT MENSAGENS */
+        #viewport {
+            flex: 1; overflow-y: auto; padding: 40px 22% 140px 22%;
+            display: flex; flex-direction: column; gap: 45px;
+        }
+        .row { opacity: 0; transform: translateY(10px); animation: slideIn 0.5s var(--liquid) forwards; }
+        @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+        
+        .label { font-size: 9px; font-weight: 800; color: #DDD; margin-bottom: 10px; letter-spacing: 2px; }
+        .content { font-size: 16px; line-height: 1.8; color: #333; }
+        .content b { color: #000; }
+
+        /* CAPSULE DOCK */
+        #dock-container {
+            position: absolute; bottom: 40px; left: 0; width: 100%;
+            display: flex; justify-content: center; padding: 0 22%;
+        }
         #dock-capsule {
-            display: flex; align-items: center; background: #FFFFFF;
-            border: 1px solid var(--border); padding: 8px 10px 8px 25px;
-            border-radius: 50px; /* BEM REDONDINHO */
-            width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            transition: 0.3s var(--liquid);
+            display: flex; align-items: center; background: #FFF;
+            border: 1px solid var(--border); padding: 8px 12px 8px 30px;
+            border-radius: 100px; width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: 0.3s;
         }
-        #dock-capsule:focus-within { border-color: #000; box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        #dock-capsule:focus-within { border-color: #DDD; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
 
-        #msg-in {
-            flex: 1; background: transparent; border: none;
-            color: #000; font-size: 15px; height: 45px;
-        }
-        #msg-in::placeholder { color: #BBB; }
-
+        #msg-in { flex: 1; background: transparent; border: none; font-size: 15px; height: 50px; }
         .send-btn {
-            background: #000; color: #FFF; border: none;
-            height: 45px; padding: 0 30px; border-radius: 40px; /* BOTÃO TAMBÉM REDONDO */
-            font-weight: 900; cursor: pointer; font-size: 10px;
-            transition: 0.2s; margin-left: 10px;
+            background: #000; color: #FFF; border: none; height: 45px; width: 45px;
+            border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;
+            transition: 0.3s;
         }
-        .send-btn:hover { transform: scale(1.02); }
+        .send-btn:hover { transform: scale(1.05); }
 
         /* SCROLLBAR */
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #EEE; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #F0F0F0; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo" alt="ANK">
-        <div style="font-size: 9px; letter-spacing: 5px; color: #EEE; font-weight: 900;">ANK_CORE // RELOADING_VISUAL</div>
+        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo">
+    </div>
+
+    <div id="modal-settings">
+        <div class="modal-content">
+            <div class="modal-header">Configurações do Núcleo</div>
+            <div class="setting-row">
+                <span class="setting-label">Modelo Ativo</span>
+                <span class="setting-value">ANK-1</span>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Plano de Dados</span>
+                <span class="setting-value">Grátis</span>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Status do Sistema</span>
+                <span class="setting-value" style="color: #00C853;">Online</span>
+            </div>
+            <button class="close-modal" onclick="toggleSettings(false)">FECHAR</button>
+        </div>
     </div>
 
     <aside id="sidebar">
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav" alt="ANK">
-        <button class="btn-new" onclick="createNewChat()">+ NOVA SESSÃO</button>
+        <div class="logo-box">
+            <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav">
+        </div>
+        <button class="btn-new" onclick="createNewChat()">
+            <span>+</span> Novo Chat
+        </button>
         <div id="chat-list"></div>
     </aside>
 
     <main id="main">
         <header class="top-bar">
-            <div class="header-status" id="active-title">ESTADO: PRONTO</div>
+            <div class="header-title" id="active-title">ANK SOBERANA 1.0</div>
             <div class="profile-area">
                 {% if user %}
                     <img src="{{ user.picture }}" class="profile-img" onclick="toggleProfile()">
-                    <div class="profile-dropdown" id="p-drop">
-                        <button onclick="location.href='/login'">TROCAR CONTA</button>
-                        <button style="color: #FF0000;" onclick="location.href='/logout'">DESCONECTAR</button>
+                    <div class="dropdown" id="p-drop">
+                        <button onclick="toggleSettings(true)">⚙️ Configurações</button>
+                        <button onclick="location.href='/login'">🔄 Trocar Conta</button>
+                        <button style="color: #FF5252;" onclick="location.href='/logout'">🚪 Sair</button>
                     </div>
                 {% else %}
-                    <button onclick="location.href='/login'" style="background:#000; color:#fff; border:none; padding:10px 20px; font-size:10px; font-weight:900; cursor:pointer; border-radius:50px;">GOOGLE LOGIN</button>
+                    <button onclick="location.href='/login'" style="background:#000; color:#fff; border:none; padding:10px 20px; font-size:11px; font-weight:700; border-radius:100px; cursor:pointer;">Entrar</button>
                 {% endif %}
             </div>
         </header>
@@ -174,8 +194,8 @@
 
         <div id="dock-container">
             <div id="dock-capsule">
-                <input type="text" id="msg-in" placeholder="Fale com a ANK 1.0..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
-                <button class="send-btn" onclick="send()">ENVIAR</button>
+                <input type="text" id="msg-in" placeholder="Como posso ajudar, Marcos?" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+                <button class="send-btn" onclick="send()">↑</button>
             </div>
         </div>
     </main>
@@ -189,11 +209,19 @@
             renderList();
             if(sessions.length > 0) loadChat(sessions[0].id, sessions[0].title);
             setTimeout(() => {
-                const l = document.getElementById('loader');
-                l.style.opacity = '0';
-                setTimeout(() => l.style.display = 'none', 1000);
-            }, 1500);
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
+            }, 1200);
         };
+
+        function toggleProfile() {
+            const d = document.getElementById('p-drop');
+            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleSettings(show) {
+            document.getElementById('modal-settings').style.display = show ? 'flex' : 'none';
+        }
 
         function renderList() {
             const list = document.getElementById('chat-list');
@@ -202,7 +230,7 @@
                 const d = document.createElement('div');
                 d.className = `chat-item ${curId === s.id ? 'active' : ''}`;
                 d.innerHTML = `
-                    <span onclick="loadChat('${s.id}', '${s.title}')">${s.title.toUpperCase()}</span>
+                    <span style="flex:1" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
                     <span class="del-chat" onclick="delChat('${s.id}')">✕</span>
                 `;
                 list.appendChild(d);
@@ -216,7 +244,7 @@
 
         async function loadChat(id, title) {
             curId = id;
-            document.getElementById('active-title').innerText = "ANK_CORE // " + title.toUpperCase();
+            document.getElementById('active-title').innerText = title.toUpperCase();
             vp.innerHTML = '';
             const r = await fetch(`/get_messages/${id}`);
             const ms = await r.json();
@@ -226,7 +254,7 @@
         }
 
         async function delChat(id) {
-            if(!confirm("ELIMINAR SESSÃO?")) return;
+            if(!confirm("Deseja apagar este chat?")) return;
             await fetch('/delete_chat', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -235,28 +263,21 @@
             location.reload();
         }
 
-        function toggleProfile() {
-            const d = document.getElementById('p-drop');
-            d.style.display = d.style.display === 'block' ? 'none' : 'block';
-        }
-
         function format(t) {
             let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
             const r = /```([a-z]*)\n([\s\S]*?)```/g;
             return s.replace(r, (m, lang, code) => {
-                return `<div class="code-wrap"><div class="code-top"><span>${lang.toUpperCase() || 'CODE'}</span><button class="copy-btn" onclick="copy(this)">COPY</button></div><pre><code class="language-${lang}">${code.trim()}</code></pre></div>`;
+                return `<div style="background:#F9F9F9; border-radius:12px; padding:20px; margin:20px 0; font-family:monospace; font-size:14px; position:relative;">
+                    <div style="font-size:10px; color:#CCC; margin-bottom:10px;">${lang.toUpperCase()}</div>
+                    <pre><code>${code.trim()}</code></pre>
+                </div>`;
             });
-        }
-
-        function copy(b) {
-            navigator.clipboard.writeText(b.closest('.code-wrap').querySelector('code').innerText);
-            b.innerText = "DONE"; setTimeout(() => b.innerText = "COPY", 2000);
         }
 
         function display(role, content, animate) {
             const d = document.createElement('div');
             d.className = `row ${role === 'user' ? 'user' : 'assistant'}`;
-            d.innerHTML = `<div class="label">${role === 'user' ? 'USER_INPUT' : 'ANK_CORE_OUTPUT'}</div><div class="content"></div>`;
+            d.innerHTML = `<div class="label">${role === 'user' ? 'VOCÊ' : 'ANK 1.0'}</div><div class="content"></div>`;
             vp.appendChild(d);
             const b = d.querySelector('.content');
 
@@ -293,6 +314,14 @@
             });
             const data = await res.json();
             display('assistant', data.response, true);
+        }
+
+        // Fechar dropdown ao clicar fora
+        window.onclick = (e) => {
+            if (!e.target.matches('.profile-img')) {
+                const d = document.getElementById('p-drop');
+                if(d) d.style.display = 'none';
+            }
         }
     </script>
 </body>
