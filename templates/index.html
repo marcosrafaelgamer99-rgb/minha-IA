@@ -18,90 +18,226 @@
             --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
+        * { 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; 
+        }
+        
         body { 
-            margin: 0; padding: 0; background: var(--bg); color: var(--text-color); 
-            font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; 
+            margin: 0; 
+            padding: 0; 
+            background: var(--bg); 
+            color: var(--text-color); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
         }
 
-        /* EFEITOS HOVER/SCALE PARA TUDO */
-        .hover-scale:hover { transform: scale(1.05); }
-        .btn-scale:active { transform: scale(0.95); }
+        /* EFEITOS DE INTERAÇÃO FLUIDA */
+        .hover-scale:hover { transform: scale(1.03); }
+        .btn-scale:active { transform: scale(0.97); }
 
-        /* PRE-LOADER */
+        /* PRE-LOADER GIGANTE */
         #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF;
-            z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: #FFF;
+            z-index: 10000; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
         }
-        .loader-logo { width: 180px; filter: invert(1); animation: pulse 2.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
+        .loader-logo { 
+            width: 180px; 
+            filter: invert(1); 
+            animation: pulse 2.5s infinite; 
+        }
+        @keyframes pulse { 
+            0%, 100% { opacity: 0.2; transform: scale(0.95); } 
+            50% { opacity: 1; transform: scale(1); } 
+        }
 
-        /* SIDEBAR */
+        /* SIDEBAR SOBERANA */
         #sidebar {
-            width: 320px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color);
-            display: flex; flex-direction: column; padding: 40px 25px; z-index: 100;
+            width: 320px; 
+            background: var(--sidebar-bg); 
+            border-right: 1px solid var(--border-color);
+            display: flex; 
+            flex-direction: column; 
+            padding: 40px 25px; 
+            z-index: 100;
         }
-        .logo-nav { width: 70px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
+        .logo-nav { 
+            width: 70px; 
+            margin-bottom: 40px; 
+            filter: invert(1); 
+            cursor: pointer; 
+        }
 
         .btn-new {
-            background: #F9F9F9; color: #000; border: none; padding: 18px;
-            border-radius: 14px; font-size: 13px; font-weight: 800; cursor: pointer;
-            margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: #F9F9F9; 
+            color: #000; 
+            border: none; 
+            padding: 18px;
+            border-radius: 14px; 
+            font-size: 13px; 
+            font-weight: 800; 
+            cursor: pointer;
+            margin-bottom: 30px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
         }
         .btn-new:hover { background: #F0F0F0; }
 
-        #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+        #chat-list { 
+            flex: 1; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 5px; 
+        }
         .chat-item {
-            padding: 14px 20px; border-radius: 12px; font-size: 14px; color: #666;
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 20px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            color: #666;
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
         }
         .chat-item:hover, .chat-item.active { background: #F9F9F9; color: #000; }
-        .del-chat { opacity: 0; font-size: 14px; color: #DDD; border: none; background: none; cursor: pointer; }
+        .del-chat { 
+            opacity: 0; 
+            font-size: 14px; 
+            color: #DDD; 
+            border: none; 
+            background: none; 
+            cursor: pointer; 
+        }
         .chat-item:hover .del-chat { opacity: 1; }
 
-        .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px; }
-        .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; padding: 12px; cursor: pointer; border-radius: 10px; }
+        .sidebar-footer { 
+            border-top: 1px solid var(--border-color); 
+            padding-top: 20px; 
+            margin-top: 20px; 
+        }
+        .settings-btn { 
+            width: 100%; 
+            text-align: left; 
+            background: none; 
+            border: none; 
+            font-size: 14px; 
+            font-weight: 700; 
+            color: #666; 
+            padding: 12px; 
+            cursor: pointer; 
+            border-radius: 10px; 
+        }
         .settings-btn:hover { background: #F9F9F9; color: #000; }
 
-        /* MÓDULO: TELAS IMERSIVAS (CONFIG & PLANOS) */
+        /* TELAS IMERSIVAS (CONFIGURAÇÕES & PLANOS) */
         .immersive-view {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #FFFFFF; z-index: 2000; display: none;
-            flex-direction: column; align-items: center; justify-content: center;
-            padding: 50px; overflow-y: auto;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: #FFFFFF; 
+            z-index: 2000; 
+            display: none; /* Controlado via JS */
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            padding: 50px; 
+            overflow-y: auto;
         }
         .close-view-btn {
-            position: absolute; top: 40px; right: 50px;
-            background: transparent; border: none;
-            font-size: 28px; font-weight: 300; color: #000;
-            cursor: pointer; padding: 10px; border-radius: 50%;
+            position: absolute; 
+            top: 40px; 
+            right: 50px;
+            background: transparent; 
+            border: none;
+            font-size: 28px; 
+            font-weight: 300; 
+            color: #000;
+            cursor: pointer; 
+            padding: 10px; 
+            border-radius: 50%;
         }
 
         /* TELA: CONFIGURAÇÕES */
-        .settings-container { width: 100%; max-width: 600px; text-align: left; margin: auto; }
-        .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; }
+        .settings-container { 
+            width: 100%; 
+            max-width: 600px; 
+            text-align: left; 
+            margin: auto; 
+        }
+        .settings-header { 
+            font-size: 42px; 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            margin-bottom: 60px; 
+        }
         .settings-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 30px 0; border-bottom: 1px solid #F2F2F2;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 30px 0; 
+            border-bottom: 1px solid #F2F2F2;
         }
         .settings-label { font-size: 16px; color: #999; font-weight: 500; }
         .settings-value { font-size: 16px; font-weight: 800; color: #000; }
 
         /* TELA: PLANOS */
-        .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
-        .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
-        .plans-subtitle { font-size: 16px; color: #888; margin-bottom: 60px; font-weight: 500; }
+        .plans-container { 
+            width: 100%; 
+            max-width: 1100px; 
+            text-align: center; 
+            margin: auto; 
+        }
+        .plans-header { 
+            font-size: 48px; 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            margin-bottom: 20px; 
+        }
+        .plans-subtitle { 
+            font-size: 16px; 
+            color: #888; 
+            margin-bottom: 60px; 
+            font-weight: 500; 
+        }
         
         .plans-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            text-align: left;
         }
         .plan-card {
-            border: 1px solid var(--border-color); border-radius: 24px; padding: 40px;
-            background: #FFF; display: flex; flex-direction: column; justify-content: space-between;
+            border: 1px solid var(--border-color); 
+            border-radius: 24px; 
+            padding: 40px;
+            background: #FFF; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
         }
         .plan-card.pro {
-            background: #000; color: #FFF; border-color: #000;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px);
+            background: #000; 
+            color: #FFF; 
+            border-color: #000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15); 
+            transform: translateY(-10px);
         }
         .plan-card.plus { background: #FBFBFB; }
 
@@ -115,81 +251,172 @@
         .pro .plan-features li::before { color: #FFF; }
 
         .plan-btn-card {
-            width: 100%; padding: 18px; border-radius: 12px; font-size: 13px; font-weight: 800;
-            cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px;
+            width: 100%; 
+            padding: 18px; 
+            border-radius: 12px; 
+            font-size: 13px; 
+            font-weight: 800;
+            cursor: pointer; 
+            border: none; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
         }
         .plan-btn-card.current { background: #F0F0F0; color: #888; cursor: default; }
         .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
         .plan-btn-card.upgrade-plus { background: #000; color: #FFF; }
 
-        /* MAIN CONTENT */
-        #main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        /* ÁREA PRINCIPAL DO CHAT */
+        #main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+        }
         
         .header {
-            padding: 30px 50px; display: flex; justify-content: space-between;
-            align-items: center; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color); z-index: 90;
+            padding: 30px 50px; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: center; 
+            background: rgba(255,255,255,0.9); 
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); 
+            z-index: 90;
         }
-        .header-title { font-size: 10px; font-weight: 900; color: #E0E0E0; letter-spacing: 5px; }
+        .header-title { 
+            font-size: 10px; 
+            font-weight: 900; 
+            color: #E0E0E0; 
+            letter-spacing: 5px; 
+        }
 
-        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .header-actions { 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+        }
         
-        /* BOTÃO DE PLANOS NO CABEÇALHO */
         .btn-plans-header {
-            background: #FFF; border: 1px solid var(--border-color); color: #000;
-            padding: 10px 20px; border-radius: 50px; font-size: 12px; font-weight: 800;
-            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            background: #FFF; 
+            border: 1px solid var(--border-color); 
+            color: #000;
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            font-size: 12px; 
+            font-weight: 800;
+            cursor: pointer; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
         .btn-plans-header:hover { border-color: #000; }
 
-        .profile-img { width: 50px; height: 50px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border-color); object-fit: cover; }
+        .profile-img { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            border: 1px solid var(--border-color); 
+            object-fit: cover; 
+        }
         
         .profile-dropdown {
-            display: none; position: absolute; top: 90px; right: 50px;
-            background: #FFF; border: 1px solid var(--border-color);
-            border-radius: 20px; padding: 10px; width: 240px; z-index: 500;
+            display: none; 
+            position: absolute; 
+            top: 90px; 
+            right: 50px;
+            background: #FFF; 
+            border: 1px solid var(--border-color);
+            border-radius: 20px; 
+            padding: 10px; 
+            width: 240px; 
+            z-index: 500;
             box-shadow: 0 30px 60px rgba(0,0,0,0.05);
         }
         .profile-dropdown button {
-            width: 100%; background: transparent; border: none; color: #666;
-            padding: 15px 20px; text-align: left; cursor: pointer; font-size: 14px;
-            font-weight: 700; border-radius: 12px;
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: #666;
+            padding: 15px 20px; 
+            text-align: left; 
+            cursor: pointer; 
+            font-size: 14px;
+            font-weight: 700; 
+            border-radius: 12px;
         }
         .profile-dropdown button:hover { background: #F9F9F9; color: #000; }
 
-        /* VIEWPORT MENSAGENS */
+        /* ROLAGEM E MENSAGENS NO CHAT */
         #viewport {
-            flex: 1; overflow-y: auto; padding: 80px 22% 160px 22%;
-            display: flex; flex-direction: column; gap: 60px;
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 80px 22% 160px 22%;
+            display: flex; 
+            flex-direction: column; 
+            gap: 60px;
         }
-        .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
+        .msg-row { 
+            opacity: 0; 
+            transform: translateY(20px); 
+            animation: slideIn 0.8s var(--liquid-ease) forwards; 
+        }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
-        .role-tag { font-size: 10px; font-weight: 900; color: #F0F0F0; margin-bottom: 15px; letter-spacing: 3px; }
+        .role-tag { 
+            font-size: 10px; 
+            font-weight: 900; 
+            color: #F0F0F0; 
+            margin-bottom: 15px; 
+            letter-spacing: 3px; 
+        }
         .content { font-size: 17px; line-height: 2; color: #444; }
         .content b { color: #000; }
 
-        /* DOCK CAPSULE */
+        /* CÁPSULA DE ENTRADA DE DADOS */
         #dock-wrapper {
-            position: absolute; bottom: 50px; left: 0; width: 100%;
-            display: flex; justify-content: center; padding: 0 22%; z-index: 100;
+            position: absolute; 
+            bottom: 50px; 
+            left: 0; 
+            width: 100%;
+            display: flex; 
+            justify-content: center; 
+            padding: 0 22%; 
+            z-index: 100;
         }
         #dock-capsule {
-            display: flex; align-items: center; background: #FFF;
-            border: 1px solid var(--border-color); padding: 10px 15px 10px 35px;
-            border-radius: 100px; width: 100%;
+            display: flex; 
+            align-items: center; 
+            background: #FFF;
+            border: 1px solid var(--border-color); 
+            padding: 10px 15px 10px 35px;
+            border-radius: 100px; 
+            width: 100%;
             box-shadow: 0 4px 30px rgba(0,0,0,0.02);
         }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 50px rgba(0,0,0,0.06); }
 
-        #msg-in { flex: 1; background: transparent; border: none; font-size: 16px; height: 55px; font-weight: 500; }
+        #msg-in { 
+            flex: 1; 
+            background: transparent; 
+            border: none; 
+            font-size: 16px; 
+            height: 55px; 
+            font-weight: 500; 
+        }
         .btn-send {
-            background: #000; color: #FFF; height: 50px; width: 50px;
-            border-radius: 50%; border: none; cursor: pointer; font-size: 22px;
-            display: flex; align-items: center; justify-content: center;
+            background: #000; 
+            color: #FFF; 
+            height: 50px; 
+            width: 50px;
+            border-radius: 50%; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 22px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
         }
 
-        /* SCROLLBAR */
+        /* BARRA DE ROLAGEM FINA E ELEGANTE */
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-thumb { background: #F0F0F0; border-radius: 10px; }
     </style>
@@ -225,7 +452,7 @@
             <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
             
             <div class="plans-grid">
-                <!-- CARTÃO GRÁTIS -->
+                <!-- PLANO GRÁTIS -->
                 <div class="plan-card hover-scale">
                     <div>
                         <div class="plan-name">Grátis</div>
@@ -239,41 +466,42 @@
                     <button class="plan-btn-card current btn-scale">SEU PLANO ATUAL</button>
                 </div>
 
-                <!-- CARTÃO PRO (DESTAQUE) -->
+                <!-- PLANO PRO -->
                 <div class="plan-card pro hover-scale">
                     <div>
                         <div class="plan-name">Pro</div>
-                        <!-- ATUALIZADO: R$ 25 -->
                         <div class="plan-price">R$ 25<span>/mês</span></div>
                         <ul class="plan-features">
                             <li>Acesso prioritário ANK 1.0</li>
                             <li>Velocidade Neural 2x</li>
-                            <li>Contexto Longo (Memória Plus)</li>
+                            <li>Contexto Longo</li>
                             <li>Soberania de Dados</li>
                         </ul>
                     </div>
-                    <button class="plan-btn-card upgrade-pro btn-scale">ASSINAR PRO</button>
+                    <!-- REDIRECIONA PARA O NOVO SITE DE CHECKOUT -->
+                    <button class="plan-btn-card upgrade-pro btn-scale" onclick="location.href='/checkout?plan=pro'">ASSINAR PRO</button>
                 </div>
 
-                <!-- CARTÃO PLUS -->
+                <!-- PLANO PLUS -->
                 <div class="plan-card plus hover-scale">
                     <div>
                         <div class="plan-name">Plus</div>
-                        <!-- ATUALIZADO: R$ 60 -->
                         <div class="plan-price">R$ 60<span>/mês</span></div>
                         <ul class="plan-features">
                             <li>Acesso Ilimitado ANK 1.0</li>
                             <li>Velocidade Neural Máxima</li>
-                            <li>Acesso a Novos Modelos Antecipado</li>
+                            <li>Novos Modelos Antecipado</li>
                             <li>Suporte Dedicado</li>
                         </ul>
                     </div>
-                    <button class="plan-btn-card upgrade-plus btn-scale">ASSINAR PLUS</button>
+                    <!-- REDIRECIONA PARA O NOVO SITE DE CHECKOUT -->
+                    <button class="plan-btn-card upgrade-plus btn-scale" onclick="location.href='/checkout?plan=plus'">ASSINAR PLUS</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- BARRA LATERAL (SIDEBAR) -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
@@ -283,6 +511,7 @@
         </div>
     </aside>
 
+    <!-- ÁREA PRINCIPAL -->
     <main id="main">
         <header class="header">
             <div class="header-title" id="active-title">SISTEMA_ANK_ONLINE</div>
@@ -291,6 +520,7 @@
                 <!-- BOTÃO DE PLANOS NO CABEÇALHO -->
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 
+                <!-- MENU DE PERFIL -->
                 <div class="profile-area">
                     {% if user %}
                         <img src="{{ user.picture }}" class="profile-img hover-scale" onclick="toggleProfile()">
@@ -306,8 +536,10 @@
             </div>
         </header>
 
+        <!-- CAIXA DE MENSAGENS -->
         <div id="viewport"></div>
 
+        <!-- CÁPSULA DE ENTRADA -->
         <div id="dock-wrapper">
             <div id="dock-capsule" class="hover-scale">
                 <input type="text" id="msg-in" placeholder="Transmita dados para a ANK 1.0..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
@@ -316,146 +548,169 @@
         </div>
     </main>
 
+    <!-- SCRIPTS JS -->
     <script>
-        let curId = null;
-        const sessions = {{ sessions | tojson | safe }};
+        let curId = null; 
+        const sessions = {{ sessions | tojson | safe }}; 
         const vp = document.getElementById('viewport');
 
-        window.onload = () => {
-            renderList();
-            if(sessions.length > 0) loadChat(sessions[0].id, sessions[0].title);
-            setTimeout(() => {
-                const l = document.getElementById('loader');
-                l.style.opacity = '0';
-                setTimeout(() => l.style.display = 'none', 600);
-            }, 1500);
+        // FUNÇÃO DE CARREGAMENTO INICIAL
+        window.onload = () => { 
+            renderList(); 
+            if(sessions.length > 0) {
+                loadChat(sessions[0].id, sessions[0].title); 
+            }
+            // Remove o Pre-Loader
+            setTimeout(() => { 
+                const l = document.getElementById('loader'); 
+                l.style.opacity = '0'; 
+                setTimeout(() => l.style.display = 'none', 600); 
+            }, 1500); 
         };
 
-        // GESTOR DE TELAS IMERSIVAS
-        function switchView(view) {
-            const settings = document.getElementById('view-settings');
-            const plans = document.getElementById('view-plans');
+        // CONTROLE DE TELAS (CHAT, CONFIGURAÇÕES, PLANOS)
+        function switchView(view) { 
+            const settings = document.getElementById('view-settings'); 
+            const plans = document.getElementById('view-plans'); 
             
-            settings.style.opacity = '0';
-            plans.style.opacity = '0';
+            settings.style.opacity = '0'; 
+            plans.style.opacity = '0'; 
 
-            setTimeout(() => {
-                settings.style.display = 'none';
-                plans.style.display = 'none';
+            setTimeout(() => { 
+                settings.style.display = 'none'; 
+                plans.style.display = 'none'; 
 
-                if(view === 'settings') {
-                    settings.style.display = 'flex';
-                    setTimeout(() => settings.style.opacity = '1', 10);
-                } else if (view === 'plans') {
-                    plans.style.display = 'flex';
-                    setTimeout(() => plans.style.opacity = '1', 10);
-                }
-            }, 300);
+                if(view === 'settings') { 
+                    settings.style.display = 'flex'; 
+                    setTimeout(() => settings.style.opacity = '1', 10); 
+                } else if (view === 'plans') { 
+                    plans.style.display = 'flex'; 
+                    setTimeout(() => plans.style.opacity = '1', 10); 
+                } 
+            }, 300); 
         }
 
-        function toggleProfile() {
-            const d = document.getElementById('p-drop');
-            d.style.display = d.style.display === 'block' ? 'none' : 'block';
+        // MOSTRAR/ESCONDER DROPDOWN DE PERFIL
+        function toggleProfile() { 
+            const d = document.getElementById('p-drop'); 
+            d.style.display = d.style.display === 'block' ? 'none' : 'block'; 
         }
 
-        function renderList() {
-            const list = document.getElementById('chat-list');
-            list.innerHTML = '';
-            sessions.forEach(s => {
-                const d = document.createElement('div');
-                d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`;
+        // RENDERIZAR LISTA DE CHATS NA SIDEBAR
+        function renderList() { 
+            const list = document.getElementById('chat-list'); 
+            list.innerHTML = ''; 
+            sessions.forEach(s => { 
+                const d = document.createElement('div'); 
+                d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`; 
                 d.innerHTML = `
                     <span style="flex:1" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
                     <button class="del-chat hover-scale btn-scale" onclick="delChat('${s.id}')">✕</button>
-                `;
-                list.appendChild(d);
-            });
+                `; 
+                list.appendChild(d); 
+            }); 
         }
 
-        async function createNewChat() {
-            await fetch('/new_chat', { method: 'POST' });
-            location.reload();
+        // COMANDOS DE CHAT
+        async function createNewChat() { 
+            await fetch('/new_chat', { method: 'POST' }); 
+            location.reload(); 
         }
 
-        async function loadChat(id, title) {
-            curId = id;
-            document.getElementById('active-title').innerText = "NÚCLEO_" + title.toUpperCase();
-            vp.innerHTML = '';
-            const r = await fetch(`/get_messages/${id}`);
-            const ms = await r.json();
-            ms.forEach(m => display(m.role, m.content, false));
-            renderList();
-            vp.scrollTop = vp.scrollHeight;
+        async function loadChat(id, title) { 
+            curId = id; 
+            document.getElementById('active-title').innerText = "NÚCLEO_" + title.toUpperCase(); 
+            vp.innerHTML = ''; 
+            const r = await fetch(`/get_messages/${id}`); 
+            const ms = await r.json(); 
+            ms.forEach(m => display(m.role, m.content, false)); 
+            renderList(); 
+            vp.scrollTop = vp.scrollHeight; 
         }
 
-        async function delChat(id) {
-            if(!confirm("ELIMINAR SESSÃO?")) return;
-            await fetch('/delete_chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({id: id})
-            });
-            location.reload();
+        async function delChat(id) { 
+            if(!confirm("ELIMINAR SESSÃO?")) return; 
+            await fetch('/delete_chat', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({id: id}) 
+            }); 
+            location.reload(); 
         }
 
-        function format(t) {
-            let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            const r = /```([a-z]*)\n([\s\S]*?)```/g;
-            return s.replace(r, (m, lang, code) => {
-                return `<div class="hover-scale" style="background:#F9F9F9; border-radius:20px; padding:30px; margin:30px 0; border:1px solid #F0F0F0;">
+        // FORMATAÇÃO DE CÓDIGOS E MARKDOWN
+        function format(t) { 
+            let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
+            const r = /```([a-z]*)\n([\s\S]*?)```/g; 
+            return s.replace(r, (m, lang, code) => { 
+                return `
+                <div class="hover-scale" style="background:#F9F9F9; border-radius:20px; padding:30px; margin:30px 0; border:1px solid #F0F0F0;">
                     <div style="font-size:10px; color:#CCC; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div>
                     <pre><code style="font-family: 'JetBrains Mono', monospace; font-size:15px;">${code.trim()}</code></pre>
-                </div>`;
-            });
+                </div>`; 
+            }); 
         }
 
-        function display(role, content, animate) {
-            const d = document.createElement('div');
-            d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`;
-            d.innerHTML = `<div class="role-tag">${role === 'user' ? 'AUTORIDADE' : 'ANK_CORE'}</div><div class="content"></div>`;
-            vp.appendChild(d);
-            const b = d.querySelector('.content');
+        // MOSTRAR MENSAGENS NA TELA
+        function display(role, content, animate) { 
+            const d = document.createElement('div'); 
+            d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
+            d.innerHTML = `<div class="role-tag">${role === 'user' ? 'AUTORIDADE' : 'ANK_CORE'}</div><div class="content"></div>`; 
+            vp.appendChild(d); 
+            const b = d.querySelector('.content'); 
 
-            if(animate && role === 'assistant') {
-                let i = 0;
-                function type() {
-                    if(i < content.length) {
-                        b.textContent += content.charAt(i); i++;
-                        vp.scrollTop = vp.scrollHeight; setTimeout(type, 1);
-                    } else {
-                        b.innerHTML = format(content); hljs.highlightAll();
-                        vp.scrollTop = vp.scrollHeight;
-                    }
-                }
-                type();
-            } else {
-                b.innerHTML = format(content); hljs.highlightAll();
-            }
+            if(animate && role === 'assistant') { 
+                let i = 0; 
+                function type() { 
+                    if(i < content.length) { 
+                        b.textContent += content.charAt(i); 
+                        i++; 
+                        vp.scrollTop = vp.scrollHeight; 
+                        setTimeout(type, 1); 
+                    } else { 
+                        b.innerHTML = format(content); 
+                        hljs.highlightAll(); 
+                        vp.scrollTop = vp.scrollHeight; 
+                    } 
+                } 
+                type(); 
+            } else { 
+                b.innerHTML = format(content); 
+                hljs.highlightAll(); 
+            } 
         }
 
-        async function send() {
-            const i = document.getElementById('msg-in');
-            const m = i.value.trim(); if(!m) return;
-            if(!curId) {
-                const r = await fetch('/new_chat', { method: 'POST' });
-                const sess = await r.json();
-                curId = sess.id;
-            }
-            display('user', m, false); i.value = '';
-            const res = await fetch('/chat', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: m, chat_id: curId})
-            });
-            const data = await res.json();
-            display('assistant', data.response, true);
+        // ENVIAR MENSAGEM PARA O SERVIDOR
+        async function send() { 
+            const i = document.getElementById('msg-in'); 
+            const m = i.value.trim(); 
+            if(!m) return; 
+            
+            if(!curId) { 
+                const r = await fetch('/new_chat', { method: 'POST' }); 
+                const sess = await r.json(); 
+                curId = sess.id; 
+            } 
+            
+            display('user', m, false); 
+            i.value = ''; 
+            
+            const res = await fetch('/chat', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({message: m, chat_id: curId}) 
+            }); 
+            
+            const data = await res.json(); 
+            display('assistant', data.response, true); 
         }
 
-        window.onclick = (e) => {
-            if (!e.target.matches('.profile-img')) {
-                const d = document.getElementById('p-drop');
-                if(d) d.style.display = 'none';
-            }
+        // FECHAR DROPDOWN DE PERFIL CLICANDO FORA
+        window.onclick = (e) => { 
+            if (!e.target.matches('.profile-img')) { 
+                const d = document.getElementById('p-drop'); 
+                if(d) d.style.display = 'none'; 
+            } 
         }
     </script>
 </body>
