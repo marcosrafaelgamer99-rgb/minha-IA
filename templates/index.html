@@ -243,7 +243,8 @@
                 <div class="plan-card pro hover-scale">
                     <div>
                         <div class="plan-name">Pro</div>
-                        <div class="plan-price">R$ 49<span>/mês</span></div>
+                        <!-- ATUALIZADO: R$ 25 -->
+                        <div class="plan-price">R$ 25<span>/mês</span></div>
                         <ul class="plan-features">
                             <li>Acesso prioritário ANK 1.0</li>
                             <li>Velocidade Neural 2x</li>
@@ -258,7 +259,8 @@
                 <div class="plan-card plus hover-scale">
                     <div>
                         <div class="plan-name">Plus</div>
-                        <div class="plan-price">R$ 99<span>/mês</span></div>
+                        <!-- ATUALIZADO: R$ 60 -->
+                        <div class="plan-price">R$ 60<span>/mês</span></div>
                         <ul class="plan-features">
                             <li>Acesso Ilimitado ANK 1.0</li>
                             <li>Velocidade Neural Máxima</li>
@@ -286,7 +288,7 @@
             <div class="header-title" id="active-title">SISTEMA_ANK_ONLINE</div>
             
             <div class="header-actions">
-                <!-- NOVO BOTÃO DE PLANOS NO CABEÇALHO -->
+                <!-- BOTÃO DE PLANOS NO CABEÇALHO -->
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 
                 <div class="profile-area">
@@ -329,12 +331,11 @@
             }, 1500);
         };
 
-        // GESTOR DE TELAS IMERSIVAS (CHAT, CONFIGURAÇÕES E PLANOS)
+        // GESTOR DE TELAS IMERSIVAS
         function switchView(view) {
             const settings = document.getElementById('view-settings');
             const plans = document.getElementById('view-plans');
             
-            // Oculta ambas primeiro com fade out
             settings.style.opacity = '0';
             plans.style.opacity = '0';
 
@@ -349,7 +350,7 @@
                     plans.style.display = 'flex';
                     setTimeout(() => plans.style.opacity = '1', 10);
                 }
-            }, 300); // 300ms = Transição rápida e premium
+            }, 300);
         }
 
         function toggleProfile() {
