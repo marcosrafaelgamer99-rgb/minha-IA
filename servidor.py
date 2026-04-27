@@ -8,10 +8,11 @@ import uuid
 from openai import OpenAI
 
 app = Flask(__name__)
+# Configuração obrigatória para o Render (HTTPS)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 CORS(app)
 
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_immersion_2026")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "ank_soberana_checkout_2026")
 
 # --- CONFIGURAÇÃO GOOGLE OAUTH ---
 oauth = OAuth(app)
@@ -48,12 +49,16 @@ def gerar_titulo(mensagem):
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": "Resuma a mensagem em 2 palavras. Título curto."},
+            messages=[{"role": "system", "content": "Resuma a mensagem em 2 palavras. Título curto em maiúsculas."},
                       {"role": "user", "content": mensagem}],
             max_tokens=8
         )
         return res.choices[0].message.content.upper().replace('"', '')
     except: return "NOVA SESSÃO"
+
+# ==========================================
+# ROTAS DE PÁGINAS (FRONTEND)
+# ==========================================
 
 @app.route('/')
 def index():
@@ -63,20 +68,38 @@ def index():
     user_data = db.get(user_email, {"sessions": []})
     return render_template('index.html', user=user, sessions=user_data["sessions"])
 
+# -> ESTA É A ROTA QUE ESTAVA A FALTAR E CAUSOU O ERRO 404 <-
+@app.route('/checkout')
+def checkout():
+    user = session.get('user')
+    # Carrega a página de checkout.html que vamos criar abaixo
+    return render_template('checkout.html', user=user)
+
+# ==========================================
+# ROTAS DE AUTENTICAÇÃO (GOOGLE)
+# ==========================================
+
 @app.route('/login')
 def login():
     return google.authorize_redirect(url_for('authorize', _external=True), prompt='select_account')
 
 @app.route('/authorize')
 def authorize():
-    token = google.authorize_access_token()
-    session['user'] = token.get('userinfo') or google.get('https://openidconnect.googleapis.com/v1/userinfo').json()
-    return redirect('/')
+    try:
+        token = google.authorize_access_token()
+        session['user'] = token.get('userinfo') or google.get('https://openidconnect.googleapis.com/v1/userinfo').json()
+        return redirect('/')
+    except Exception as e:
+        return f"Erro Crítico de Login: {str(e)}", 400
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     return redirect('/')
+
+# ==========================================
+# ROTAS DE DADOS (BACKEND / CHAT)
+# ==========================================
 
 @app.route('/new_chat', methods=['POST'])
 def new_chat():
@@ -126,14 +149,14 @@ def chat():
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": "ANK 1.0 Soberana. Abril 2026. Minimalista."}] + sess["messages"][-12:],
+            messages=[{"role": "system", "content": "ANK 1.0 Soberana. Abril 2026. Responda de forma elegante, direta e técnica."}] + sess["messages"][-12:],
             max_tokens=4000
         )
         ans = res.choices[0].message.content
         sess["messages"].append({"role": "assistant", "content": ans})
         salvar_db(db)
         return jsonify({"response": ans, "title": sess["title"]})
-    except Exception as e: return jsonify({"response": f"ERRO: {str(e)}"}), 500
+    except Exception as e: return jsonify({"response": f"ERRO DE CONEXÃO: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

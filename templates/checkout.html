@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANK | Assinatura Soberana</title>
+    <title>ANK | Checkout Soberano</title>
     
     <style>
         :root {
@@ -12,7 +12,6 @@
             --border: #EAEAEA;
             --text-main: #000000;
             --text-dim: #888888;
-            --accent: #000000;
             --liquid: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -26,7 +25,7 @@
         .hover-scale:hover { transform: scale(1.02); }
         .btn-scale:active { transform: scale(0.97); }
 
-        /* HEADER FIXO */
+        /* CABEÇALHO DE VOLTAR */
         .header {
             position: fixed; top: 0; left: 0; width: 100%; padding: 30px 50px;
             display: flex; justify-content: space-between; align-items: center;
@@ -37,17 +36,12 @@
             color: var(--text-dim); cursor: pointer; display: flex; align-items: center; gap: 8px;
         }
         .back-btn:hover { color: var(--text-main); }
-        .logo { width: 50px; filter: invert(1); cursor: pointer; }
+        .logo { width: 45px; filter: invert(1); cursor: pointer; }
 
-        /* CONTAINER PRINCIPAL (CÁPSULA DE VIDRO) */
-        .checkout-container {
-            width: 100%; max-width: 900px; margin-top: 80px; position: relative;
-        }
+        .checkout-container { width: 100%; max-width: 900px; margin-top: 80px; position: relative; }
 
-        /* PASSO 1: ESCOLHA DO PLANO (Vindo do clique) */
-        #step-selection {
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
+        /* TELA DE SELEÇÃO DE PLANO */
+        #step-selection { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .title { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 50px; }
 
@@ -73,16 +67,14 @@
         }
         .pro .select-btn { background: #FFF; color: #000; border: none; }
 
-        /* PASSO 2: CHECKOUT PIX */
+        /* TELA DE PAGAMENTO (PIX) */
         #step-payment {
-            display: none; /* Escondido por padrão, revelado via JS */
-            opacity: 0; transform: translateY(20px);
+            display: none; opacity: 0; transform: translateY(20px);
             background: var(--surface); border: 1px solid var(--border); border-radius: 30px;
             padding: 50px; box-shadow: 0 20px 80px rgba(0,0,0,0.05);
-            display: flex; gap: 60px;
+            gap: 60px;
         }
 
-        /* Lado Esquerdo: Resumo & Cupom */
         .summary-col { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .summary-title { font-size: 12px; font-weight: 800; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
         
@@ -90,40 +82,22 @@
         .item-name { font-size: 24px; font-weight: 900; }
         .item-price { font-size: 24px; font-weight: 500; }
         
-        .coupon-box {
-            display: flex; border: 1px solid var(--border); border-radius: 12px;
-            overflow: hidden; margin-bottom: 40px; margin-top: 20px;
-        }
-        .coupon-box input {
-            flex: 1; border: none; padding: 15px 20px; font-size: 14px; outline: none; background: #FAFAFA;
-        }
-        .coupon-box button {
-            background: #000; color: #FFF; border: none; padding: 0 25px;
-            font-weight: 800; cursor: pointer; font-size: 12px;
-        }
+        .coupon-box { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 40px; margin-top: 20px; }
+        .coupon-box input { flex: 1; border: none; padding: 15px 20px; font-size: 14px; outline: none; background: #FAFAFA; }
+        .coupon-box button { background: #000; color: #FFF; border: none; padding: 0 25px; font-weight: 800; cursor: pointer; font-size: 12px; }
 
-        .total-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-top: 30px; border-top: 1px solid var(--border);
-        }
+        .total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid var(--border); }
         .total-label { font-size: 16px; font-weight: 700; color: var(--text-dim); }
         .total-price { font-size: 36px; font-weight: 900; letter-spacing: -1px; }
 
-        /* Lado Direito: PIX Exclusivo */
         .pix-col {
             flex: 1; background: #FAFAFA; border-radius: 20px; padding: 40px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
             border: 1px solid var(--border);
         }
-        .pix-logo {
-            font-size: 20px; font-weight: 900; color: #32BCAD; /* Cor oficial do PIX */
-            display: flex; align-items: center; gap: 8px; margin-bottom: 30px; letter-spacing: -1px;
-        }
-        .pix-logo::before {
-            content: "❖"; font-size: 24px;
-        }
+        .pix-logo { font-size: 20px; font-weight: 900; color: #32BCAD; display: flex; align-items: center; gap: 8px; margin-bottom: 30px; letter-spacing: -1px; }
+        .pix-logo::before { content: "❖"; font-size: 24px; }
         
-        /* O "QR Code" Minimalista de 2026 */
         .qr-placeholder {
             width: 200px; height: 200px; background: #FFF; border: 1px dashed #CCC;
             border-radius: 16px; display: flex; align-items: center; justify-content: center;
@@ -143,10 +117,7 @@
         .copy-pix-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
         
         .waiting-text { font-size: 13px; color: var(--text-dim); margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .waiting-text::before {
-            content: ""; display: block; width: 8px; height: 8px; background: #32BCAD; border-radius: 50%;
-            animation: blink 1.5s infinite;
-        }
+        .waiting-text::before { content: ""; display: block; width: 8px; height: 8px; background: #32BCAD; border-radius: 50%; animation: blink 1.5s infinite; }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
     </style>
@@ -155,12 +126,11 @@
 
     <header class="header">
         <button class="back-btn btn-scale" onclick="location.href='/'">← Voltar ao Núcleo</button>
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'" alt="ANK Logo">
+        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'" alt="ANK">
     </header>
 
     <div class="checkout-container">
         
-        <!-- PASSO 1: ESCOLHA (Visível se não vier com plano na URL) -->
         <div id="step-selection">
             <div class="title">Evolução Neural.</div>
             <div class="subtitle">Selecione a capacidade de processamento desejada.</div>
@@ -169,22 +139,20 @@
                 <div class="plan-card pro hover-scale" onclick="proceedToPayment('Pro', 25)">
                     <div class="plan-name">Pro</div>
                     <div class="plan-price">R$ 25<span>/mês</span></div>
-                    <div style="font-size: 14px; color: #AAA; line-height: 1.6;">Acesso prioritário, Velocidade 2x e Soberania de Dados ativada.</div>
-                    <button class="select-btn btn-scale">CONTINUAR PARA PAGAMENTO</button>
+                    <div style="font-size: 14px; color: #AAA; line-height: 1.6;">Acesso prioritário, Velocidade 2x e Soberania de Dados.</div>
+                    <button class="select-btn btn-scale">PAGAR COM PIX</button>
                 </div>
                 
                 <div class="plan-card plus hover-scale" onclick="proceedToPayment('Plus', 60)">
                     <div class="plan-name">Plus</div>
                     <div class="plan-price">R$ 60<span>/mês</span></div>
                     <div style="font-size: 14px; color: var(--text-dim); line-height: 1.6;">O poder máximo. Ilimitado, rápido e com acesso a novos modelos.</div>
-                    <button class="select-btn btn-scale" style="background: #000; color: #FFF;">CONTINUAR PARA PAGAMENTO</button>
+                    <button class="select-btn btn-scale" style="background: #000; color: #FFF;">PAGAR COM PIX</button>
                 </div>
             </div>
         </div>
 
-        <!-- PASSO 2: PAGAMENTO PIX (Visível após escolha) -->
-        <div id="step-payment" style="display: none;">
-            
+        <div id="step-payment">
             <div class="summary-col">
                 <div>
                     <div class="summary-title">Resumo da Assinatura</div>
@@ -197,7 +165,7 @@
                         <input type="text" id="coupon-input" placeholder="Possui código de convite?" autocomplete="off">
                         <button onclick="applyCoupon()" class="btn-scale">APLICAR</button>
                     </div>
-                    <div id="coupon-msg" style="font-size: 12px; color: #32BCAD; font-weight: 700; margin-top: -30px; margin-bottom: 20px; display: none;">Cupom SOBERANA10 aplicado! (-R$ 10,00)</div>
+                    <div id="coupon-msg" style="font-size: 12px; color: #32BCAD; font-weight: 700; margin-top: -30px; margin-bottom: 20px; display: none;">Cupom aplicado! (-R$ 10,00)</div>
                 </div>
 
                 <div class="total-row">
@@ -209,17 +177,14 @@
             <div class="pix-col">
                 <div class="pix-logo">Pagamento via PIX</div>
                 <div class="qr-placeholder hover-scale">
-                    <div style="font-size: 10px; font-weight: 800; color: #999; letter-spacing: 2px;">QR CODE GERADO</div>
+                    <div style="font-size: 10px; font-weight: 800; color: #999; letter-spacing: 2px;">CÓDIGO GERADO</div>
                 </div>
                 <button class="copy-pix-btn btn-scale" onclick="copyPixCode(this)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     COPIAR CÓDIGO PIX
                 </button>
-                <div class="waiting-text">Aguardando confirmação do pagamento...</div>
+                <div class="waiting-text">Aguardando confirmação...</div>
             </div>
-
         </div>
-
     </div>
 
     <script>
@@ -227,7 +192,6 @@
         let discountApplied = false;
 
         window.onload = () => {
-            // Verifica se a pessoa veio do botão "Assinar Pro" ou "Plus" da tela principal
             const urlParams = new URLSearchParams(window.location.search);
             const plan = urlParams.get('plan');
             
@@ -236,43 +200,34 @@
             } else if (plan === 'plus') {
                 proceedToPayment('Plus', 60);
             } else {
-                // Se não vier direto, mostra os cartões para escolher
                 document.getElementById('step-selection').style.display = 'flex';
             }
         };
 
-        // Função fluida para transição do passo 1 para o passo 2
         function proceedToPayment(name, price) {
             currentPrice = price;
-            
-            // Oculta Seleção
             const sel = document.getElementById('step-selection');
             sel.style.opacity = '0';
             setTimeout(() => {
                 sel.style.display = 'none';
-                
-                // Atualiza Dados
                 document.getElementById('selected-plan-name').innerText = name;
                 document.getElementById('selected-plan-price').innerText = price;
                 document.getElementById('total-price').innerText = price;
                 
-                // Mostra Pagamento
                 const pay = document.getElementById('step-payment');
                 pay.style.display = 'flex';
-                // Trigger reflow
                 void pay.offsetWidth; 
                 pay.style.opacity = '1';
                 pay.style.transform = 'translateY(0)';
             }, 300);
         }
 
-        // Sistema de Cupom Soberano
         function applyCoupon() {
             if(discountApplied) return;
             const input = document.getElementById('coupon-input').value.toUpperCase();
             
             if(input === 'SOBERANA10' || input === 'ANK2026') {
-                const discount = 10; // R$ 10 de desconto
+                const discount = 10;
                 const newTotal = currentPrice - discount;
                 
                 document.getElementById('total-price').innerText = newTotal > 0 ? newTotal : 0;
@@ -280,19 +235,15 @@
                 document.getElementById('coupon-input').disabled = true;
                 discountApplied = true;
             } else {
-                alert("Código de convite inválido.");
+                alert("Código inválido.");
             }
         }
 
-        // Copiar Código Pix Animado
         function copyPixCode(btn) {
-            // Código fake para simulação
-            const fakePix = "00020126580014br.gov.bcb.pix0136ANK-SOBERANA-1.0-PIX-2026-CODE-XYZ5204000053039865802BR5913ANK SOBERANA6009SAO PAULO62070503***6304E11F";
-            navigator.clipboard.writeText(fakePix);
-            
+            navigator.clipboard.writeText("00020126580014br.gov.bcb.pix0136ANK-SOBERANA-1.0");
             const originalText = btn.innerHTML;
-            btn.innerHTML = "CÓDIGO COPIADO COM SUCESSO ✓";
-            btn.style.background = "#32BCAD"; // Verde PIX
+            btn.innerHTML = "CÓDIGO COPIADO ✓";
+            btn.style.background = "#32BCAD";
             btn.style.color = "#FFF";
             
             setTimeout(() => {
