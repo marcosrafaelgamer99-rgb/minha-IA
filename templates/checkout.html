@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANK | Checkout Soberano</title>
+    <title>ANK | Assinatura Soberana</title>
     
     <style>
         :root {
@@ -25,7 +25,6 @@
         .hover-scale:hover { transform: scale(1.02); }
         .btn-scale:active { transform: scale(0.97); }
 
-        /* CABEÇALHO DE VOLTAR */
         .header {
             position: fixed; top: 0; left: 0; width: 100%; padding: 30px 50px;
             display: flex; justify-content: space-between; align-items: center;
@@ -40,13 +39,11 @@
 
         .checkout-container { width: 100%; max-width: 900px; margin-top: 80px; position: relative; }
 
-        /* TELA DE SELEÇÃO DE PLANO */
         #step-selection { display: flex; flex-direction: column; align-items: center; text-align: center; }
         .title { font-size: 42px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 10px; }
         .subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 50px; }
 
         .cards-grid { display: flex; gap: 30px; width: 100%; justify-content: center; }
-        
         .plan-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
             padding: 40px; width: 380px; text-align: left; cursor: pointer;
@@ -54,12 +51,10 @@
         }
         .plan-card:hover { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.08); transform: translateY(-5px); }
         .plan-card.pro { background: #000; color: #FFF; border-color: #000; }
-        
         .plan-name { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 20px; letter-spacing: -2px; }
         .plan-price span { font-size: 16px; font-weight: 500; color: var(--text-dim); }
         .pro .plan-price span { color: #888; }
-        
         .select-btn {
             width: 100%; padding: 18px; border-radius: 50px; font-size: 14px; font-weight: 800;
             border: 1px solid var(--border); background: var(--bg); color: var(--text-main); cursor: pointer;
@@ -67,33 +62,31 @@
         }
         .pro .select-btn { background: #FFF; color: #000; border: none; }
 
-        /* TELA DE PAGAMENTO (PIX) */
         #step-payment {
             display: none; opacity: 0; transform: translateY(20px);
             background: var(--surface); border: 1px solid var(--border); border-radius: 30px;
-            padding: 50px; box-shadow: 0 20px 80px rgba(0,0,0,0.05);
-            gap: 60px;
+            padding: 50px; box-shadow: 0 20px 80px rgba(0,0,0,0.05); gap: 60px;
         }
-
         .summary-col { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .summary-title { font-size: 12px; font-weight: 800; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
-        
         .item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .item-name { font-size: 24px; font-weight: 900; }
         .item-price { font-size: 24px; font-weight: 500; }
         
+        /* CAIXA DE CUPOM */
         .coupon-box { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 40px; margin-top: 20px; }
-        .coupon-box input { flex: 1; border: none; padding: 15px 20px; font-size: 14px; outline: none; background: #FAFAFA; }
+        .coupon-box input { flex: 1; border: none; padding: 15px 20px; font-size: 14px; outline: none; background: #FAFAFA; font-weight: 600; }
         .coupon-box button { background: #000; color: #FFF; border: none; padding: 0 25px; font-weight: 800; cursor: pointer; font-size: 12px; }
-
+        
         .total-row { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid var(--border); }
         .total-label { font-size: 16px; font-weight: 700; color: var(--text-dim); }
         .total-price { font-size: 36px; font-weight: 900; letter-spacing: -1px; }
 
+        /* COLUNA DO PIX / ATIVAÇÃO */
         .pix-col {
             flex: 1; background: #FAFAFA; border-radius: 20px; padding: 40px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            border: 1px solid var(--border);
+            border: 1px solid var(--border); justify-content: center;
         }
         .pix-logo { font-size: 20px; font-weight: 900; color: #32BCAD; display: flex; align-items: center; gap: 8px; margin-bottom: 30px; letter-spacing: -1px; }
         .pix-logo::before { content: "❖"; font-size: 24px; }
@@ -114,19 +107,32 @@
             font-size: 14px; font-weight: 800; border: none; cursor: pointer;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .copy-pix-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
         
         .waiting-text { font-size: 13px; color: var(--text-dim); margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px;}
-        .waiting-text::before { content: ""; display: block; width: 8px; height: 8px; background: #32BCAD; border-radius: 50%; animation: blink 1.5s infinite; }
+        .waiting-text.loading::before { content: ""; display: block; width: 8px; height: 8px; background: #32BCAD; border-radius: 50%; animation: blink 1.5s infinite; }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+        /* TELA DE SUCESSO */
+        #step-success {
+            display: none; opacity: 0; transform: translateY(20px);
+            flex-direction: column; align-items: center; text-align: center;
+        }
+        .success-icon {
+            width: 80px; height: 80px; background: #000; color: #FFF; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 30px;
+            animation: popIn 0.5s var(--liquid);
+        }
+        @keyframes popIn { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .success-title { font-size: 32px; font-weight: 900; margin-bottom: 10px; }
+        .success-subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 40px; }
 
     </style>
 </head>
 <body>
 
     <header class="header">
-        <button class="back-btn btn-scale" onclick="location.href='/'">← Voltar ao Núcleo</button>
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'" alt="ANK">
+        <button class="back-btn btn-scale" onclick="location.href='/'">← Voltar</button>
+        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'">
     </header>
 
     <div class="checkout-container">
@@ -134,20 +140,16 @@
         <div id="step-selection">
             <div class="title">Evolução Neural.</div>
             <div class="subtitle">Selecione a capacidade de processamento desejada.</div>
-            
             <div class="cards-grid">
                 <div class="plan-card pro hover-scale" onclick="proceedToPayment('Pro', 25)">
                     <div class="plan-name">Pro</div>
                     <div class="plan-price">R$ 25<span>/mês</span></div>
-                    <div style="font-size: 14px; color: #AAA; line-height: 1.6;">Acesso prioritário, Velocidade 2x e Soberania de Dados.</div>
-                    <button class="select-btn btn-scale">PAGAR COM PIX</button>
+                    <button class="select-btn btn-scale">AVANÇAR</button>
                 </div>
-                
                 <div class="plan-card plus hover-scale" onclick="proceedToPayment('Plus', 60)">
                     <div class="plan-name">Plus</div>
                     <div class="plan-price">R$ 60<span>/mês</span></div>
-                    <div style="font-size: 14px; color: var(--text-dim); line-height: 1.6;">O poder máximo. Ilimitado, rápido e com acesso a novos modelos.</div>
-                    <button class="select-btn btn-scale" style="background: #000; color: #FFF;">PAGAR COM PIX</button>
+                    <button class="select-btn btn-scale" style="background: #000; color: #FFF;">AVANÇAR</button>
                 </div>
             </div>
         </div>
@@ -165,47 +167,54 @@
                         <input type="text" id="coupon-input" placeholder="Possui código de convite?" autocomplete="off">
                         <button onclick="applyCoupon()" class="btn-scale">APLICAR</button>
                     </div>
-                    <div id="coupon-msg" style="font-size: 12px; color: #32BCAD; font-weight: 700; margin-top: -30px; margin-bottom: 20px; display: none;">Cupom aplicado! (-R$ 10,00)</div>
+                    <div id="coupon-msg" style="font-size: 12px; color: #000; font-weight: 900; margin-top: -30px; margin-bottom: 20px; display: none;">CUPOM APLICADO: 100% OFF (GRÁTIS)</div>
                 </div>
-
                 <div class="total-row">
                     <div class="total-label">Total a pagar hoje</div>
                     <div class="total-price">R$ <span id="total-price">25</span>,00</div>
                 </div>
             </div>
 
-            <div class="pix-col">
+            <div class="pix-col" id="pix-area">
                 <div class="pix-logo">Pagamento via PIX</div>
                 <div class="qr-placeholder hover-scale">
-                    <div style="font-size: 10px; font-weight: 800; color: #999; letter-spacing: 2px;">CÓDIGO GERADO</div>
+                    <div style="font-size: 10px; font-weight: 800; color: #999; letter-spacing: 2px;">QR CODE</div>
                 </div>
-                <button class="copy-pix-btn btn-scale" onclick="copyPixCode(this)">
+                <button class="copy-pix-btn btn-scale" id="btn-copia-cola" onclick="copyPixCode()">
                     COPIAR CÓDIGO PIX
                 </button>
-                <div class="waiting-text">Aguardando confirmação...</div>
+                <div id="status-text" class="waiting-text loading">Aguardando confirmação...</div>
             </div>
         </div>
+
+        <div id="step-success">
+            <div class="success-icon">✓</div>
+            <div class="success-title">Núcleo Atualizado!</div>
+            <div class="success-subtitle">O seu novo plano foi ativado com sucesso através do convite VIP.</div>
+            <button class="select-btn btn-scale hover-scale" style="background: #000; color: #FFF; width: auto; padding: 15px 40px;" onclick="location.href='/'">
+                ACESSAR SISTEMA SOBERANO
+            </button>
+        </div>
+
     </div>
 
     <script>
         let currentPrice = 0;
+        let selectedPlan = '';
         let discountApplied = false;
 
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const plan = urlParams.get('plan');
-            
-            if (plan === 'pro') {
-                proceedToPayment('Pro', 25);
-            } else if (plan === 'plus') {
-                proceedToPayment('Plus', 60);
-            } else {
-                document.getElementById('step-selection').style.display = 'flex';
-            }
+            if (plan === 'pro') proceedToPayment('Pro', 25);
+            else if (plan === 'plus') proceedToPayment('Plus', 60);
+            else document.getElementById('step-selection').style.display = 'flex';
         };
 
         function proceedToPayment(name, price) {
             currentPrice = price;
+            selectedPlan = name;
+            
             const sel = document.getElementById('step-selection');
             sel.style.opacity = '0';
             setTimeout(() => {
@@ -222,34 +231,54 @@
             }, 300);
         }
 
+        // --- SISTEMA DE CUPOM MÁGICO ---
         function applyCoupon() {
             if(discountApplied) return;
-            const input = document.getElementById('coupon-input').value.toUpperCase();
+            const input = document.getElementById('coupon-input').value.toUpperCase().replace(/\s/g, ''); // Remove espaços e deixa tudo maiúsculo
             
-            if(input === 'SOBERANA10' || input === 'ANK2026') {
-                const discount = 10;
-                const newTotal = currentPrice - discount;
-                
-                document.getElementById('total-price').innerText = newTotal > 0 ? newTotal : 0;
+            // O cupom que deixa tudo grátis
+            if(input === 'GRATIS20%') {
+                document.getElementById('total-price').innerText = "0";
                 document.getElementById('coupon-msg').style.display = 'block';
                 document.getElementById('coupon-input').disabled = true;
                 discountApplied = true;
+                
+                // Transforma a área do PIX num botão de ativação direta
+                const pixArea = document.getElementById('pix-area');
+                pixArea.innerHTML = `
+                    <div style="font-size: 40px; margin-bottom: 20px;">🎉</div>
+                    <div style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Custo Zero</div>
+                    <div style="font-size: 14px; color: #888; margin-bottom: 30px;">O seu convite cobriu 100% do valor do plano.</div>
+                    <button class="copy-pix-btn btn-scale hover-scale" onclick="activateFreePlan()">
+                        ATIVAR PLANO AGORA
+                    </button>
+                `;
             } else {
-                alert("Código inválido.");
+                alert("Cupom inválido ou expirado.");
             }
         }
 
-        function copyPixCode(btn) {
-            navigator.clipboard.writeText("00020126580014br.gov.bcb.pix0136ANK-SOBERANA-1.0");
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "CÓDIGO COPIADO ✓";
-            btn.style.background = "#32BCAD";
-            btn.style.color = "#FFF";
-            
+        function activateFreePlan() {
+            // Salva o novo plano no armazenamento local do navegador para o frontend saber que ele mudou
+            localStorage.setItem('ank_plan', selectedPlan);
+            showSuccess();
+        }
+
+        function showSuccess() {
+            const pay = document.getElementById('step-payment');
+            pay.style.opacity = '0';
             setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = "#000";
-            }, 3000);
+                pay.style.display = 'none';
+                const suc = document.getElementById('step-success');
+                suc.style.display = 'flex';
+                void suc.offsetWidth;
+                suc.style.opacity = '1';
+                suc.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        function copyPixCode() {
+            alert("Como você não inseriu o cupom, esta é apenas uma simulação.");
         }
     </script>
 </body>
