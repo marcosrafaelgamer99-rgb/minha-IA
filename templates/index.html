@@ -158,13 +158,14 @@
         .settings-value { font-size: 16px; font-weight: 800; color: #000; display: flex; align-items: center; gap: 10px; }
         
         .token-badge-large { 
-            background: #F0F0F0; 
-            padding: 6px 12px; 
-            border-radius: 50px; 
+            background: #F9F9F9; 
+            padding: 6px 14px; 
+            border-radius: 6px; 
             font-size: 12px; 
             color: #000; 
-            font-family: monospace; 
-            font-weight: bold; 
+            font-family: 'JetBrains Mono', monospace; 
+            font-weight: bold;
+            border: 1px solid var(--border-color);
         }
 
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
@@ -205,23 +206,56 @@
         .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
-        .role-tag { font-size: 10px; font-weight: 900; color: #E0E0E0; margin-bottom: 15px; letter-spacing: 3px; display: flex; align-items: center; gap: 15px;}
-        .content { font-size: 17px; line-height: 2; color: #444; }
+        .role-tag { 
+            font-size: 10px; 
+            font-weight: 900; 
+            color: #D0D0D0; 
+            margin-bottom: 15px; 
+            letter-spacing: 3px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+        }
+        .content { font-size: 17px; line-height: 2; color: #333; }
         .content b { color: #000; }
 
-        /* CONTADOR DE TOKENS AO VIVO */
-        .live-tokens {
-            background: #F5F5F5; 
-            color: #000; 
+        /* NOVO CONTADOR DE TOKENS (PREMIUM 2026) */
+        .telemetry-badge {
+            background: #FFFFFF; 
+            border: 1px solid #E5E5E5; 
+            color: #666; 
             padding: 4px 10px; 
-            border-radius: 50px;
-            font-size: 9px; 
-            font-family: monospace; 
-            letter-spacing: 1px; 
-            font-weight: 800;
+            border-radius: 6px; /* Pill para quadrado sutil */
+            font-size: 10px; 
+            font-family: 'JetBrains Mono', 'Courier New', monospace; /* Fonte tipo código */
+            font-weight: 600;
             display: inline-flex; 
             align-items: center; 
-            gap: 4px;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            /* Evita que a caixa trema quando os números mudam */
+            font-variant-numeric: tabular-nums; 
+            letter-spacing: 0;
+        }
+        
+        .status-dot {
+            width: 6px; 
+            height: 6px; 
+            background-color: #000; 
+            border-radius: 50%; 
+            animation: pulse-dot 1s infinite;
+        }
+        
+        .telemetry-badge.completed {
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+            color: #AAA;
+        }
+        
+        @keyframes pulse-dot { 
+            0%, 100% { opacity: 0.3; transform: scale(0.8); } 
+            50% { opacity: 1; transform: scale(1.2); } 
         }
 
         #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
@@ -274,6 +308,7 @@
             <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
             <div class="plans-grid">
                 
+                <!-- PLANO GRÁTIS -->
                 <div class="plan-card hover-scale">
                     <div>
                         <div class="plan-name">Grátis</div>
@@ -287,6 +322,7 @@
                     <button class="plan-btn-card current btn-scale" id="btn-gratis">SEU PLANO ATUAL</button>
                 </div>
                 
+                <!-- PLANO PRO -->
                 <div class="plan-card pro hover-scale">
                     <div>
                         <div class="plan-name">Pro</div>
@@ -297,21 +333,21 @@
                             <li>Velocidade 2x</li>
                         </ul>
                     </div>
-                    <!-- REDIRECIONA PARA O NOVO CHECKOUT -->
                     <button class="plan-btn-card upgrade-pro btn-scale" onclick="location.href='/checkout?plan=pro'">ASSINAR PRO</button>
                 </div>
                 
+                <!-- PLANO PLUS -->
                 <div class="plan-card plus hover-scale">
                     <div>
                         <div class="plan-name">Plus</div>
                         <div class="plan-price">R$ 60<span>/mês</span></div>
                         <ul class="plan-features">
-                            <li>Ilimitado (Sem limite de Tokens)</li>
+                            <!-- ATUALIZADO: 50 Milhões generosos ao invés de infinito -->
+                            <li>50 Milhões de Tokens Generosos</li>
                             <li>Velocidade Máxima</li>
                             <li>Novos Modelos</li>
                         </ul>
                     </div>
-                    <!-- REDIRECIONA PARA O NOVO CHECKOUT -->
                     <button class="plan-btn-card upgrade-plus btn-scale" onclick="location.href='/checkout?plan=plus'">ASSINAR PLUS</button>
                 </div>
                 
@@ -319,6 +355,7 @@
         </div>
     </div>
 
+    <!-- BARRA LATERAL -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()" alt="ANK">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
@@ -328,6 +365,7 @@
         </div>
     </aside>
 
+    <!-- NÚCLEO PRINCIPAL -->
     <main id="main">
         <header class="header">
             <div class="header-title" id="active-title">SISTEMA_ANK_ONLINE</div>
@@ -349,6 +387,7 @@
             </div>
         </header>
 
+        <!-- ÁREA DO CHAT -->
         <div id="viewport"></div>
         
         <div id="dock-wrapper">
@@ -359,6 +398,7 @@
         </div>
     </main>
 
+    <!-- MOTOR JAVASCRIPT DA INTERFACE -->
     <script>
         let curId = null; 
         const sessions = {{ sessions | tojson | safe }}; 
@@ -387,10 +427,11 @@
             document.getElementById('ui-current-plan').innerText = userPlan;
             const tokenUI = document.getElementById('ui-token-limit');
             
+            // Atualizado: Pro com 5 Milhões e Plus com generosos 50 Milhões
             if(userPlan === 'Pro') {
-                tokenUI.innerHTML = '<span class="token-badge-large" style="background:#000; color:#FFF;">5.000.000 TOKENS</span>';
+                tokenUI.innerHTML = '<span class="token-badge-large" style="background:#000; color:#FFF; border:none;">5.000.000 TOKENS</span>';
             } else if(userPlan === 'Plus') {
-                tokenUI.innerHTML = '<span class="token-badge-large" style="background:#000; color:#FFF;">∞ ILIMITADO</span>';
+                tokenUI.innerHTML = '<span class="token-badge-large" style="background:#000; color:#FFF; border:none;">50.000.000 TOKENS</span>';
             } else {
                 tokenUI.innerHTML = '<span class="token-badge-large">500.000 TOKENS</span>';
             }
@@ -469,25 +510,28 @@
             const r = /```([a-z]*)\n([\s\S]*?)```/g; 
             return s.replace(r, (m, lang, code) => { 
                 return `
-                <div class="hover-scale" style="background:#F9F9F9; border-radius:20px; padding:30px; margin:30px 0; border:1px solid #F0F0F0;">
+                <div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:1px solid #F0F0F0;">
                     <div style="font-size:10px; color:#CCC; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div>
-                    <pre><code style="font-family: 'JetBrains Mono', monospace; font-size:15px;">${code.trim()}</code></pre>
+                    <pre><code style="font-family: 'JetBrains Mono', monospace; font-size:14px;">${code.trim()}</code></pre>
                 </div>`; 
             }); 
         }
         
-        // FUNÇÃO QUE MOSTRA AS MENSAGENS E ANIMA OS TOKENS
+        // FUNÇÃO QUE MOSTRA AS MENSAGENS E ANIMA OS TOKENS (NOVO VISUAL)
         function display(role, content, animate) { 
             const d = document.createElement('div'); 
             d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
-            // ADICIONA A TAG DE TOKENS APENAS PARA A IA
+            // ADICIONA A TAG DE TELEMETRIA APENAS PARA A IA
             if (role === 'assistant') {
                 const uniqueId = Date.now();
                 d.innerHTML = `
                     <div class="role-tag">
                         ANK_CORE 
-                        <span class="live-tokens" id="token-count-${uniqueId}">⚡ 0 TOKENS</span>
+                        <span class="telemetry-badge" id="telemetry-${uniqueId}">
+                            <div class="status-dot"></div>
+                            PROCESSANDO: <span id="num-${uniqueId}">0</span> TKNS
+                        </span>
                     </div>
                     <div class="content"></div>
                 `;
@@ -501,7 +545,8 @@
             if(animate && role === 'assistant') { 
                 let i = 0; 
                 let tokens = 12; // Custo base de requisição
-                const tokenBadge = d.querySelector('.live-tokens');
+                const telemetryBadge = d.querySelector('.telemetry-badge');
+                const numSpan = d.querySelector(`#num-${telemetryBadge.id.split('-')[1]}`);
 
                 function type() { 
                     if(i < content.length) { 
@@ -511,7 +556,8 @@
                         // Atualiza a contagem de tokens a cada ~4 caracteres
                         if (i % 4 === 0) {
                             tokens++;
-                            tokenBadge.innerText = `⚡ ${tokens} TOKENS`;
+                            // Atualiza os números de forma fluida devido ao tabular-nums no CSS
+                            numSpan.innerText = tokens;
                         }
 
                         vp.scrollTop = vp.scrollHeight; 
@@ -520,9 +566,10 @@
                         b.innerHTML = format(content); 
                         hljs.highlightAll(); 
                         
-                        // Fica verde quando o processamento conclui
-                        tokenBadge.style.color = "#32BCAD"; 
-                        tokenBadge.innerText = `⚡ ${tokens} TOKENS (CONCLUÍDO)`;
+                        // Fim do processamento: Visual Limpo
+                        telemetryBadge.classList.add('completed');
+                        telemetryBadge.innerHTML = `✓ ${tokens} TKNS`;
+                        
                         vp.scrollTop = vp.scrollHeight; 
                     } 
                 } 
@@ -531,12 +578,12 @@
                 b.innerHTML = format(content); 
                 hljs.highlightAll(); 
                 
-                // Se estiver apenas a carregar o histórico antigo, calcula o valor final
+                // Se estiver apenas a carregar o histórico antigo
                 if (role === 'assistant') {
                     const finalTokens = Math.floor(content.length / 4) + 12;
-                    const badge = d.querySelector('.live-tokens');
-                    badge.innerText = `⚡ ${finalTokens} TOKENS`;
-                    badge.style.color = "#999";
+                    const badge = d.querySelector('.telemetry-badge');
+                    badge.classList.add('completed');
+                    badge.innerHTML = `${finalTokens} TKNS`;
                 }
             } 
         }
