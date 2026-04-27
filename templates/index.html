@@ -56,7 +56,7 @@
             cursor: pointer; display: flex; justify-content: space-between; align-items: center;
         }
         .chat-item:hover, .chat-item.active { background: #F9F9F9; color: #000; }
-        .del-chat { opacity: 0; font-size: 14px; color: #DDD; }
+        .del-chat { opacity: 0; font-size: 14px; color: #DDD; border: none; background: none; cursor: pointer; }
         .chat-item:hover .del-chat { opacity: 1; }
 
         .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px; }
@@ -70,6 +70,14 @@
             flex-direction: column; align-items: center; justify-content: center;
             padding: 100px;
         }
+        /* BOTÃO FECHAR CONFIGURAÇÕES NO CANTO DIREITO */
+        .close-settings-btn {
+            position: absolute; top: 40px; right: 50px;
+            background: transparent; border: none;
+            font-size: 28px; font-weight: 300; color: #000;
+            cursor: pointer; padding: 10px; border-radius: 50%;
+        }
+        
         .settings-container { width: 100%; max-width: 600px; text-align: left; }
         .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; }
         .settings-row { 
@@ -78,11 +86,6 @@
         }
         .settings-label { font-size: 16px; color: #999; font-weight: 500; }
         .settings-value { font-size: 16px; font-weight: 800; color: #000; }
-        .btn-back { 
-            margin-top: 60px; background: #000; color: #FFF; border: none; 
-            padding: 20px 60px; border-radius: 50px; font-weight: 900; font-size: 12px; 
-            cursor: pointer; letter-spacing: 2px;
-        }
 
         /* MAIN CONTENT */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
@@ -155,22 +158,20 @@
 
     <!-- ABA DE CONFIGURAÇÕES (TELA INTEIRA) -->
     <div id="view-settings">
+        <!-- BOTÃO DE FECHAR NO CANTO SUPERIOR DIREITO -->
+        <button class="close-settings-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
+        
         <div class="settings-container">
             <div class="settings-header">Preferências do Núcleo</div>
+            
             <div class="settings-row hover-scale">
-                <span class="settings-label">Inteligência Ativa</span>
-                <span class="settings-value">ANK-1_CORE</span>
+                <span class="settings-label">Modelo</span>
+                <span class="settings-value">ANK 1.0</span>
             </div>
+            
             <div class="settings-row hover-scale">
-                <span class="settings-label">Plano de Processamento</span>
-                <span class="settings-value">ACESSO GRATUITO</span>
-            </div>
-            <div class="settings-row hover-scale">
-                <span class="settings-label">Soberania de Dados</span>
-                <span class="settings-value">ATIVADA</span>
-            </div>
-            <div style="text-align: center;">
-                <button class="btn-back hover-scale btn-scale" onclick="switchView('chat')">VOLTAR AO CHAT</button>
+                <span class="settings-label">Plano</span>
+                <span class="settings-value">Grátis</span>
             </div>
         </div>
     </div>
@@ -194,7 +195,7 @@
                 {% if user %}
                     <img src="{{ user.picture }}" class="profile-img hover-scale" onclick="toggleProfile()">
                     <div class="profile-dropdown" id="p-drop">
-                        <button class="hover-scale" onclick="switchView('settings')">⚙️ Preferências</button>
+                        <button class="hover-scale" onclick="switchView('settings')">⚙️ Configurações</button>
                         <button class="hover-scale" onclick="location.href='/login'">🔄 Alternar Conta</button>
                         <button class="hover-scale" style="color: #FF4444;" onclick="location.href='/logout'">🚪 Desconectar</button>
                     </div>
@@ -255,7 +256,7 @@
                 d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`;
                 d.innerHTML = `
                     <span style="flex:1" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
-                    <span class="del-chat hover-scale" onclick="delChat('${s.id}')">✕</span>
+                    <button class="del-chat hover-scale btn-scale" onclick="delChat('${s.id}')">✕</button>
                 `;
                 list.appendChild(d);
             });
