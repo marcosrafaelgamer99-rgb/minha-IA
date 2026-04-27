@@ -24,11 +24,11 @@
             font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; 
         }
 
-        /* EFEITO DE CRESCER AO PASSAR O MOUSE */
+        /* EFEITOS HOVER/SCALE PARA TUDO */
         .hover-scale:hover { transform: scale(1.05); }
         .btn-scale:active { transform: scale(0.95); }
 
-        /* PRE-LOADER GIGANTE */
+        /* PRE-LOADER */
         #loader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF;
             z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -36,7 +36,7 @@
         .loader-logo { width: 180px; filter: invert(1); animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
-        /* SIDEBAR SOBERANA */
+        /* SIDEBAR */
         #sidebar {
             width: 320px; background: var(--sidebar-bg); border-right: 1px solid var(--border-color);
             display: flex; flex-direction: column; padding: 40px 25px; z-index: 100;
@@ -63,22 +63,22 @@
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F9F9F9; color: #000; }
 
-        /* TELA DE CONFIGURAÇÕES INTEIRA */
-        #view-settings {
+        /* MÓDULO: TELAS IMERSIVAS (CONFIG & PLANOS) */
+        .immersive-view {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #FFFFFF; z-index: 2000; display: none;
             flex-direction: column; align-items: center; justify-content: center;
-            padding: 100px;
+            padding: 50px; overflow-y: auto;
         }
-        /* BOTÃO FECHAR CONFIGURAÇÕES NO CANTO DIREITO */
-        .close-settings-btn {
+        .close-view-btn {
             position: absolute; top: 40px; right: 50px;
             background: transparent; border: none;
             font-size: 28px; font-weight: 300; color: #000;
             cursor: pointer; padding: 10px; border-radius: 50%;
         }
-        
-        .settings-container { width: 100%; max-width: 600px; text-align: left; }
+
+        /* TELA: CONFIGURAÇÕES */
+        .settings-container { width: 100%; max-width: 600px; text-align: left; margin: auto; }
         .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; }
         .settings-row { 
             display: flex; justify-content: space-between; align-items: center; 
@@ -86,6 +86,41 @@
         }
         .settings-label { font-size: 16px; color: #999; font-weight: 500; }
         .settings-value { font-size: 16px; font-weight: 800; color: #000; }
+
+        /* TELA: PLANOS */
+        .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
+        .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
+        .plans-subtitle { font-size: 16px; color: #888; margin-bottom: 60px; font-weight: 500; }
+        
+        .plans-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left;
+        }
+        .plan-card {
+            border: 1px solid var(--border-color); border-radius: 24px; padding: 40px;
+            background: #FFF; display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .plan-card.pro {
+            background: #000; color: #FFF; border-color: #000;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px);
+        }
+        .plan-card.plus { background: #FBFBFB; }
+
+        .plan-name { font-size: 20px; font-weight: 900; margin-bottom: 10px; }
+        .plan-price { font-size: 42px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; }
+        .plan-price span { font-size: 14px; font-weight: 500; color: #888; }
+        
+        .plan-features { list-style: none; padding: 0; margin: 0 0 40px 0; flex: 1; }
+        .plan-features li { font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .plan-features li::before { content: "✓"; font-weight: 900; }
+        .pro .plan-features li::before { color: #FFF; }
+
+        .plan-btn-card {
+            width: 100%; padding: 18px; border-radius: 12px; font-size: 13px; font-weight: 800;
+            cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .plan-btn-card.current { background: #F0F0F0; color: #888; cursor: default; }
+        .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
+        .plan-btn-card.upgrade-plus { background: #000; color: #FFF; }
 
         /* MAIN CONTENT */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
@@ -96,6 +131,16 @@
             border-bottom: 1px solid var(--border-color); z-index: 90;
         }
         .header-title { font-size: 10px; font-weight: 900; color: #E0E0E0; letter-spacing: 5px; }
+
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        
+        /* BOTÃO DE PLANOS NO CABEÇALHO */
+        .btn-plans-header {
+            background: #FFF; border: 1px solid var(--border-color); color: #000;
+            padding: 10px 20px; border-radius: 50px; font-size: 12px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .btn-plans-header:hover { border-color: #000; }
 
         .profile-img { width: 50px; height: 50px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border-color); object-fit: cover; }
         
@@ -156,19 +201,15 @@
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo hover-scale">
     </div>
 
-    <!-- ABA DE CONFIGURAÇÕES (TELA INTEIRA) -->
-    <div id="view-settings">
-        <!-- BOTÃO DE FECHAR NO CANTO SUPERIOR DIREITO -->
-        <button class="close-settings-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
-        
+    <!-- TELA IMERSIVA: CONFIGURAÇÕES -->
+    <div id="view-settings" class="immersive-view">
+        <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="settings-container">
-            <div class="settings-header">Preferências do Núcleo</div>
-            
+            <div class="settings-header">Preferências</div>
             <div class="settings-row hover-scale">
                 <span class="settings-label">Modelo</span>
                 <span class="settings-value">ANK 1.0</span>
             </div>
-            
             <div class="settings-row hover-scale">
                 <span class="settings-label">Plano</span>
                 <span class="settings-value">Grátis</span>
@@ -176,13 +217,65 @@
         </div>
     </div>
 
+    <!-- TELA IMERSIVA: PLANOS -->
+    <div id="view-plans" class="immersive-view">
+        <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
+        <div class="plans-container">
+            <div class="plans-header">Evolua o seu Núcleo.</div>
+            <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
+            
+            <div class="plans-grid">
+                <!-- CARTÃO GRÁTIS -->
+                <div class="plan-card hover-scale">
+                    <div>
+                        <div class="plan-name">Grátis</div>
+                        <div class="plan-price">R$ 0<span>/mês</span></div>
+                        <ul class="plan-features">
+                            <li>Acesso ao modelo ANK 1.0</li>
+                            <li>Velocidade Padrão</li>
+                            <li>Histórico Básico</li>
+                        </ul>
+                    </div>
+                    <button class="plan-btn-card current btn-scale">SEU PLANO ATUAL</button>
+                </div>
+
+                <!-- CARTÃO PRO (DESTAQUE) -->
+                <div class="plan-card pro hover-scale">
+                    <div>
+                        <div class="plan-name">Pro</div>
+                        <div class="plan-price">R$ 49<span>/mês</span></div>
+                        <ul class="plan-features">
+                            <li>Acesso prioritário ANK 1.0</li>
+                            <li>Velocidade Neural 2x</li>
+                            <li>Contexto Longo (Memória Plus)</li>
+                            <li>Soberania de Dados</li>
+                        </ul>
+                    </div>
+                    <button class="plan-btn-card upgrade-pro btn-scale">ASSINAR PRO</button>
+                </div>
+
+                <!-- CARTÃO PLUS -->
+                <div class="plan-card plus hover-scale">
+                    <div>
+                        <div class="plan-name">Plus</div>
+                        <div class="plan-price">R$ 99<span>/mês</span></div>
+                        <ul class="plan-features">
+                            <li>Acesso Ilimitado ANK 1.0</li>
+                            <li>Velocidade Neural Máxima</li>
+                            <li>Acesso a Novos Modelos Antecipado</li>
+                            <li>Suporte Dedicado</li>
+                        </ul>
+                    </div>
+                    <button class="plan-btn-card upgrade-plus btn-scale">ASSINAR PLUS</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()">
-        <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">
-            + NOVA CONVERSA
-        </button>
+        <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
         <div id="chat-list"></div>
-        
         <div class="sidebar-footer">
             <button class="settings-btn hover-scale" onclick="switchView('settings')">⚙️ CONFIGURAÇÕES</button>
         </div>
@@ -191,17 +284,23 @@
     <main id="main">
         <header class="header">
             <div class="header-title" id="active-title">SISTEMA_ANK_ONLINE</div>
-            <div class="profile-area">
-                {% if user %}
-                    <img src="{{ user.picture }}" class="profile-img hover-scale" onclick="toggleProfile()">
-                    <div class="profile-dropdown" id="p-drop">
-                        <button class="hover-scale" onclick="switchView('settings')">⚙️ Configurações</button>
-                        <button class="hover-scale" onclick="location.href='/login'">🔄 Alternar Conta</button>
-                        <button class="hover-scale" style="color: #FF4444;" onclick="location.href='/logout'">🚪 Desconectar</button>
-                    </div>
-                {% else %}
-                    <button class="hover-scale btn-scale" onclick="location.href='/login'" style="background:#000; color:#fff; border:none; padding:12px 25px; font-size:11px; font-weight:900; border-radius:50px; cursor:pointer;">GOOGLE LOGIN</button>
-                {% endif %}
+            
+            <div class="header-actions">
+                <!-- NOVO BOTÃO DE PLANOS NO CABEÇALHO -->
+                <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
+                
+                <div class="profile-area">
+                    {% if user %}
+                        <img src="{{ user.picture }}" class="profile-img hover-scale" onclick="toggleProfile()">
+                        <div class="profile-dropdown" id="p-drop">
+                            <button class="hover-scale" onclick="switchView('settings')">⚙️ Configurações</button>
+                            <button class="hover-scale" onclick="location.href='/login'">🔄 Alternar Conta</button>
+                            <button class="hover-scale" style="color: #FF4444;" onclick="location.href='/logout'">🚪 Desconectar</button>
+                        </div>
+                    {% else %}
+                        <button class="hover-scale btn-scale" onclick="location.href='/login'" style="background:#000; color:#fff; border:none; padding:12px 25px; font-size:11px; font-weight:900; border-radius:50px; cursor:pointer;">GOOGLE LOGIN</button>
+                    {% endif %}
+                </div>
             </div>
         </header>
 
@@ -230,17 +329,27 @@
             }, 1500);
         };
 
-        // ALTERNA ENTRE CHAT E CONFIGURAÇÕES
+        // GESTOR DE TELAS IMERSIVAS (CHAT, CONFIGURAÇÕES E PLANOS)
         function switchView(view) {
             const settings = document.getElementById('view-settings');
-            if(view === 'settings') {
-                settings.style.display = 'flex';
-                settings.style.opacity = '0';
-                setTimeout(() => settings.style.opacity = '1', 10);
-            } else {
-                settings.style.opacity = '0';
-                setTimeout(() => settings.style.display = 'none', 600);
-            }
+            const plans = document.getElementById('view-plans');
+            
+            // Oculta ambas primeiro com fade out
+            settings.style.opacity = '0';
+            plans.style.opacity = '0';
+
+            setTimeout(() => {
+                settings.style.display = 'none';
+                plans.style.display = 'none';
+
+                if(view === 'settings') {
+                    settings.style.display = 'flex';
+                    setTimeout(() => settings.style.opacity = '1', 10);
+                } else if (view === 'plans') {
+                    plans.style.display = 'flex';
+                    setTimeout(() => plans.style.opacity = '1', 10);
+                }
+            }, 300); // 300ms = Transição rápida e premium
         }
 
         function toggleProfile() {
