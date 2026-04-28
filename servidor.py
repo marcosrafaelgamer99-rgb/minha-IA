@@ -43,7 +43,7 @@ def pesquisar_google(query):
         texto_resultado = "\n".join([f"- {r['title']}: {r['body']} (Fonte: {r['href']})" for r in resultados])
         return f"[RESULTADOS DA WEB OBTIDOS AGORA]:\n{texto_resultado}\n\nResponda ao utilizador com base nestes dados recentes."
     except ImportError:
-        return "[SISTEMA: O pacote 'duckduckgo-search' não está instalado no servidor. Avise o utilizador.]"
+        return "[SISTEMA: O pacote 'duckduckgo-search' não está instalado no servidor.]"
     except Exception as e:
         return f"[SISTEMA: Erro na busca web: {str(e)}]"
 
@@ -54,20 +54,18 @@ def extrair_id_youtube(url):
 def ler_legenda_youtube(url):
     video_id = extrair_id_youtube(url)
     if not video_id: return "[SISTEMA: URL do YouTube inválida fornecida.]"
-    
     try:
         from youtube_transcript_api import YouTubeTranscriptApi
         transcricao = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'en'])
-        # Pega apenas os primeiros 5 minutos de texto para não estourar os tokens
         texto_completo = " ".join([t['text'] for t in transcricao])[:8000]
         return f"[TRANSCRIÇÃO DO VÍDEO OBTIDA]:\n{texto_completo}\n\nResponda ao utilizador com base no conteúdo deste vídeo."
     except ImportError:
-        return "[SISTEMA: O pacote 'youtube-transcript-api' não está instalado no servidor. Avise o utilizador.]"
+        return "[SISTEMA: O pacote 'youtube-transcript-api' não está instalado.]"
     except Exception as e:
-        return f"[SISTEMA: Não foi possível ler as legendas. Pode não ter legendas ativas. Erro: {str(e)}]"
+        return f"[SISTEMA: Não foi possível ler as legendas. Erro: {str(e)}]"
 
 # ==========================================
-# BASE DE DADOS (SEM GHOST BUG)
+# BASE DE DADOS 
 # ==========================================
 def carregar_db():
     if os.path.exists(HISTORY_FILE):
@@ -193,7 +191,7 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (CHAT + AGENTE)
+# MOTOR DA IA (RACIOCÍNIO PROFUNDO)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -221,32 +219,37 @@ def chat():
     msg_lower = msg_original.lower()
     
     if "youtube" in msg_lower and "http" in msg_lower:
-        # Extrai URL do youtube se existir na mensagem
         url_match = re.search(r'(https?://[^\s]+)', msg_original)
         if url_match:
             dados_youtube = ler_legenda_youtube(url_match.group(1))
             msg_processada = f"{msg_original}\n\n{dados_youtube}"
             
     elif "google" in msg_lower or "pesquise" in msg_lower:
-        # Se pede para pesquisar, o Python vai à net raspar dados!
         termo_busca = msg_original.replace("pesquise no google", "").replace("busque no google", "").strip()
         dados_web = pesquisar_google(termo_busca if termo_busca else msg_original)
         msg_processada = f"{msg_original}\n\n{dados_web}"
 
-    # Salva a mensagem visual (limpa)
+    # Salva a mensagem visual
     if not sess.get("messages"):
         try:
             res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo em 2 palavras apenas."}, {"role": "user", "content": msg_original}], max_tokens=8)
             sess["title"] = res.choices[0].message.content.upper().replace('"', '')
         except: sess["title"] = "SESSÃO SOBERANA"
     
-    # Gravamos a mensagem secreta (com os dados da web) no histórico para a IA ler, mas guardamos a limpa.
     sess["messages"].append({"role": "user", "content": msg_processada})
     
     plano_atual = user_data.get("plano", "Grátis")
-    sys_prompt = "ANK 1.0 Soberana. Responda de forma elegante, baseada nos dados fornecidos se existirem."
-    if plano_atual == "Pro": sys_prompt += " O utilizador é PRO. Responda com profundidade."
-    elif plano_atual == "Plus": sys_prompt += " O utilizador é PLUS. Responda como a elite absoluta."
+    
+    # === A ORDEM DE PENSAMENTO (O SEGREDO DA SOBERANA) ===
+    sys_prompt = (
+        "You are ANK 1.0 Soberana, an elite AI. "
+        "You MUST ALWAYS first think step-by-step about the user's request. "
+        "Write your internal reasoning process entirely in ENGLISH, and wrap it tightly inside <think> and </think> tags. "
+        "After the </think> tag, you MUST write your final response directly to the user in elegant PORTUGUESE. "
+    )
+    
+    if plano_atual == "Pro": sys_prompt += "The user is PRO. Provide in-depth reasoning and detailed answers."
+    elif plano_atual == "Plus": sys_prompt += "The user is PLUS. You are an absolute elite agent. Think extensively and provide definitive, masterful answers."
     
     try:
         res = client.chat.completions.create(
@@ -256,7 +259,6 @@ def chat():
         )
         ans = res.choices[0].message.content
         
-        # Volta a guardar a mensagem limpa para não sujar a tela do utilizador se ele recarregar a página
         sess["messages"][-1]["content"] = msg_original
         sess["messages"].append({"role": "assistant", "content": ans})
         
@@ -268,7 +270,7 @@ def chat():
         return jsonify({"response": ans, "title": sess["title"], "tokens_restantes": user_data["tokens"]})
         
     except Exception as e: 
-        sess["messages"][-1]["content"] = msg_original # Reverte em caso de erro
+        sess["messages"][-1]["content"] = msg_original 
         return jsonify({"response": f"ERRO DE NÚCLEO: {str(e)}"}), 500
 
 if __name__ == '__main__':
