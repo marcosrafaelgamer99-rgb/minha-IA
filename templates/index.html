@@ -12,117 +12,74 @@
         :root {
             --bg: #FFFFFF; 
             --sidebar-bg: #FFFFFF; 
-            /* A LINHA AGORA É MAIS GROSSA E MAIS ESCURA */
             --border-color: #E0E0E0; 
             --text-color: #000000; 
-            --text-muted: #777777; /* Textos secundários mais escuros */
+            --text-muted: #777777; 
             --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { 
-            box-sizing: border-box; 
-            outline: none; 
-            transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; 
-        }
-        
-        body { 
-            margin: 0; 
-            padding: 0; 
-            background: var(--bg); 
-            color: var(--text-color); 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            display: flex; 
-            height: 100vh; 
-            overflow: hidden; 
-        }
+        * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text-color); font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; }
 
         .hover-scale:hover { transform: scale(1.03); } 
         .btn-scale:active { transform: scale(0.97); }
 
-        /* PRE-LOADER COM LOGO GIGANTE */
-        #loader { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #FFF; z-index: 10000; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
-        }
-        /* LOGO AUMENTADA PARA 250px */
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .loader-logo { width: 250px; filter: invert(1); animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
-        /* SIDEBAR COM LINHA FORTE */
-        #sidebar { 
-            width: 320px; background: var(--sidebar-bg); 
-            border-right: 2px solid var(--border-color); /* BORDA MAIS GROSSA */
-            display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; 
-        }
-        /* LOGO DA BARRA LATERAL AUMENTADA PARA 110px */
+        /* SIDEBAR E LISTAS DE CHAT */
+        #sidebar { width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
         .logo-nav { width: 110px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
 
-        .btn-new { 
-            background: #000; color: #FFF; border: none; padding: 18px; 
-            border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; 
-            margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; 
-        }
+        .btn-new { background: #000; color: #FFF; border: none; padding: 18px; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-new:hover { opacity: 0.8; }
 
-        #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
+        #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 5px; }
+        
+        /* TÍTULOS DAS SESSÕES (FIXADOS / RECENTES / ARQUIVADOS) */
+        .section-title { font-size: 11px; font-weight: 900; color: #999; letter-spacing: 2px; margin: 15px 0 5px 5px; text-transform: uppercase; }
+
         .chat-item { 
-            padding: 14px 20px; border-radius: 12px; font-size: 14px; color: #444; font-weight: 600;
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center; 
+            padding: 12px 15px; border-radius: 12px; font-size: 14px; color: #444; font-weight: 600;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; position: relative;
         }
         .chat-item:hover, .chat-item.active { background: #F0F0F0; color: #000; }
-        .del-chat { opacity: 0; font-size: 16px; color: #999; border: none; background: none; cursor: pointer; font-weight: 900;}
-        .chat-item:hover .del-chat { opacity: 1; color: #FF4444; }
+        .chat-title-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .sidebar-footer { border-top: 2px solid var(--border-color); padding-top: 20px; margin-top: 20px; }
-        .settings-btn { 
-            width: 100%; text-align: left; background: none; border: none; font-size: 14px; 
-            font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; 
-        }
+        /* AÇÕES DO CHAT (Aparecem no Hover) */
+        .chat-actions { display: none; align-items: center; gap: 8px; }
+        .chat-item:hover .chat-actions { display: flex; }
+        .action-btn { background: transparent; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.2s; display: flex; align-items: center; }
+        .action-btn:hover { opacity: 1; transform: scale(1.1); }
+        .action-btn.delete:hover { color: #FF4444; opacity: 1; }
+
+        /* RODAPÉ DA SIDEBAR */
+        .sidebar-footer { border-top: 2px solid var(--border-color); padding-top: 20px; margin-top: 20px; display: flex; flex-direction: column; gap: 10px;}
+        .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
 
         /* TELAS IMERSIVAS */
-        .immersive-view { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; 
-            align-items: center; justify-content: center; padding: 50px; overflow-y: auto; 
-        }
-        .close-view-btn { 
-            position: absolute; top: 40px; right: 50px; background: transparent; border: none; 
-            font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; 
-        }
+        .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; }
+        .close-view-btn { position: absolute; top: 40px; right: 50px; background: transparent; border: none; font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; }
 
         .settings-container { width: 100%; max-width: 600px; text-align: left; margin: auto; }
         .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; color: #000; }
         .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 30px 0; border-bottom: 2px solid #F0F0F0; }
         .settings-label { font-size: 16px; color: #555; font-weight: 700; }
         .settings-value { font-size: 16px; font-weight: 900; color: #000; display: flex; align-items: center; gap: 10px; }
-        
         .token-badge-large { background: #F0F0F0; padding: 6px 14px; border-radius: 6px; font-size: 14px; color: #000; font-family: 'JetBrains Mono', monospace; font-weight: 900; border: 2px solid var(--border-color); }
 
         /* ANIMAÇÃO E GRADIENTES UNIVERSAIS */
-        @keyframes aura-spin { 
-            0% { background-position: 0% 50%; } 
-            50% { background-position: 100% 50%; } 
-            100% { background-position: 0% 50%; } 
-        }
-        .text-gradient-pro {
-            background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900;
-        }
-        .text-gradient-plus {
-            background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900;
-        }
+        @keyframes aura-spin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .text-gradient-pro { background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
+        .text-gradient-plus { background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
 
         /* TELA DE PLANOS */
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
         .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; color: #000;}
         .plans-subtitle { font-size: 18px; color: #555; margin-bottom: 60px; font-weight: 600; }
         .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
-        
         .plan-card { border: 2px solid var(--border-color); border-radius: 24px; padding: 40px; background: #FFF; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
         .plan-card.pro { border: none; box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px); }
         .plan-card.pro::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #000; }
@@ -130,7 +87,6 @@
         .plan-card.plus { border: none; box-shadow: 0 20px 50px rgba(0,255,136,0.1); }
         .plan-card.plus::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #FFF; }
         .plan-card.plus::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.6; }
-
         .plan-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; color: #000;}
         .pro .plan-price { color: #FFF; }
@@ -140,7 +96,6 @@
         .plan-features li::before { content: "✓"; font-weight: 900; color: #000;}
         .pro .plan-features li { color: #DDD; }
         .pro .plan-features li::before { color: #FFF; }
-        
         .plan-btn-card { width: 100%; padding: 18px; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; }
         .plan-btn-card.current { background: #EAEAEA; color: #555; cursor: default; }
         .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
@@ -148,37 +103,18 @@
 
         /* CHAT E MAIN */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
-        
-        /* CABEÇALHO DO CHAT (MAIS DESTACADO) */
-        .header { 
-            padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; 
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); 
-            border-bottom: 2px solid var(--border-color); /* LINHA MAIS GROSSA E ESCURA */
-            z-index: 90; 
-        }
-        
-        /* TÍTULO DA SESSÃO GIGANTE E ESCURO */
-        .header-title { 
-            font-size: 18px; /* Era 10px */
-            font-weight: 900; 
-            color: #000000; /* Era Cinza Claro */
-            letter-spacing: 2px; 
-            text-transform: uppercase;
-        }
-
+        .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
+        .header-title { font-size: 18px; font-weight: 900; color: #000000; letter-spacing: 2px; text-transform: uppercase; }
         .header-actions { display: flex; align-items: center; gap: 20px; }
         .btn-plans-header { background: #FFF; border: 2px solid var(--border-color); color: #000; padding: 12px 24px; border-radius: 50px; font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .btn-plans-header:hover { border-color: #000; }
 
-        /* AURA DA FOTO DE PERFIL */
         .profile-area { position: relative; }
         .profile-wrapper { position: relative; width: 50px; height: 50px; cursor: pointer; border-radius: 50%; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; border: 2px solid #FFF; }
-        
-        /* Auras ativadas via JS */
         .profile-wrapper.pro::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
         .profile-wrapper.plus::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
-
+        
         .profile-dropdown { display: none; position: absolute; top: 90px; right: 0px; background: #FFF; border: 2px solid var(--border-color); border-radius: 20px; padding: 10px; width: 280px; z-index: 500; box-shadow: 0 30px 60px rgba(0,0,0,0.08); overflow: hidden; }
         .dropdown-header-info { padding: 15px; border-bottom: 2px solid #F0F0F0; margin-bottom: 10px; }
         .drop-name { font-size: 16px; font-weight: 900; color: #000; }
@@ -186,7 +122,6 @@
         .drop-badges { display: flex; gap: 8px; }
         .badge-mini { background: #000; color: #FFF; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
         .badge-tkns { background: #F0F0F0; color: #000; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; font-family: monospace; border: 1px solid #E0E0E0;}
-
         .profile-dropdown button { width: 100%; background: transparent; border: none; color: #444; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 15px; font-weight: 800; border-radius: 12px; }
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
@@ -198,7 +133,6 @@
         .content { font-size: 17px; line-height: 2; color: #222; font-weight: 500;}
         .content b { color: #000; font-weight: 900;}
 
-        /* CONTADOR DE TOKENS DA IA */
         .telemetry-badge { background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; }
         .status-dot { width: 8px; height: 8px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
         .telemetry-badge.completed { border-color: transparent; background: transparent; box-shadow: none; color: #777; }
@@ -220,22 +154,19 @@
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo hover-scale" alt="ANK">
     </div>
 
-    <!-- TELA IMERSIVA: CONFIGURAÇÕES -->
+    <!-- TELA: CONFIGURAÇÕES -->
     <div id="view-settings" class="immersive-view">
         <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="settings-container">
             <div class="settings-header">Preferências</div>
-            
             <div class="settings-row hover-scale">
                 <span class="settings-label">Modelo</span>
                 <span class="settings-value">ANK 1.0</span>
             </div>
-            
             <div class="settings-row hover-scale">
                 <span class="settings-label">Plano Ativo</span>
                 <span class="settings-value" id="ui-current-plan" style="font-size: 24px;">{{ plano }}</span>
             </div>
-            
             <div class="settings-row hover-scale">
                 <span class="settings-label">Tokens Restantes</span>
                 <span class="settings-value">
@@ -245,63 +176,52 @@
         </div>
     </div>
 
-    <!-- TELA IMERSIVA: PLANOS -->
+    <!-- TELA: PLANOS -->
     <div id="view-plans" class="immersive-view">
         <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="plans-container">
             <div class="plans-header">Evolua o seu Núcleo.</div>
             <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
             <div class="plans-grid">
-                
                 <div class="plan-card hover-scale" id="card-gratis">
                     <div>
                         <div class="plan-name">Grátis</div>
                         <div class="plan-price">R$ 0<span>/mês</span></div>
-                        <ul class="plan-features">
-                            <li>Acesso ANK 1.0</li>
-                            <li>500 Mil Tokens Generosos</li>
-                            <li>Velocidade Padrão</li>
-                        </ul>
+                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>500 Mil Tokens Generosos</li><li>Velocidade Padrão</li></ul>
                     </div>
                     <button class="plan-btn-card current btn-scale" id="btn-comprar-gratis">SEU PLANO ATUAL</button>
                 </div>
-                
                 <div class="plan-card pro hover-scale" id="card-pro">
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div>
                         <div class="plan-price">R$ 25<span>/mês</span></div>
-                        <ul class="plan-features">
-                            <li>Acesso prioritário</li>
-                            <li>5 Milhões de Tokens</li>
-                            <li>Velocidade 2x</li>
-                        </ul>
+                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Velocidade 2x</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
                 </div>
-                
                 <div class="plan-card plus hover-scale" id="card-plus">
                     <div>
                         <div class="plan-name text-gradient-plus">Plus</div>
                         <div class="plan-price">R$ 60<span>/mês</span></div>
-                        <ul class="plan-features">
-                            <li>50 Milhões de Tokens Generosos</li>
-                            <li>Velocidade Máxima</li>
-                            <li>Novos Modelos</li>
-                        </ul>
+                        <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Velocidade Máxima</li><li>Novos Modelos</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-plus btn-scale" id="btn-comprar-plus" onclick="location.href='/checkout?plan=Plus'">ASSINAR PLUS</button>
                 </div>
-                
             </div>
         </div>
     </div>
 
-    <!-- BARRA LATERAL -->
+    <!-- BARRA LATERAL (COM FIXADOS E ARQUIVADOS) -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()" alt="ANK">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
+        
+        <!-- LOCAL ONDE OS CHATS SÃO INJETADOS -->
         <div id="chat-list"></div>
+        
         <div class="sidebar-footer">
+            <!-- BOTÃO PARA ALTERNAR VISÃO DE ARQUIVOS -->
+            <button class="settings-btn hover-scale" id="btn-toggle-archive" onclick="toggleArchiveView()">📦 VER ARQUIVADOS</button>
             <button class="settings-btn hover-scale" onclick="switchView('settings')">⚙️ CONFIGURAÇÕES</button>
         </div>
     </aside>
@@ -309,9 +229,7 @@
     <!-- NÚCLEO PRINCIPAL -->
     <main id="main">
         <header class="header">
-            <!-- AGORA O TÍTULO É DE ALTO DESTAQUE -->
-            <div class="header-title" id="active-title">NÚCLEO_SESSÃO ONLINE</div>
-            
+            <div class="header-title" id="active-title">NÚCLEO_NOVA SESSÃO</div>
             <div class="header-actions">
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 <div class="profile-area">
@@ -350,32 +268,39 @@
         </div>
     </main>
 
+    <!-- ÍCONES SVG INLINE -->
+    <svg style="display:none;">
+        <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.6V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.6a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></symbol>
+        <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></symbol>
+    </svg>
+
     <script>
         let curId = null; 
-        const sessions = {{ sessions | tojson | safe }}; 
+        let sessions = {{ sessions | tojson | safe }}; 
         const vp = document.getElementById('viewport');
         
         const userPlan = "{{ plano }}";
         let userTokens = {{ tokens }};
+        let showingArchived = false;
 
         window.onload = () => { 
             renderList(); 
             updateUIBasedOnPlanAndTokens();
             
-            if(sessions.length > 0) {
-                loadChat(sessions[0].id, sessions[0].title); 
+            // Carrega o primeiro chat que NÃO esteja arquivado
+            const firstActive = sessions.find(s => !s.archived);
+            if(firstActive) {
+                loadChat(firstActive.id, firstActive.title); 
             }
             
             setTimeout(() => { 
                 const l = document.getElementById('loader'); 
-                l.style.opacity = '0'; 
-                setTimeout(() => l.style.display = 'none', 600); 
+                l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 600); 
             }, 1500); 
         };
 
-        function formatNumber(num) {
-            return new Intl.NumberFormat('pt-BR').format(num);
-        }
+        function formatNumber(num) { return new Intl.NumberFormat('pt-BR').format(num); }
 
         function updateUIBasedOnPlanAndTokens() {
             const formatado = formatNumber(userTokens);
@@ -404,38 +329,23 @@
             const btnGratis = document.getElementById('btn-comprar-gratis');
             const btnPro = document.getElementById('btn-comprar-pro');
             const btnPlus = document.getElementById('btn-comprar-plus');
-
             btnGratis.innerText = "ASSINAR GRÁTIS"; btnGratis.className = "plan-btn-card current btn-scale";
             btnPro.innerText = "ASSINAR PRO"; btnPro.className = "plan-btn-card upgrade-pro btn-scale";
             btnPlus.innerText = "ASSINAR PLUS"; btnPlus.className = "plan-btn-card upgrade-plus btn-scale";
 
-            if (userPlan === 'Grátis') {
-                btnGratis.innerText = "SEU PLANO ATUAL"; btnGratis.onclick = null;
-            } else if (userPlan === 'Pro') {
-                btnPro.innerText = "SEU PLANO ATUAL"; btnPro.className = "plan-btn-card current btn-scale"; btnPro.onclick = null;
-            } else if (userPlan === 'Plus') {
-                btnPlus.innerText = "SEU PLANO ATUAL"; btnPlus.className = "plan-btn-card current btn-scale"; btnPlus.onclick = null;
-            }
+            if (userPlan === 'Grátis') { btnGratis.innerText = "SEU PLANO ATUAL"; btnGratis.onclick = null; } 
+            else if (userPlan === 'Pro') { btnPro.innerText = "SEU PLANO ATUAL"; btnPro.className = "plan-btn-card current btn-scale"; btnPro.onclick = null; } 
+            else if (userPlan === 'Plus') { btnPlus.innerText = "SEU PLANO ATUAL"; btnPlus.className = "plan-btn-card current btn-scale"; btnPlus.onclick = null; }
         }
 
         function switchView(view) { 
             const settings = document.getElementById('view-settings'); 
             const plans = document.getElementById('view-plans'); 
-            
-            settings.style.opacity = '0'; 
-            plans.style.opacity = '0'; 
-
+            settings.style.opacity = '0'; plans.style.opacity = '0'; 
             setTimeout(() => { 
-                settings.style.display = 'none'; 
-                plans.style.display = 'none'; 
-
-                if(view === 'settings') { 
-                    settings.style.display = 'flex'; 
-                    setTimeout(() => settings.style.opacity = '1', 10); 
-                } else if (view === 'plans') { 
-                    plans.style.display = 'flex'; 
-                    setTimeout(() => plans.style.opacity = '1', 10); 
-                } 
+                settings.style.display = 'none'; plans.style.display = 'none'; 
+                if(view === 'settings') { settings.style.display = 'flex'; setTimeout(() => settings.style.opacity = '1', 10); } 
+                else if (view === 'plans') { plans.style.display = 'flex'; setTimeout(() => plans.style.opacity = '1', 10); } 
             }, 300); 
         }
 
@@ -444,20 +354,98 @@
             d.style.display = d.style.display === 'block' ? 'none' : 'block'; 
         }
 
+        function toggleArchiveView() {
+            showingArchived = !showingArchived;
+            const btn = document.getElementById('btn-toggle-archive');
+            if(showingArchived) {
+                btn.innerHTML = "← VOLTAR AOS CHATS";
+                btn.style.color = "#000";
+            } else {
+                btn.innerHTML = "📦 VER ARQUIVADOS";
+                btn.style.color = "#333";
+            }
+            renderList();
+        }
+
+        // NOVO MOTOR DE RENDERIZAÇÃO DA BARRA LATERAL (Com Pins e Archives)
         function renderList() { 
             const list = document.getElementById('chat-list'); 
             list.innerHTML = ''; 
-            sessions.forEach(s => { 
-                const d = document.createElement('div'); 
-                d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`; 
-                d.innerHTML = `
-                    <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
-                    <button class="del-chat hover-scale btn-scale" onclick="delChat('${s.id}')">✕</button>
-                `; 
-                list.appendChild(d); 
-            }); 
+            
+            if (showingArchived) {
+                // VISÃO: ARQUIVADOS
+                const archived = sessions.filter(s => s.archived);
+                list.innerHTML = `<div class="section-title">ARQUIVADOS</div>`;
+                if(archived.length === 0) list.innerHTML += `<div style="font-size:12px; color:#999; padding:15px;">Nenhum chat arquivado.</div>`;
+                
+                archived.forEach(s => list.appendChild(createChatElement(s)));
+            } else {
+                // VISÃO: PRINCIPAL (Fixados e Recentes)
+                const pinned = sessions.filter(s => s.pinned && !s.archived);
+                const recents = sessions.filter(s => !s.pinned && !s.archived);
+                
+                if (pinned.length > 0) {
+                    list.innerHTML += `<div class="section-title">FIXADOS</div>`;
+                    pinned.forEach(s => list.appendChild(createChatElement(s)));
+                }
+                
+                if (recents.length > 0 || pinned.length > 0) {
+                    list.innerHTML += `<div class="section-title" style="margin-top: 25px;">RECENTES</div>`;
+                }
+                recents.forEach(s => list.appendChild(createChatElement(s)));
+            }
         }
-        
+
+        // GERAÇÃO DO HTML DE CADA CHAT (Hover Reveal Actions)
+        function createChatElement(s) {
+            const d = document.createElement('div'); 
+            d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`; 
+            
+            // Ícones condicionais (Se está fixado, o ícone serve para desfixar, etc)
+            const pinColor = s.pinned ? "#000" : "currentColor";
+            const archiveTitle = s.archived ? "Desarquivar" : "Arquivar";
+
+            d.innerHTML = `
+                <span class="chat-title-text" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
+                <div class="chat-actions">
+                    ${!s.archived ? `
+                    <button class="action-btn" title="${s.pinned ? 'Desfixar' : 'Fixar'}" onclick="actionPin('${s.id}')">
+                        <svg width="14" height="14" style="color: ${pinColor}"><use href="#icon-pin"></use></svg>
+                    </button>` : ''}
+                    <button class="action-btn" title="${archiveTitle}" onclick="actionArchive('${s.id}')">
+                        <svg width="14" height="14"><use href="#icon-archive"></use></svg>
+                    </button>
+                    <button class="action-btn delete" title="Apagar" onclick="actionDelete('${s.id}')">
+                        <svg width="14" height="14"><use href="#icon-trash"></use></svg>
+                    </button>
+                </div>
+            `; 
+            return d;
+        }
+
+        // AÇÕES DA BARRA LATERAL (Comunicação com o Servidor)
+        async function actionPin(id) {
+            const sess = sessions.find(s => s.id === id);
+            if(sess) sess.pinned = !sess.pinned;
+            renderList(); // Atualiza UI na hora
+            await fetch('/api/toggle_pin', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) });
+        }
+
+        async function actionArchive(id) {
+            const sess = sessions.find(s => s.id === id);
+            if(sess) sess.archived = !sess.archived;
+            renderList(); // O chat vai sumir da vista atual animadamente
+            await fetch('/api/toggle_archive', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) });
+        }
+
+        async function actionDelete(id) {
+            if(!confirm("ELIMINAR SESSÃO? Esta ação é irreversível.")) return; 
+            sessions = sessions.filter(s => s.id !== id);
+            if(curId === id) { vp.innerHTML = ''; curId = null; document.getElementById('active-title').innerText = "NÚCLEO_SESSÃO ONLINE"; }
+            renderList();
+            await fetch('/delete_chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) }); 
+        }
+
         async function createNewChat() { 
             const r = await fetch('/new_chat', { method: 'POST' }); 
             const sess = await r.json();
@@ -465,6 +453,7 @@
             curId = sess.id;
             document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; 
             vp.innerHTML = '';
+            showingArchived = false; // Volta para a aba principal ao criar chat
             renderList();
         }
 
@@ -477,12 +466,6 @@
             ms.forEach(m => display(m.role, m.content, false)); 
             renderList(); 
             vp.scrollTop = vp.scrollHeight; 
-        }
-
-        async function delChat(id) { 
-            if(!confirm("ELIMINAR SESSÃO?")) return; 
-            await fetch('/delete_chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) }); 
-            location.reload(); 
         }
         
         function format(t) { 
@@ -587,19 +570,14 @@
             
             const data = await res.json(); 
             
-            if(data.error) {
-                alert(data.error);
-                return;
-            }
+            if(data.error) { alert(data.error); return; }
 
             display('assistant', data.response, true); 
             
             if (data.title) {
                 document.getElementById('active-title').innerText = "NÚCLEO_" + data.title.toUpperCase();
                 let existingSess = sessions.find(s => s.id === curId);
-                if (existingSess) {
-                    existingSess.title = data.title;
-                }
+                if (existingSess) existingSess.title = data.title;
                 renderList(); 
             }
 

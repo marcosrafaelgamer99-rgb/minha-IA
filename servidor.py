@@ -32,7 +32,6 @@ client = OpenAI(
 
 HISTORY_FILE = 'memoria_ank.json'
 
-# --- LIMITES SOBERANOS 2026 ---
 LIMITES_TOKENS = {
     "Grátis": 500000,
     "Pro": 5000000,
@@ -67,12 +66,11 @@ def atualizar_plano_usuario(email, novo_plano):
     db = carregar_db()
     init_user_if_needed(email)
     db[email]["plano"] = novo_plano
-    # Reseta os tokens de acordo com o novo plano
     db[email]["tokens"] = LIMITES_TOKENS.get(novo_plano, 500000)
     salvar_db(db)
 
 # ==========================================
-# ROTAS FRONTEND
+# ROTAS FRONTEND E OAUTH
 # ==========================================
 @app.route('/')
 def index():
@@ -93,28 +91,17 @@ def index():
 @app.route('/checkout')
 def checkout():
     user = session.get('user')
-    if not user:
-        return redirect('/login') 
+    if not user: return redirect('/login') 
     return render_template('checkout.html', user=user)
 
-# ==========================================
-# API DE UPGRADE (VIA CUPOM OU PIX)
-# ==========================================
 @app.route('/api/upgrade_plano', methods=['POST'])
 def upgrade_plano():
-    """Rota usada pelo checkout para efetivar o plano no banco de dados"""
     user = session.get('user')
     if not user: return jsonify({"error": "Não autenticado"}), 401
-    
     data = request.json
-    novo_plano = data.get('plan')
-    
-    atualizar_plano_usuario(user["email"], novo_plano)
-    return jsonify({"status": "sucesso", "plano": novo_plano})
+    atualizar_plano_usuario(user["email"], data.get('plan'))
+    return jsonify({"status": "sucesso", "plano": data.get('plan')})
 
-# ==========================================
-# ROTAS OAUTH
-# ==========================================
 @app.route('/login')
 def login(): return google.authorize_redirect(url_for('authorize', _external=True), prompt='select_account')
 
@@ -130,7 +117,7 @@ def logout():
     return redirect('/')
 
 # ==========================================
-# GESTÃO DO CHAT E TOKENS
+# GESTÃO DE SESSÕES (CHATS, PINS E ARQUIVOS)
 # ==========================================
 @app.route('/new_chat', methods=['POST'])
 def new_chat():
@@ -139,10 +126,37 @@ def new_chat():
     init_user_if_needed(u_email)
     
     new_id = str(uuid.uuid4())
-    new_sess = {"id": new_id, "title": "NOVA SESSÃO", "messages": []}
+    # ADICIONADO: pinned e archived
+    new_sess = {"id": new_id, "title": "NOVA SESSÃO", "messages": [], "pinned": False, "archived": False}
     db[u_email]["sessions"].insert(0, new_sess)
     salvar_db(db)
     return jsonify(new_sess)
+
+@app.route('/api/toggle_pin', methods=['POST'])
+def toggle_pin():
+    cid = request.json.get('id')
+    u_email = session.get('user', {}).get("email", "visitante")
+    db = carregar_db()
+    if u_email in db:
+        for s in db[u_email].get("sessions", []):
+            if s["id"] == cid:
+                s["pinned"] = not s.get("pinned", False)
+                break
+        salvar_db(db)
+    return jsonify({"status": "ok"})
+
+@app.route('/api/toggle_archive', methods=['POST'])
+def toggle_archive():
+    cid = request.json.get('id')
+    u_email = session.get('user', {}).get("email", "visitante")
+    db = carregar_db()
+    if u_email in db:
+        for s in db[u_email].get("sessions", []):
+            if s["id"] == cid:
+                s["archived"] = not s.get("archived", False)
+                break
+        salvar_db(db)
+    return jsonify({"status": "ok"})
 
 @app.route('/delete_chat', methods=['POST'])
 def delete_chat():
@@ -162,6 +176,9 @@ def get_messages(chat_id):
         if s["id"] == chat_id: return jsonify(s["messages"])
     return jsonify([])
 
+# ==========================================
+# MOTOR DA IA (CHAT)
+# ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
@@ -176,7 +193,7 @@ def chat():
     user_data = init_user_if_needed(u_email)
     
     if user_data["tokens"] <= 0:
-        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. Por favor, atualize o seu plano para continuar operando.", "tokens_restantes": 0})
+        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. Atualize o seu plano para continuar operando.", "tokens_restantes": 0})
     
     sessions = user_data.get("sessions", [])
     sess = next((s for s in sessions if s["id"] == cid), None)
@@ -184,7 +201,7 @@ def chat():
     if not sess: return jsonify({"error": "Sessão não encontrada"}), 404
     if not sess["messages"]:
         try:
-            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo de 2 palavras. Apenas o resumo."}, {"role": "user", "content": msg}], max_tokens=8)
+            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo de 2 palavras."}, {"role": "user", "content": msg}], max_tokens=8)
             sess["title"] = res.choices[0].message.content.upper().replace('"', '')
         except: sess["title"] = "NOVA SESSÃO"
     
@@ -192,8 +209,7 @@ def chat():
     
     plano_atual = user_data.get("plano", "Grátis")
     sys_prompt = "ANK 1.0 Soberana. Abril 2026. Responda de forma elegante e técnica."
-    
-    if plano_atual == "Pro": sys_prompt += " O utilizador é PRO. Responda com mais profundidade."
+    if plano_atual == "Pro": sys_prompt += " O utilizador é PRO. Responda com profundidade."
     elif plano_atual == "Plus": sys_prompt += " O utilizador é PLUS. Responda como a elite absoluta."
     
     try:
@@ -205,8 +221,6 @@ def chat():
         ans = res.choices[0].message.content
         sess["messages"].append({"role": "assistant", "content": ans})
         
-        # --- CÁLCULO REAL DE TOKENS ---
-        # Estimativa: 1 token a cada 4 caracteres
         tokens_gastos = (len(msg) // 4) + (len(ans) // 4) + 12
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
