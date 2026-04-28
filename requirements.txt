@@ -6,3 +6,4 @@ openai
 werkzeug
 duckduckgo-search
 youtube-transcript-api
+gunicorn
