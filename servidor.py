@@ -33,16 +33,16 @@ client = OpenAI(
 HISTORY_FILE = 'memoria_ank.json'
 
 # ==========================================
-# ECONOMIA DE TOKENS DE ALTA PRESSÃO
+# ECONOMIA DE TOKENS (RÁPIDA QUEIMA NO GRÁTIS)
 # ==========================================
 LIMITES_TOKENS = {
-    "Grátis": 15000,     # Queima muito rápido!
+    "Grátis": 15000,     
     "Pro": 5000000,
     "Plus": 50000000
 }
 
 # ==========================================
-# FERRAMENTAS DA IA (WEB E YOUTUBE)
+# FERRAMENTAS DA IA
 # ==========================================
 def pesquisar_google(query):
     try:
@@ -73,7 +73,7 @@ def ler_legenda_youtube(url):
         return f"[SISTEMA: Não foi possível ler as legendas. Erro: {str(e)}]"
 
 # ==========================================
-# BASE DE DADOS PERSISTENTE
+# BASE DE DADOS 
 # ==========================================
 def carregar_db():
     if os.path.exists(HISTORY_FILE):
@@ -199,7 +199,7 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (DEEP REASONING MiMo)
+# MOTOR DA IA (BLINDAGEM DO PENSAMENTO E CÓDIGO)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -244,14 +244,22 @@ def chat():
     sess["messages"].append({"role": "user", "content": msg_processada})
     plano_atual = user_data.get("plano", "Grátis")
     
-    # === A ORDEM ABSOLUTA DE PENSAMENTO SOBERANA ===
+    # === A BLINDAGEM DO MONÓLOGO INTERNO (MIMO/R1 LOGIC) ===
     sys_prompt = (
-        "You are ANK 1.0 Soberana, an absolute elite AI architecture built for complex logic. "
-        "CRITICAL INSTRUCTION: You MUST use Deep Chain of Thought reasoning before answering. "
-        "1. Open a <think> tag. Inside it, write a massive, exhaustive internal monologue in ENGLISH (your native logic language). "
-        "Analyze the problem, evaluate edge cases, and draft the solution entirely in ENGLISH inside <think>...</think>. Do not skip this! "
-        "2. SINGLE-FILE CODE MANDATE: If code is requested, you MUST provide the ENTIRE, COMPLETE, and RUNNABLE code within ONE SINGLE MARKDOWN BLOCK. NEVER split code into multiple parts. "
-        "3. FINAL OUTPUT: After closing the </think> tag, you MUST write your final response directly to the user in perfect, elegant PORTUGUESE."
+        "You are ANK 1.0 Soberana, an absolute elite reasoning AI.\n"
+        "You MUST structure your entire response in two strict phases:\n\n"
+        "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
+        "You MUST start by writing <think>.\n"
+        "Inside <think>...</think>, you must talk ONLY TO YOURSELF in ENGLISH. This is your private brain space. "
+        "Analyze the user's request, plan the logic, and figure out the best approach. "
+        "CRITICAL RULES FOR <think>:\n"
+        "- NEVER address the user here. Do not say 'You want...' or 'I will show you...'. Say 'The user wants... I need to do...'.\n"
+        "- NEVER write the actual final code or final answer here. ONLY plan it.\n"
+        "- NEVER teach or explain things to the user here. Just figure out the problem for yourself.\n\n"
+        "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
+        "After you close </think>, switch to PORTUGUESE.\n"
+        "This is where you talk to the user. Provide the final, elegant explanation.\n"
+        "CRITICAL RULE FOR CODE: If the user asked for code, you MUST write the ENTIRE, COMPLETE, and RUNNABLE code in ONE SINGLE MARKDOWN BLOCK in this phase. NEVER split the code into parts.\n"
     )
     
     if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust technical depth."
@@ -268,7 +276,7 @@ def chat():
         sess["messages"][-1]["content"] = msg_original
         sess["messages"].append({"role": "assistant", "content": ans})
         
-        # CÁLCULO DE CONSUMO (Queima ultra-rápida)
+        # CÁLCULO DE CONSUMO DE TOKENS (Queima Rápida)
         tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.8) + 200
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
