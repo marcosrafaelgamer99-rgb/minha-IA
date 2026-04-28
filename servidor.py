@@ -33,16 +33,16 @@ client = OpenAI(
 HISTORY_FILE = 'memoria_ank.json'
 
 # ==========================================
-# ECONOMIA DE TOKENS (REDUZIDA PARA O GRÁTIS)
+# ECONOMIA DE TOKENS DE ALTA PRESSÃO
 # ==========================================
 LIMITES_TOKENS = {
-    "Grátis": 15000,     # Era 500.000. Agora queima rápido!
+    "Grátis": 15000,     # Queima muito rápido!
     "Pro": 5000000,
     "Plus": 50000000
 }
 
 # ==========================================
-# FERRAMENTAS DA IA (GOOGLE E YOUTUBE)
+# FERRAMENTAS DA IA (WEB E YOUTUBE)
 # ==========================================
 def pesquisar_google(query):
     try:
@@ -73,7 +73,7 @@ def ler_legenda_youtube(url):
         return f"[SISTEMA: Não foi possível ler as legendas. Erro: {str(e)}]"
 
 # ==========================================
-# BASE DE DADOS 
+# BASE DE DADOS PERSISTENTE
 # ==========================================
 def carregar_db():
     if os.path.exists(HISTORY_FILE):
@@ -199,7 +199,7 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (DEEP REASONING & ONE-FILE CODE)
+# MOTOR DA IA (DEEP REASONING MiMo)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -222,7 +222,7 @@ def chat():
     sess = next((s for s in sessions if s["id"] == cid), None)
     if not sess: return jsonify({"error": "Sessão não encontrada"}), 404
 
-    # === AGENTE INTERCEPTADOR ===
+    # AGENTE WEB E YOUTUBE
     msg_processada = msg_original
     msg_lower = msg_original.lower()
     if "youtube" in msg_lower and "http" in msg_lower:
@@ -244,18 +244,18 @@ def chat():
     sess["messages"].append({"role": "user", "content": msg_processada})
     plano_atual = user_data.get("plano", "Grátis")
     
-    # === A ORDEM DE PENSAMENTO (O SEGREDO DA SOBERANA) ===
+    # === A ORDEM ABSOLUTA DE PENSAMENTO SOBERANA ===
     sys_prompt = (
-        "You are ANK 1.0 Soberana, an absolute elite AI architecture comparable to MiMo-V2.5-Pro. "
-        "1. DEEP REASONING: You MUST ALWAYS think extensively, deeply, and step-by-step before answering. "
-        "Explore multiple angles, logic flaws, and optimizations. "
-        "Write this ENTIRE internal reasoning process in ENGLISH, wrapped tightly inside <think> and </think> tags. Do not skip this. "
-        "2. SINGLE-FILE CODE MANDATE: If the user asks for code, a website, or a script, you MUST provide the ENTIRE, COMPLETE, and RUNNABLE code within ONE SINGLE MARKDOWN BLOCK. NEVER split the code into multiple files, pieces, or parts. Write everything inside one file so the user can just copy and paste it once. "
-        "3. FINAL OUTPUT: After the </think> tag, you MUST write your final response directly to the user in extremely elegant, highly organized PORTUGUESE."
+        "You are ANK 1.0 Soberana, an absolute elite AI architecture built for complex logic. "
+        "CRITICAL INSTRUCTION: You MUST use Deep Chain of Thought reasoning before answering. "
+        "1. Open a <think> tag. Inside it, write a massive, exhaustive internal monologue in ENGLISH (your native logic language). "
+        "Analyze the problem, evaluate edge cases, and draft the solution entirely in ENGLISH inside <think>...</think>. Do not skip this! "
+        "2. SINGLE-FILE CODE MANDATE: If code is requested, you MUST provide the ENTIRE, COMPLETE, and RUNNABLE code within ONE SINGLE MARKDOWN BLOCK. NEVER split code into multiple parts. "
+        "3. FINAL OUTPUT: After closing the </think> tag, you MUST write your final response directly to the user in perfect, elegant PORTUGUESE."
     )
     
     if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust technical depth."
-    elif plano_atual == "Plus": sys_prompt += " The user is PLUS. You are an absolute elite agent. Spare no details, make it a masterpiece."
+    elif plano_atual == "Plus": sys_prompt += " The user is PLUS. You are an absolute elite agent. Think masterfully."
     
     try:
         res = client.chat.completions.create(
@@ -268,9 +268,8 @@ def chat():
         sess["messages"][-1]["content"] = msg_original
         sess["messages"].append({"role": "assistant", "content": ans})
         
-        # === CÁLCULO DE CONSUMO ACELERADO ===
-        # Cada palavra gerada gasta muito mais tokens agora. Queima rápida.
-        tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.5) + 150
+        # CÁLCULO DE CONSUMO (Queima ultra-rápida)
+        tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.8) + 200
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
         

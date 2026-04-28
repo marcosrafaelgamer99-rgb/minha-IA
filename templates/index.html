@@ -22,11 +22,8 @@
         
         body { 
             margin: 0; padding: 0; background: var(--bg); color: var(--text-color); 
-            /* TIPOGRAFIA DE ELITE 2026 */
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            text-rendering: optimizeLegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
             display: flex; height: 100vh; overflow: hidden; 
         }
 
@@ -37,7 +34,6 @@
         .loader-logo { width: 250px; filter: invert(1); animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
-        /* SIDEBAR E LISTAS DE CHAT */
         #sidebar { width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
         .logo-nav { width: 110px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
 
@@ -61,7 +57,6 @@
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
 
-        /* TELAS IMERSIVAS */
         .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; }
         .close-view-btn { position: absolute; top: 40px; right: 50px; background: transparent; border: none; font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; }
 
@@ -76,33 +71,54 @@
         .text-gradient-pro { background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
         .text-gradient-plus { background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
 
-        /* TELA DE PLANOS */
+        /* TELA DE PLANOS COM HOVER GLOW VIP */
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
         .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; color: #000;}
         .plans-subtitle { font-size: 18px; color: #555; margin-bottom: 60px; font-weight: 600; }
         .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
-        .plan-card { border: 2px solid var(--border-color); border-radius: 24px; padding: 40px; background: #FFF; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
+        
+        .plan-card { 
+            border: 2px solid var(--border-color); border-radius: 24px; padding: 40px; 
+            background: #FFF; display: flex; flex-direction: column; justify-content: space-between; 
+            position: relative; z-index: 1; overflow: hidden;
+        }
+        
+        /* Efeito de Rastreio do Mouse */
+        .plan-card::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0,0,0,0.06), transparent 40%);
+            z-index: -1; opacity: 0; transition: opacity 0.3s;
+        }
+        .plan-card:hover::before { opacity: 1; }
+
         .plan-card.pro { border: none; box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px); }
-        .plan-card.pro::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #000; }
+        .plan-card.pro::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #111; }
         .plan-card.pro::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.8; }
+        
         .plan-card.plus { border: none; box-shadow: 0 20px 50px rgba(0,255,136,0.1); }
-        .plan-card.plus::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #FFF; }
+        .plan-card.plus::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #050505; }
         .plan-card.plus::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.6; }
+        
+        .vip-tag { font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-bottom: 15px; letter-spacing: 1px;}
+        .tag-gratis { background: #E0E0E0; color: #555; }
+        .tag-pro { background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); }
+        .tag-plus { background: #00ff88; color: #000; box-shadow: 0 0 10px rgba(0,255,136,0.5); }
+
         .plan-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; color: #000;}
-        .pro .plan-price { color: #FFF; }
+        .pro .plan-price, .plus .plan-price { color: #FFF; }
         .plan-price span { font-size: 16px; font-weight: 600; color: #777; }
         .plan-features { list-style: none; padding: 0; margin: 0 0 40px 0; flex: 1; }
         .plan-features li { font-size: 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 500; color: #333;}
         .plan-features li::before { content: "✓"; font-weight: 900; color: #000;}
-        .pro .plan-features li { color: #DDD; }
-        .pro .plan-features li::before { color: #FFF; }
-        .plan-btn-card { width: 100%; padding: 18px; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; }
+        .pro .plan-features li, .plus .plan-features li { color: #DDD; }
+        .pro .plan-features li::before, .plus .plan-features li::before { color: #FFF; }
+        .plan-btn-card { width: 100%; padding: 18px; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; z-index: 10; position: relative;}
         .plan-btn-card.current { background: #EAEAEA; color: #555; cursor: default; }
         .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
-        .plan-btn-card.upgrade-plus { background: #000; color: #FFF; }
+        .plan-btn-card.upgrade-plus { background: #00ff88; color: #000; }
 
-        /* CABEÇALHO, MAIN E PERFIL */
+        /* CABEÇALHO E MAIN */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
         .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
         .header-title { font-size: 18px; font-weight: 900; color: #000000; letter-spacing: 2px; text-transform: uppercase; }
@@ -126,51 +142,44 @@
         .profile-dropdown button { width: 100%; background: transparent; border: none; color: #444; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 15px; font-weight: 800; border-radius: 12px; }
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
-        /* VIEWPORT & TYPOGRAPHY OF LUXURY */
+        /* VIEWPORT, TIPOGRAFIA E CAIXA DE PENSAMENTO */
         #viewport { flex: 1; overflow-y: auto; padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; }
         .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
         .role-tag { font-size: 11px; font-weight: 900; color: #555; margin-bottom: 15px; letter-spacing: 2px; display: flex; align-items: center; gap: 15px;}
         
-        /* A MÁGICA DA TIPOGRAFIA: Texto extremamente legível e organizado */
-        .content { 
-            font-size: 16px; 
-            line-height: 1.8; 
-            color: #111111; 
-            font-weight: 500;
-            letter-spacing: -0.2px;
-        }
+        .content { font-size: 16px; line-height: 1.8; color: #111111; font-weight: 500; letter-spacing: -0.2px; }
         .content p { margin-bottom: 20px; }
         .content b, .content strong { color: #000; font-weight: 800; }
         .content h1, .content h2, .content h3 { font-weight: 900; color: #000; margin-top: 30px; margin-bottom: 15px; letter-spacing: -1px; }
-        .content ul { padding-left: 20px; margin-bottom: 20px; }
-        .content li { margin-bottom: 8px; }
 
-        /* CAIXA DE PENSAMENTO CINZA (DeepSeek/o1 Style) */
+        /* A CAIXA CINZA DE PENSAMENTO (INGLÊS) */
         .think-box {
-            color: #888888;
+            color: #7A7A7A;
             font-size: 14px;
-            font-style: italic;
-            border-left: 2px solid #E0E0E0;
-            padding-left: 18px;
-            margin-bottom: 25px;
+            border-left: 3px solid #E0E0E0;
+            padding-left: 20px;
+            margin-bottom: 30px;
             font-family: 'JetBrains Mono', 'Courier New', monospace;
             white-space: pre-wrap;
-            line-height: 1.6;
+            line-height: 1.7;
+            background: rgba(245,245,245,0.5);
+            padding-top: 15px;
+            padding-bottom: 15px;
+            border-radius: 0 12px 12px 0;
         }
         .think-header {
-            font-weight: 900;
-            font-size: 10px;
-            color: #999;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            font-style: normal;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 1px;
+            font-weight: 900; font-size: 10px; color: #999; margin-bottom: 15px;
+            text-transform: uppercase; font-style: normal; display: flex;
+            align-items: center; gap: 8px; letter-spacing: 1px; font-family: 'Inter', sans-serif;
         }
+        .blinking-cursor::after {
+            content: '|';
+            animation: blink-cursor 1s step-start infinite;
+            color: #7A7A7A;
+        }
+        @keyframes blink-cursor { 50% { opacity: 0; } }
 
         .telemetry-badge { background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; }
         .status-dot { width: 8px; height: 8px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
@@ -180,7 +189,6 @@
         .icon-google { width: 14px; height: 14px; }
         .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
-        /* DOCK DE INPUT */
         #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
         #dock-capsule { display: flex; align-items: center; background: #FFF; border: 2px solid var(--border-color); padding: 10px 15px 10px 35px; border-radius: 100px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -220,13 +228,15 @@
             <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
             <div class="plans-grid">
                 <div class="plan-card hover-scale" id="card-gratis">
+                    <div class="vip-tag tag-gratis">BÁSICO</div>
                     <div>
                         <div class="plan-name">Grátis</div><div class="plan-price">R$ 0<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>15 Mil Tokens (Degustação)</li><li>Velocidade Padrão</li></ul>
+                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>15.000 Tokens (Degustação)</li><li>Velocidade Padrão</li></ul>
                     </div>
                     <button class="plan-btn-card current btn-scale" id="btn-comprar-gratis">SEU PLANO ATUAL</button>
                 </div>
                 <div class="plan-card pro hover-scale" id="card-pro">
+                    <div class="vip-tag tag-pro">MAIS POPULAR</div>
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div><div class="plan-price">R$ 15<span>/mês</span></div>
                         <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Raciocínio Profundo</li></ul>
@@ -234,6 +244,7 @@
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
                 </div>
                 <div class="plan-card plus hover-scale" id="card-plus">
+                    <div class="vip-tag tag-plus">NÍVEL DEUS</div>
                     <div>
                         <div class="plan-name text-gradient-plus">Plus</div><div class="plan-price">R$ 25<span>/mês</span></div>
                         <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Velocidade Máxima</li><li>Ferramentas (Web/YouTube)</li></ul>
@@ -288,17 +299,24 @@
         
         <div id="dock-wrapper">
             <div id="dock-capsule" class="hover-scale">
-                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Escreva um código...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Crie um site...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
                 <button class="btn-send btn-scale" onclick="send()">↑</button>
             </div>
         </div>
     </main>
 
     <script>
-        let curId = null; 
-        let sessions = {{ sessions | tojson | safe }}; 
-        const vp = document.getElementById('viewport');
+        let curId = null; let sessions = {{ sessions | tojson | safe }}; const vp = document.getElementById('viewport');
         const userPlan = "{{ plano }}"; let userTokens = {{ tokens }}; let showingArchived = false;
+
+        // EFEITO LANTERNA NOS CARTÕES VIP
+        document.querySelectorAll('.plan-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
 
         window.onload = () => { 
             renderList(); updateUIBasedOnPlanAndTokens();
@@ -393,7 +411,7 @@
             }); 
         }
         
-        // MOTOR DE RACIOCÍNIO (SEPARA O PENSAMENTO DA RESPOSTA)
+        // MOTOR DE RACIOCÍNIO VISUAL EM TEMPO REAL
         function display(role, content, animate, tool = 'none') { 
             const d = document.createElement('div'); d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
@@ -434,7 +452,8 @@
                 if (thoughtText) {
                     thoughtDiv = document.createElement('div');
                     thoughtDiv.className = 'think-box';
-                    thoughtDiv.innerHTML = `<div class="think-header"><div class="status-dot" style="background:#888;"></div> REASONING PROCESS (ENGLISH)</div><div class="think-content"></div>`;
+                    // ADICIONEI A CLASSE DO CURSOR PISCANTE NA CAIXA DE PENSAMENTO
+                    thoughtDiv.innerHTML = `<div class="think-header"><div class="status-dot" style="background:#888;"></div> REASONING PROCESS (ENGLISH)</div><div class="think-content blinking-cursor"></div>`;
                     b.appendChild(thoughtDiv);
                 }
                 b.appendChild(answerDiv);
@@ -451,6 +470,8 @@
                     } else { 
                         if (isThinkingPhase) {
                             isThinkingPhase = false; currentText = finalAnswerText; currentTarget = answerDiv; i = 0;
+                            // PARA O PISCA DO PENSAMENTO
+                            thoughtDiv.querySelector('.think-content').classList.remove('blinking-cursor');
                             thoughtDiv.querySelector('.status-dot').style.animation = 'none';
                             thoughtDiv.querySelector('.status-dot').style.opacity = '0.5';
                             setTimeout(type, 1);
@@ -458,8 +479,6 @@
                             if (thoughtText) thoughtDiv.querySelector('.think-content').innerHTML = format(thoughtText);
                             answerDiv.innerHTML = format(finalAnswerText); hljs.highlightAll(); 
                             telemetryBadge.classList.add('completed');
-                            
-                            // Matemática simulada de queima rápida para o ecrã bater certo com o servidor
                             tokens_gasto = Math.floor(content.length * 1.5) + 150;
                             telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                             vp.scrollTop = vp.scrollHeight; 
@@ -517,7 +536,6 @@
             vp.removeChild(loadingMsg);
 
             if(data.error) { 
-                // Se der erro de Tokens, mostra uma caixa de aviso no chat e para.
                 const errDiv = document.createElement('div');
                 errDiv.className = 'msg-row assistant';
                 errDiv.innerHTML = `<div class="role-tag">SISTEMA</div><div class="content"><div style="background:#FFF0F0; border:1px solid #FFCCCC; color:#CC0000; padding:20px; border-radius:12px; font-weight:700;">${data.error}</div></div>`;
