@@ -45,10 +45,7 @@
             align-items: center; justify-content: center; 
         }
         .loader-logo { width: 180px; filter: invert(1); animation: pulse 2.5s infinite; }
-        @keyframes pulse { 
-            0%, 100% { opacity: 0.2; transform: scale(0.95); } 
-            50% { opacity: 1; transform: scale(1); } 
-        }
+        @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
         /* SIDEBAR */
         #sidebar { 
@@ -99,64 +96,37 @@
         
         .token-badge-large { background: #F9F9F9; padding: 6px 14px; border-radius: 6px; font-size: 12px; color: #000; font-family: 'JetBrains Mono', monospace; font-weight: bold; border: 1px solid var(--border-color); }
 
-        /* TELA DE PLANOS COM AURAS PREMIUM 2026 */
-        .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
-        .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
-        .plans-subtitle { font-size: 16px; color: #888; margin-bottom: 60px; font-weight: 500; }
-        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
-        
-        .plan-card { 
-            border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; 
-            background: #FFF; display: flex; flex-direction: column; justify-content: space-between; 
-            position: relative; z-index: 1;
-        }
-
-        /* ANIMAÇÃO DE ROTAÇÃO E GRADIENTES */
+        /* ANIMAÇÃO E GRADIENTES UNIVERSAIS */
         @keyframes aura-spin { 
             0% { background-position: 0% 50%; } 
             50% { background-position: 100% 50%; } 
             100% { background-position: 0% 50%; } 
         }
-
-        /* TEXTOS COM GRADIENTES */
         .text-gradient-pro {
             background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            background-size: 200% auto; animation: aura-spin 3s linear infinite;
+            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900;
         }
         .text-gradient-plus {
             background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            background-size: 200% auto; animation: aura-spin 3s linear infinite;
+            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900;
         }
 
-        /* AURA PRO (COLORIDA) */
+        /* TELA DE PLANOS */
+        .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
+        .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
+        .plans-subtitle { font-size: 16px; color: #888; margin-bottom: 60px; font-weight: 500; }
+        .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
+        
+        .plan-card { border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; background: #FFF; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
         .plan-card.pro { border: none; box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px); }
-        .plan-card.pro::after { 
-            content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; 
-            border-radius: 24px; background: #000; /* Fundo do cartão */
-        }
-        .plan-card.pro::before {
-            content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px;
-            border-radius: 28px; filter: blur(14px);
-            background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f);
-            background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.8;
-        }
-
-        /* AURA PLUS (VERDE) */
+        .plan-card.pro::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #000; }
+        .plan-card.pro::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.8; }
         .plan-card.plus { border: none; box-shadow: 0 20px 50px rgba(0,255,136,0.1); }
-        .plan-card.plus::after { 
-            content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; 
-            border-radius: 24px; background: #FFF; /* Fundo do cartão */
-        }
-        .plan-card.plus::before {
-            content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px;
-            border-radius: 28px; filter: blur(14px);
-            background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88);
-            background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.6;
-        }
+        .plan-card.plus::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #FFF; }
+        .plan-card.plus::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.6; }
 
-        /* Elementos de Texto dentro dos Planos */
         .plan-name { font-size: 24px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 42px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; }
         .pro .plan-price { color: #FFF; }
@@ -181,10 +151,16 @@
         .btn-plans-header { background: #FFF; border: 1px solid var(--border-color); color: #000; padding: 10px 20px; border-radius: 50px; font-size: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .btn-plans-header:hover { border-color: #000; }
 
+        /* AURA DA FOTO DE PERFIL */
         .profile-area { position: relative; }
-        .profile-img { width: 50px; height: 50px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border-color); object-fit: cover; }
-        .profile-dropdown { display: none; position: absolute; top: 90px; right: 0px; background: #FFF; border: 1px solid var(--border-color); border-radius: 20px; padding: 10px; width: 280px; z-index: 500; box-shadow: 0 30px 60px rgba(0,0,0,0.08); overflow: hidden; }
+        .profile-wrapper { position: relative; width: 50px; height: 50px; cursor: pointer; border-radius: 50%; }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; border: 2px solid #FFF; }
         
+        /* Auras ativadas via JS */
+        .profile-wrapper.pro::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
+        .profile-wrapper.plus::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
+
+        .profile-dropdown { display: none; position: absolute; top: 90px; right: 0px; background: #FFF; border: 1px solid var(--border-color); border-radius: 20px; padding: 10px; width: 280px; z-index: 500; box-shadow: 0 30px 60px rgba(0,0,0,0.08); overflow: hidden; }
         .dropdown-header-info { padding: 15px; border-bottom: 1px solid #F0F0F0; margin-bottom: 10px; }
         .drop-name { font-size: 14px; font-weight: 900; color: #000; }
         .drop-email { font-size: 11px; color: #888; margin-bottom: 10px; }
@@ -203,7 +179,7 @@
         .content { font-size: 17px; line-height: 2; color: #333; }
         .content b { color: #000; }
 
-        /* CONTADOR DE TOKENS (PREMIUM 2026) */
+        /* CONTADOR DE TOKENS DA IA */
         .telemetry-badge { background: #FFFFFF; border: 1px solid #E5E5E5; color: #666; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); font-variant-numeric: tabular-nums; letter-spacing: 0; }
         .status-dot { width: 6px; height: 6px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
         .telemetry-badge.completed { border-color: transparent; background: transparent; box-shadow: none; color: #AAA; }
@@ -237,7 +213,8 @@
             
             <div class="settings-row hover-scale">
                 <span class="settings-label">Plano Ativo</span>
-                <span class="settings-value" id="ui-current-plan">{{ plano }}</span>
+                <!-- O JS vai injetar o texto com o Gradiente correto aqui -->
+                <span class="settings-value" id="ui-current-plan" style="font-size: 20px;">{{ plano }}</span>
             </div>
             
             <div class="settings-row hover-scale">
@@ -319,13 +296,18 @@
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 <div class="profile-area">
                     {% if user %}
-                        <img src="{{ user.picture }}" class="profile-img hover-scale" onclick="toggleProfile()" alt="User">
+                        <!-- ENVOLVEMOS A IMAGEM NO WRAPPER DA AURA -->
+                        <div class="profile-wrapper hover-scale" id="profile-aura" onclick="toggleProfile()">
+                            <img src="{{ user.picture }}" class="profile-img" alt="User">
+                        </div>
+
                         <div class="profile-dropdown" id="p-drop">
                             <div class="dropdown-header-info">
                                 <div class="drop-name">{{ user.given_name }}</div>
                                 <div class="drop-email">{{ user.email }}</div>
                                 <div class="drop-badges">
-                                    <span class="badge-mini">{{ plano }}</span>
+                                    <!-- O BADGE TAMBÉM VAI RECEBER A COR/GRADIENTE -->
+                                    <span class="badge-mini" id="dropdown-badge-plan" style="background:#000; color:#FFF;">{{ plano }}</span>
                                     <span class="badge-tkns" id="menu-tokens">...</span>
                                 </div>
                             </div>
@@ -355,6 +337,7 @@
         const sessions = {{ sessions | tojson | safe }}; 
         const vp = document.getElementById('viewport');
         
+        // VARIÁVEIS SEGURAS VINDAS DO SERVIDOR
         const userPlan = "{{ plano }}";
         let userTokens = {{ tokens }};
 
@@ -377,13 +360,34 @@
             return new Intl.NumberFormat('pt-BR').format(num);
         }
 
+        // APLICA AS AURAS E GRADIENTES ONDE O NOME DO PLANO APARECE
         function updateUIBasedOnPlanAndTokens() {
+            // 1. Contador numérico
             const formatado = formatNumber(userTokens);
             document.getElementById('ui-token-limit').innerHTML = `<span class="token-badge-large" style="background:#000; color:#FFF; border:none;">${formatado} TOKENS</span>`;
-            
             const menuTokens = document.getElementById('menu-tokens');
             if(menuTokens) menuTokens.innerText = `${formatado} TKNS`;
 
+            // 2. Elementos de Aura e Gradiantes
+            const profileAura = document.getElementById('profile-aura');
+            const badgePlan = document.getElementById('dropdown-badge-plan');
+            const uiCurrentPlan = document.getElementById('ui-current-plan');
+
+            if (userPlan === 'Pro') {
+                if(profileAura) profileAura.className = 'profile-wrapper pro hover-scale';
+                if(badgePlan) badgePlan.innerHTML = '<span class="text-gradient-pro">PRO</span>';
+                if(uiCurrentPlan) uiCurrentPlan.innerHTML = '<span class="text-gradient-pro">Pro</span>';
+            } else if (userPlan === 'Plus') {
+                if(profileAura) profileAura.className = 'profile-wrapper plus hover-scale';
+                if(badgePlan) badgePlan.innerHTML = '<span class="text-gradient-plus">PLUS</span>';
+                if(uiCurrentPlan) uiCurrentPlan.innerHTML = '<span class="text-gradient-plus">Plus</span>';
+            } else {
+                if(profileAura) profileAura.className = 'profile-wrapper hover-scale';
+                if(badgePlan) badgePlan.innerHTML = 'GRÁTIS';
+                if(uiCurrentPlan) uiCurrentPlan.innerText = 'Grátis';
+            }
+
+            // 3. Botões da aba de compra
             const btnGratis = document.getElementById('btn-comprar-gratis');
             const btnPro = document.getElementById('btn-comprar-pro');
             const btnPlus = document.getElementById('btn-comprar-plus');
@@ -393,16 +397,11 @@
             btnPlus.innerText = "ASSINAR PLUS"; btnPlus.className = "plan-btn-card upgrade-plus btn-scale";
 
             if (userPlan === 'Grátis') {
-                btnGratis.innerText = "SEU PLANO ATUAL";
-                btnGratis.onclick = null;
+                btnGratis.innerText = "SEU PLANO ATUAL"; btnGratis.onclick = null;
             } else if (userPlan === 'Pro') {
-                btnPro.innerText = "SEU PLANO ATUAL";
-                btnPro.className = "plan-btn-card current btn-scale";
-                btnPro.onclick = null;
+                btnPro.innerText = "SEU PLANO ATUAL"; btnPro.className = "plan-btn-card current btn-scale"; btnPro.onclick = null;
             } else if (userPlan === 'Plus') {
-                btnPlus.innerText = "SEU PLANO ATUAL";
-                btnPlus.className = "plan-btn-card current btn-scale";
-                btnPlus.onclick = null;
+                btnPlus.innerText = "SEU PLANO ATUAL"; btnPlus.className = "plan-btn-card current btn-scale"; btnPlus.onclick = null;
             }
         }
 
@@ -439,7 +438,7 @@
                 const d = document.createElement('div'); 
                 d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`; 
                 d.innerHTML = `
-                    <span style="flex:1" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
+                    <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
                     <button class="del-chat hover-scale btn-scale" onclick="delChat('${s.id}')">✕</button>
                 `; 
                 list.appendChild(d); 
@@ -557,14 +556,12 @@
             const m = i.value.trim(); 
             if(!m) return; 
             
-            // Lógica CORRIGIDA: Criar chat automaticamente e atualizar título sem bugs!
-            let isNewSession = false;
+            // Lógica sem bugs para gerar título imediatamente
             if(!curId) { 
                 const r = await fetch('/new_chat', { method: 'POST' }); 
                 const sess = await r.json(); 
                 curId = sess.id; 
-                sessions.unshift(sess); // Adiciona na lista visualmente na mesma hora
-                isNewSession = true;
+                sessions.unshift(sess); 
             } 
             
             display('user', m, false); 
@@ -585,14 +582,14 @@
 
             display('assistant', data.response, true); 
             
-            // SE A IA DEU UM NOVO TÍTULO, ATUALIZAMOS A LISTA NA HORA
+            // ATUALIZA A BARRA LATERAL NA MESMA HORA COM O TÍTULO NOVO
             if (data.title) {
                 document.getElementById('active-title').innerText = "NÚCLEO_" + data.title.toUpperCase();
                 let existingSess = sessions.find(s => s.id === curId);
                 if (existingSess) {
                     existingSess.title = data.title;
                 }
-                renderList(); // Recarrega a barra lateral para mostrar o título que a IA gerou
+                renderList(); 
             }
 
             if(data.tokens_restantes !== undefined) {
@@ -601,8 +598,9 @@
             }
         }
 
+        // FECHAR DROP CLICANDO FORA (COM RECONHECIMENTO DA AURA)
         window.onclick = (e) => { 
-            if (!e.target.matches('.profile-img')) { 
+            if (!e.target.closest('.profile-wrapper')) { 
                 const d = document.getElementById('p-drop'); 
                 if(d) d.style.display = 'none'; 
             } 
