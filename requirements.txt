@@ -1,6 +1,8 @@
-flask
-flask-cors
-openai
-gunicorn
-authlib
+Flask
+Flask-Cors
+Authlib
 requests
+openai
+werkzeug
+duckduckgo-search
+youtube-transcript-api
