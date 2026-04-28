@@ -7,33 +7,16 @@
     
     <style>
         :root {
-            --bg: #FAFAFA;
-            --surface: #FFFFFF;
-            --border: #EAEAEA;
-            --text-main: #000000;
-            --text-dim: #888888;
-            --liquid: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg: #FAFAFA; --surface: #FFFFFF; --border: #EAEAEA;
+            --text-main: #000000; --text-dim: #888888; --liquid: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; outline: none; transition: all 0.3s var(--liquid); }
-        body { 
-            margin: 0; padding: 0; background: var(--bg); color: var(--text-main); 
-            font-family: 'Inter', -apple-system, sans-serif; 
-            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text-main); font-family: 'Inter', -apple-system, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .hover-scale:hover { transform: scale(1.02); } .btn-scale:active { transform: scale(0.97); }
 
-        .hover-scale:hover { transform: scale(1.02); }
-        .btn-scale:active { transform: scale(0.97); }
-
-        .header {
-            position: fixed; top: 0; left: 0; width: 100%; padding: 30px 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(250, 250, 250, 0.9); backdrop-filter: blur(10px); z-index: 100;
-        }
-        .back-btn {
-            background: transparent; border: none; font-size: 14px; font-weight: 700;
-            color: var(--text-dim); cursor: pointer; display: flex; align-items: center; gap: 8px;
-        }
+        .header { position: fixed; top: 0; left: 0; width: 100%; padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(250, 250, 250, 0.9); backdrop-filter: blur(10px); z-index: 100; }
+        .back-btn { background: transparent; border: none; font-size: 14px; font-weight: 700; color: var(--text-dim); cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .back-btn:hover { color: var(--text-main); }
         .logo { width: 45px; filter: invert(1); cursor: pointer; }
 
@@ -44,36 +27,23 @@
         .subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 50px; }
 
         .cards-grid { display: flex; gap: 30px; width: 100%; justify-content: center; }
-        .plan-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
-            padding: 40px; width: 380px; text-align: left; cursor: pointer;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-        }
+        .plan-card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px; width: 380px; text-align: left; cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,0.03); }
         .plan-card:hover { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.08); transform: translateY(-5px); }
         .plan-card.pro { background: #000; color: #FFF; border-color: #000; }
         .plan-name { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 20px; letter-spacing: -2px; }
         .plan-price span { font-size: 16px; font-weight: 500; color: var(--text-dim); }
         .pro .plan-price span { color: #888; }
-        .select-btn {
-            width: 100%; padding: 18px; border-radius: 50px; font-size: 14px; font-weight: 800;
-            border: 1px solid var(--border); background: var(--bg); color: var(--text-main); cursor: pointer;
-            margin-top: 20px;
-        }
+        .select-btn { width: 100%; padding: 18px; border-radius: 50px; font-size: 14px; font-weight: 800; border: 1px solid var(--border); background: var(--bg); color: var(--text-main); cursor: pointer; margin-top: 20px; }
         .pro .select-btn { background: #FFF; color: #000; border: none; }
 
-        #step-payment {
-            display: none; opacity: 0; transform: translateY(20px);
-            background: var(--surface); border: 1px solid var(--border); border-radius: 30px;
-            padding: 50px; box-shadow: 0 20px 80px rgba(0,0,0,0.05); gap: 60px;
-        }
+        #step-payment { display: none; opacity: 0; transform: translateY(20px); background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 50px; box-shadow: 0 20px 80px rgba(0,0,0,0.05); gap: 60px; }
         .summary-col { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .summary-title { font-size: 12px; font-weight: 800; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 30px; }
         .item-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .item-name { font-size: 24px; font-weight: 900; }
         .item-price { font-size: 24px; font-weight: 500; }
         
-        /* CAIXA DE CUPOM */
         .coupon-box { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 40px; margin-top: 20px; }
         .coupon-box input { flex: 1; border: none; padding: 15px 20px; font-size: 14px; outline: none; background: #FAFAFA; font-weight: 600; }
         .coupon-box button { background: #000; color: #FFF; border: none; padding: 0 25px; font-weight: 800; cursor: pointer; font-size: 12px; }
@@ -82,46 +52,21 @@
         .total-label { font-size: 16px; font-weight: 700; color: var(--text-dim); }
         .total-price { font-size: 36px; font-weight: 900; letter-spacing: -1px; }
 
-        /* COLUNA DO PIX / ATIVAÇÃO */
-        .pix-col {
-            flex: 1; background: #FAFAFA; border-radius: 20px; padding: 40px;
-            display: flex; flex-direction: column; align-items: center; text-align: center;
-            border: 1px solid var(--border); justify-content: center;
-        }
+        .pix-col { flex: 1; background: #FAFAFA; border-radius: 20px; padding: 40px; display: flex; flex-direction: column; align-items: center; text-align: center; border: 1px solid var(--border); justify-content: center; }
         .pix-logo { font-size: 20px; font-weight: 900; color: #32BCAD; display: flex; align-items: center; gap: 8px; margin-bottom: 30px; letter-spacing: -1px; }
         .pix-logo::before { content: "❖"; font-size: 24px; }
         
-        .qr-placeholder {
-            width: 200px; height: 200px; background: #FFF; border: 1px dashed #CCC;
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-            margin-bottom: 30px; position: relative; overflow: hidden;
-        }
-        .qr-placeholder::after {
-            content: ""; position: absolute; width: 60%; height: 60%;
-            background: repeating-linear-gradient(45deg, #000 0, #000 10px, transparent 10px, transparent 20px);
-            opacity: 0.1; border-radius: 8px;
-        }
+        .qr-placeholder { width: 200px; height: 200px; background: #FFF; border: 1px dashed #CCC; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .qr-placeholder::after { content: ""; position: absolute; width: 60%; height: 60%; background: repeating-linear-gradient(45deg, #000 0, #000 10px, transparent 10px, transparent 20px); opacity: 0.1; border-radius: 8px; }
 
-        .copy-pix-btn {
-            background: #000; color: #FFF; width: 100%; padding: 18px; border-radius: 50px;
-            font-size: 14px; font-weight: 800; border: none; cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
+        .copy-pix-btn { background: #000; color: #FFF; width: 100%; padding: 18px; border-radius: 50px; font-size: 14px; font-weight: 800; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; gap: 10px; }
         
         .waiting-text { font-size: 13px; color: var(--text-dim); margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px;}
         .waiting-text.loading::before { content: ""; display: block; width: 8px; height: 8px; background: #32BCAD; border-radius: 50%; animation: blink 1.5s infinite; }
         @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-        /* TELA DE SUCESSO */
-        #step-success {
-            display: none; opacity: 0; transform: translateY(20px);
-            flex-direction: column; align-items: center; text-align: center;
-        }
-        .success-icon {
-            width: 80px; height: 80px; background: #000; color: #FFF; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 30px;
-            animation: popIn 0.5s var(--liquid);
-        }
+        #step-success { display: none; opacity: 0; transform: translateY(20px); flex-direction: column; align-items: center; text-align: center; }
+        .success-icon { width: 80px; height: 80px; background: #000; color: #FFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 30px; animation: popIn 0.5s var(--liquid); }
         @keyframes popIn { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
         .success-title { font-size: 32px; font-weight: 900; margin-bottom: 10px; }
         .success-subtitle { font-size: 16px; color: var(--text-dim); margin-bottom: 40px; }
@@ -132,7 +77,7 @@
 
     <header class="header">
         <button class="back-btn btn-scale" onclick="location.href='/'">← Voltar</button>
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'">
+        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo hover-scale" onclick="location.href='/'" alt="ANK Logo">
     </header>
 
     <div class="checkout-container">
@@ -206,8 +151,8 @@
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const plan = urlParams.get('plan');
-            if (plan === 'pro') proceedToPayment('Pro', 25);
-            else if (plan === 'plus') proceedToPayment('Plus', 60);
+            if (plan === 'pro' || plan === 'Pro') proceedToPayment('Pro', 25);
+            else if (plan === 'plus' || plan === 'Plus') proceedToPayment('Plus', 60);
             else document.getElementById('step-selection').style.display = 'flex';
         };
 
@@ -231,19 +176,16 @@
             }, 300);
         }
 
-        // --- SISTEMA DE CUPOM MÁGICO ---
         function applyCoupon() {
             if(discountApplied) return;
-            const input = document.getElementById('coupon-input').value.toUpperCase().replace(/\s/g, ''); // Remove espaços e deixa tudo maiúsculo
+            const input = document.getElementById('coupon-input').value.toUpperCase().replace(/\s/g, ''); 
             
-            // O cupom que deixa tudo grátis
             if(input === 'GRATIS20%') {
                 document.getElementById('total-price').innerText = "0";
                 document.getElementById('coupon-msg').style.display = 'block';
                 document.getElementById('coupon-input').disabled = true;
                 discountApplied = true;
                 
-                // Transforma a área do PIX num botão de ativação direta
                 const pixArea = document.getElementById('pix-area');
                 pixArea.innerHTML = `
                     <div style="font-size: 40px; margin-bottom: 20px;">🎉</div>
@@ -258,10 +200,24 @@
             }
         }
 
-        function activateFreePlan() {
-            // Salva o novo plano no armazenamento local do navegador para o frontend saber que ele mudou
-            localStorage.setItem('ank_plan', selectedPlan);
-            showSuccess();
+        async function activateFreePlan() {
+            // AVISAR O SERVIDOR PARA GUARDAR O NOVO PLANO E RESETAR OS TOKENS!
+            try {
+                const res = await fetch('/api/upgrade_plano', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ plan: selectedPlan })
+                });
+                
+                if(res.ok) {
+                    showSuccess();
+                } else {
+                    alert("Por favor, faça login antes de assinar.");
+                    location.href = '/login';
+                }
+            } catch (error) {
+                alert("Erro ao conectar com o banco de dados da ANK.");
+            }
         }
 
         function showSuccess() {
@@ -278,7 +234,7 @@
         }
 
         function copyPixCode() {
-            alert("Como você não inseriu o cupom, esta é apenas uma simulação.");
+            alert("Aguardando ativação do PIX Real.");
         }
     </script>
 </body>
