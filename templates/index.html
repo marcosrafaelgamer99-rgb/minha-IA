@@ -18,29 +18,59 @@
             --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
-        body { margin: 0; padding: 0; background: var(--bg); color: var(--text-color); font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        * { 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; 
+        }
+        
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: var(--bg); 
+            color: var(--text-color); 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
 
         .hover-scale:hover { transform: scale(1.03); } 
         .btn-scale:active { transform: scale(0.97); }
 
-        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* PRE-LOADER */
+        #loader { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #FFF; z-index: 10000; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; 
+        }
         .loader-logo { width: 250px; filter: invert(1); animation: pulse 2.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 
+            0%, 100% { opacity: 0.2; transform: scale(0.95); } 
+            50% { opacity: 1; transform: scale(1); } 
+        }
 
-        #sidebar { width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
+        /* SIDEBAR E LISTAS DE CHAT */
+        #sidebar { 
+            width: 320px; background: var(--sidebar-bg); 
+            border-right: 2px solid var(--border-color); 
+            display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; 
+        }
         .logo-nav { width: 110px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
 
-        .btn-new { background: #000; color: #FFF; border: none; padding: 18px; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-new { 
+            background: #000; color: #FFF; border: none; padding: 18px; 
+            border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; 
+            margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; 
+        }
         .btn-new:hover { opacity: 0.8; }
 
         #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 5px; }
-        
         .section-title { font-size: 11px; font-weight: 900; color: #999; letter-spacing: 2px; margin: 15px 0 5px 5px; text-transform: uppercase; }
 
         .chat-item { 
-            padding: 12px 15px; border-radius: 12px; font-size: 14px; color: #444; font-weight: 600;
-            cursor: pointer; display: flex; justify-content: space-between; align-items: center; position: relative;
+            padding: 12px 15px; border-radius: 12px; font-size: 14px; color: #444; font-weight: 600; 
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; position: relative; 
         }
         .chat-item:hover, .chat-item.active { background: #F0F0F0; color: #000; }
         .chat-title-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -55,8 +85,16 @@
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
 
-        .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; }
-        .close-view-btn { position: absolute; top: 40px; right: 50px; background: transparent; border: none; font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; }
+        /* TELAS IMERSIVAS */
+        .immersive-view { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; 
+            align-items: center; justify-content: center; padding: 50px; overflow-y: auto; 
+        }
+        .close-view-btn { 
+            position: absolute; top: 40px; right: 50px; background: transparent; border: none; 
+            font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; 
+        }
 
         .settings-container { width: 100%; max-width: 600px; text-align: left; margin: auto; }
         .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; color: #000; }
@@ -65,14 +103,29 @@
         .settings-value { font-size: 16px; font-weight: 900; color: #000; display: flex; align-items: center; gap: 10px; }
         .token-badge-large { background: #F0F0F0; padding: 6px 14px; border-radius: 6px; font-size: 14px; color: #000; font-family: 'JetBrains Mono', monospace; font-weight: 900; border: 2px solid var(--border-color); }
 
-        @keyframes aura-spin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .text-gradient-pro { background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
-        .text-gradient-plus { background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
+        /* ANIMAÇÕES E GRADIENTES UNIVERSAIS */
+        @keyframes aura-spin { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
+        .text-gradient-pro { 
+            background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; 
+            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; 
+        }
+        .text-gradient-plus { 
+            background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; 
+            background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; 
+        }
 
+        /* TELA DE PLANOS */
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
         .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; color: #000;}
         .plans-subtitle { font-size: 18px; color: #555; margin-bottom: 60px; font-weight: 600; }
         .plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: left; }
+        
         .plan-card { border: 2px solid var(--border-color); border-radius: 24px; padding: 40px; background: #FFF; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 1; }
         .plan-card.pro { border: none; box-shadow: 0 30px 60px rgba(0,0,0,0.15); transform: translateY(-10px); }
         .plan-card.pro::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #000; }
@@ -80,6 +133,7 @@
         .plan-card.plus { border: none; box-shadow: 0 20px 50px rgba(0,255,136,0.1); }
         .plan-card.plus::after { content: ""; position: absolute; z-index: -1; top: 0; left: 0; right: 0; bottom: 0; border-radius: 24px; background: #FFF; }
         .plan-card.plus::before { content: ""; position: absolute; z-index: -2; top: -4px; left: -4px; right: -4px; bottom: -4px; border-radius: 28px; filter: blur(14px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 4s ease infinite; opacity: 0.6; }
+        
         .plan-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; color: #000;}
         .pro .plan-price { color: #FFF; }
@@ -89,11 +143,13 @@
         .plan-features li::before { content: "✓"; font-weight: 900; color: #000;}
         .pro .plan-features li { color: #DDD; }
         .pro .plan-features li::before { color: #FFF; }
+        
         .plan-btn-card { width: 100%; padding: 18px; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 1px; }
         .plan-btn-card.current { background: #EAEAEA; color: #555; cursor: default; }
         .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
         .plan-btn-card.upgrade-plus { background: #000; color: #FFF; }
 
+        /* CHAT E MAIN */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
         .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
         .header-title { font-size: 18px; font-weight: 900; color: #000000; letter-spacing: 2px; text-transform: uppercase; }
@@ -101,9 +157,11 @@
         .btn-plans-header { background: #FFF; border: 2px solid var(--border-color); color: #000; padding: 12px 24px; border-radius: 50px; font-size: 13px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
         .btn-plans-header:hover { border-color: #000; }
 
+        /* PERFIL E AURAS */
         .profile-area { position: relative; }
         .profile-wrapper { position: relative; width: 50px; height: 50px; cursor: pointer; border-radius: 50%; }
         .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: relative; z-index: 2; border: 2px solid #FFF; }
+        
         .profile-wrapper.pro::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #ff007f, #7f00ff, #00d4ff, #ff007f); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
         .profile-wrapper.plus::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; right: -3px; bottom: -3px; border-radius: 50%; filter: blur(4px); background: linear-gradient(45deg, #00ff88, #00cc22, #aaff00, #00ff88); background-size: 300% 300%; animation: aura-spin 3s linear infinite; }
         
@@ -114,9 +172,11 @@
         .drop-badges { display: flex; gap: 8px; }
         .badge-mini { background: #000; color: #FFF; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
         .badge-tkns { background: #F0F0F0; color: #000; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 900; font-family: monospace; border: 1px solid #E0E0E0;}
+        
         .profile-dropdown button { width: 100%; background: transparent; border: none; color: #444; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 15px; font-weight: 800; border-radius: 12px; }
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
+        /* VIEWPORT E MENSAGENS */
         #viewport { flex: 1; overflow-y: auto; padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; }
         .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
@@ -125,11 +185,21 @@
         .content { font-size: 17px; line-height: 2; color: #222; font-weight: 500;}
         .content b { color: #000; font-weight: 900;}
 
-        .telemetry-badge { background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; }
+        /* BADGES DE TELEMETRIA E FERRAMENTAS */
+        .telemetry-badge { 
+            background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; 
+            border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', 'Courier New', monospace; 
+            font-weight: 800; display: inline-flex; align-items: center; gap: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; 
+        }
         .status-dot { width: 8px; height: 8px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
         .telemetry-badge.completed { border-color: transparent; background: transparent; box-shadow: none; color: #777; }
         @keyframes pulse-dot { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+        
+        .icon-google { width: 14px; height: 14px; }
+        .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
+        /* DOCK DE INPUT */
         #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
         #dock-capsule { display: flex; align-items: center; background: #FFF; border: 2px solid var(--border-color); padding: 10px 15px 10px 35px; border-radius: 100px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -137,14 +207,29 @@
         #msg-in::placeholder { color: #999; }
         .btn-send { background: #000; color: #FFF; height: 55px; width: 55px; border-radius: 50%; border: none; cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; }
 
-        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 4px; } 
+        ::-webkit-scrollbar-thumb { background: #E0E0E0; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo hover-scale" alt="ANK">
-    </div>
+    <!-- ÍCONES SVG INLINE -->
+    <svg style="display:none;">
+        <symbol id="google-logo" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </symbol>
+        <symbol id="youtube-logo" viewBox="0 0 24 24">
+            <path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4S5.746,4,4.186,4.418c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768C5.746,20,12,20,12,20s6.254,0,7.814-0.418c0.86-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M9.5,15.5v-7L15.5,12L9.5,15.5z"/>
+        </symbol>
+        <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.6V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.6a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></symbol>
+        <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></symbol>
+    </svg>
+
+    <div id="loader"><img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="loader-logo hover-scale" alt="ANK"></div>
 
     <!-- TELA: CONFIGURAÇÕES -->
     <div id="view-settings" class="immersive-view">
@@ -175,37 +260,51 @@
             <div class="plans-header">Evolua o seu Núcleo.</div>
             <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
             <div class="plans-grid">
+                
                 <div class="plan-card hover-scale" id="card-gratis">
                     <div>
                         <div class="plan-name">Grátis</div>
                         <div class="plan-price">R$ 0<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>500 Mil Tokens Generosos</li><li>Velocidade Padrão</li></ul>
+                        <ul class="plan-features">
+                            <li>Acesso ANK 1.0</li>
+                            <li>500 Mil Tokens Generosos</li>
+                            <li>Velocidade Padrão</li>
+                        </ul>
                     </div>
                     <button class="plan-btn-card current btn-scale" id="btn-comprar-gratis">SEU PLANO ATUAL</button>
                 </div>
+                
                 <div class="plan-card pro hover-scale" id="card-pro">
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div>
-                        <!-- PREÇO ATUALIZADO: R$ 15 -->
                         <div class="plan-price">R$ 15<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Velocidade 2x</li></ul>
+                        <ul class="plan-features">
+                            <li>Acesso prioritário</li>
+                            <li>5 Milhões de Tokens</li>
+                            <li>Velocidade 2x</li>
+                        </ul>
                     </div>
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
                 </div>
+                
                 <div class="plan-card plus hover-scale" id="card-plus">
                     <div>
                         <div class="plan-name text-gradient-plus">Plus</div>
-                        <!-- PREÇO ATUALIZADO: R$ 25 -->
                         <div class="plan-price">R$ 25<span>/mês</span></div>
-                        <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Velocidade Máxima</li><li>Novos Modelos</li></ul>
+                        <ul class="plan-features">
+                            <li>50 Milhões de Tokens</li>
+                            <li>Velocidade Máxima</li>
+                            <li>Ferramentas (Web/YouTube)</li>
+                        </ul>
                     </div>
                     <button class="plan-btn-card upgrade-plus btn-scale" id="btn-comprar-plus" onclick="location.href='/checkout?plan=Plus'">ASSINAR PLUS</button>
                 </div>
+                
             </div>
         </div>
     </div>
 
-    <!-- BARRA LATERAL (COM FIXADOS E ARQUIVADOS) -->
+    <!-- BARRA LATERAL -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()" alt="ANK">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
@@ -224,6 +323,7 @@
             <div class="header-title" id="active-title">NÚCLEO_NOVA SESSÃO</div>
             <div class="header-actions">
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
+                
                 <div class="profile-area">
                     {% if user %}
                         <div class="profile-wrapper hover-scale" id="profile-aura" onclick="toggleProfile()">
@@ -254,26 +354,19 @@
         
         <div id="dock-wrapper">
             <div id="dock-capsule" class="hover-scale">
-                <input type="text" id="msg-in" placeholder="Transmita dados para a ANK 1.0..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Pesquise no Google sobre...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
                 <button class="btn-send btn-scale" onclick="send()">↑</button>
             </div>
         </div>
     </main>
-
-    <!-- ÍCONES SVG INLINE -->
-    <svg style="display:none;">
-        <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.6V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.6a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></symbol>
-        <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></symbol>
-        <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></symbol>
-    </svg>
 
     <script>
         let curId = null; 
         let sessions = {{ sessions | tojson | safe }}; 
         const vp = document.getElementById('viewport');
         
-        const userPlan = "{{ plano }}";
-        let userTokens = {{ tokens }};
+        const userPlan = "{{ plano }}"; 
+        let userTokens = {{ tokens }}; 
         let showingArchived = false;
 
         window.onload = () => { 
@@ -281,7 +374,7 @@
             updateUIBasedOnPlanAndTokens();
             
             const firstActive = sessions.find(s => !s.archived);
-            if(firstActive) {
+            if (firstActive) {
                 loadChat(firstActive.id, firstActive.title); 
             } else if (sessions.length > 0) {
                 loadChat(sessions[0].id, sessions[0].title);
@@ -289,15 +382,19 @@
             
             setTimeout(() => { 
                 const l = document.getElementById('loader'); 
-                l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 600); 
+                l.style.opacity = '0'; 
+                setTimeout(() => l.style.display = 'none', 600); 
             }, 1500); 
         };
 
-        function formatNumber(num) { return new Intl.NumberFormat('pt-BR').format(num); }
+        function formatNumber(num) { 
+            return new Intl.NumberFormat('pt-BR').format(num); 
+        }
 
         function updateUIBasedOnPlanAndTokens() {
             const formatado = formatNumber(userTokens);
             document.getElementById('ui-token-limit').innerHTML = `<span class="token-badge-large" style="background:#000; color:#FFF; border:none;">${formatado} TOKENS</span>`;
+            
             const menuTokens = document.getElementById('menu-tokens');
             if(menuTokens) menuTokens.innerText = `${formatado} TKNS`;
 
@@ -322,23 +419,32 @@
             const btnGratis = document.getElementById('btn-comprar-gratis');
             const btnPro = document.getElementById('btn-comprar-pro');
             const btnPlus = document.getElementById('btn-comprar-plus');
+            
             btnGratis.innerText = "ASSINAR GRÁTIS"; btnGratis.className = "plan-btn-card current btn-scale";
             btnPro.innerText = "ASSINAR PRO"; btnPro.className = "plan-btn-card upgrade-pro btn-scale";
             btnPlus.innerText = "ASSINAR PLUS"; btnPlus.className = "plan-btn-card upgrade-plus btn-scale";
 
-            if (userPlan === 'Grátis') { btnGratis.innerText = "SEU PLANO ATUAL"; btnGratis.onclick = null; } 
-            else if (userPlan === 'Pro') { btnPro.innerText = "SEU PLANO ATUAL"; btnPro.className = "plan-btn-card current btn-scale"; btnPro.onclick = null; } 
-            else if (userPlan === 'Plus') { btnPlus.innerText = "SEU PLANO ATUAL"; btnPlus.className = "plan-btn-card current btn-scale"; btnPlus.onclick = null; }
+            if (userPlan === 'Grátis') { 
+                btnGratis.innerText = "SEU PLANO ATUAL"; btnGratis.onclick = null; 
+            } else if (userPlan === 'Pro') { 
+                btnPro.innerText = "SEU PLANO ATUAL"; btnPro.className = "plan-btn-card current btn-scale"; btnPro.onclick = null; 
+            } else if (userPlan === 'Plus') { 
+                btnPlus.innerText = "SEU PLANO ATUAL"; btnPlus.className = "plan-btn-card current btn-scale"; btnPlus.onclick = null; 
+            }
         }
 
         function switchView(view) { 
             const settings = document.getElementById('view-settings'); 
             const plans = document.getElementById('view-plans'); 
             settings.style.opacity = '0'; plans.style.opacity = '0'; 
+            
             setTimeout(() => { 
                 settings.style.display = 'none'; plans.style.display = 'none'; 
-                if(view === 'settings') { settings.style.display = 'flex'; setTimeout(() => settings.style.opacity = '1', 10); } 
-                else if (view === 'plans') { plans.style.display = 'flex'; setTimeout(() => plans.style.opacity = '1', 10); } 
+                if(view === 'settings') { 
+                    settings.style.display = 'flex'; setTimeout(() => settings.style.opacity = '1', 10); 
+                } else if (view === 'plans') { 
+                    plans.style.display = 'flex'; setTimeout(() => plans.style.opacity = '1', 10); 
+                } 
             }, 300); 
         }
 
@@ -350,12 +456,10 @@
         function toggleArchiveView() {
             showingArchived = !showingArchived;
             const btn = document.getElementById('btn-toggle-archive');
-            if(showingArchived) {
-                btn.innerHTML = "← VOLTAR AOS CHATS";
-                btn.style.color = "#000";
-            } else {
-                btn.innerHTML = "📦 VER ARQUIVADOS";
-                btn.style.color = "#333";
+            if(showingArchived) { 
+                btn.innerHTML = "← VOLTAR AOS CHATS"; btn.style.color = "#000"; 
+            } else { 
+                btn.innerHTML = "📦 VER ARQUIVADOS"; btn.style.color = "#333"; 
             }
             renderList();
         }
@@ -395,16 +499,9 @@
             d.innerHTML = `
                 <span class="chat-title-text" onclick="loadChat('${s.id}', '${s.title}')">${s.title}</span>
                 <div class="chat-actions">
-                    ${!s.archived ? `
-                    <button class="action-btn" title="${s.pinned ? 'Desfixar' : 'Fixar'}" onclick="actionPin('${s.id}')">
-                        <svg width="14" height="14" style="color: ${pinColor}"><use href="#icon-pin"></use></svg>
-                    </button>` : ''}
-                    <button class="action-btn" title="${archiveTitle}" onclick="actionArchive('${s.id}')">
-                        <svg width="14" height="14"><use href="#icon-archive"></use></svg>
-                    </button>
-                    <button class="action-btn delete" title="Apagar" onclick="actionDelete('${s.id}')">
-                        <svg width="14" height="14"><use href="#icon-trash"></use></svg>
-                    </button>
+                    ${!s.archived ? `<button class="action-btn" title="${s.pinned ? 'Desfixar' : 'Fixar'}" onclick="actionPin('${s.id}')"><svg width="14" height="14" style="color: ${pinColor}"><use href="#icon-pin"></use></svg></button>` : ''}
+                    <button class="action-btn" title="${archiveTitle}" onclick="actionArchive('${s.id}')"><svg width="14" height="14"><use href="#icon-archive"></use></svg></button>
+                    <button class="action-btn delete" title="Apagar" onclick="actionDelete('${s.id}')"><svg width="14" height="14"><use href="#icon-trash"></use></svg></button>
                 </div>
             `; 
             return d;
@@ -425,9 +522,12 @@
         }
 
         async function actionDelete(id) {
-            if(!confirm("ELIMINAR SESSÃO? Esta ação é irreversível.")) return; 
+            if(!confirm("ELIMINAR SESSÃO?")) return; 
             sessions = sessions.filter(s => s.id !== id);
-            if(curId === id) { vp.innerHTML = ''; curId = null; document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; }
+            if(curId === id) { 
+                vp.innerHTML = ''; curId = null; 
+                document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; 
+            }
             renderList();
             await fetch('/delete_chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) }); 
         }
@@ -449,7 +549,7 @@
             vp.innerHTML = ''; 
             const r = await fetch(`/get_messages/${id}`); 
             const ms = await r.json(); 
-            ms.forEach(m => display(m.role, m.content, false)); 
+            ms.forEach(m => display(m.role, m.content, false, 'none')); 
             renderList(); 
             vp.scrollTop = vp.scrollHeight; 
         }
@@ -466,20 +566,23 @@
             }); 
         }
         
-        function display(role, content, animate) { 
+        // AGENTE VISUAL: MOSTRA LOGOS ENQUANTO PENSA
+        function display(role, content, animate, tool = 'none') { 
             const d = document.createElement('div'); 
             d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
-            // REMOVIDO O "ANK_CORE", DEIXANDO APENAS "ANK" MAIS O CONTADOR DE TOKENS
             if (role === 'assistant') {
                 const uniqueId = Date.now();
+                let toolHTML = `<div class="status-dot"></div><span id="num-${uniqueId}">0</span> TKNS`;
+                
+                // Ativa a logo do Google ou YouTube
+                if (tool === 'google') toolHTML = `<svg class="icon-google"><use href="#google-logo"></use></svg> BUSCANDO NA WEB...`;
+                else if (tool === 'youtube') toolHTML = `<svg class="icon-youtube"><use href="#youtube-logo"></use></svg> ANALISANDO VÍDEO...`;
+
                 d.innerHTML = `
                     <div class="role-tag">
                         ANK 
-                        <span class="telemetry-badge" id="telemetry-${uniqueId}">
-                            <div class="status-dot"></div>
-                            <span id="num-${uniqueId}">0</span> TKNS
-                        </span>
+                        <span class="telemetry-badge" id="telemetry-${uniqueId}">${toolHTML}</span>
                     </div>
                     <div class="content"></div>
                 `;
@@ -494,25 +597,35 @@
                 let i = 0; 
                 let tokens_gasto = 12; 
                 const telemetryBadge = d.querySelector('.telemetry-badge');
-                const numSpan = d.querySelector(`#num-${telemetryBadge.id.split('-')[1]}`);
+                
+                // Limpeza: não mostrar na tela os dados brutos da web extraídos pelo Python
+                let visualContent = content;
+                if (content.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) {
+                    visualContent = content.split("Responda ao utilizador")[1] || content;
+                }
+                if (content.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) {
+                    visualContent = content.split("Responda ao utilizador")[1] || content;
+                }
 
                 function type() { 
-                    if(i < content.length) { 
-                        b.textContent += content.charAt(i); 
+                    if(i < visualContent.length) { 
+                        b.textContent += visualContent.charAt(i); 
                         i++; 
                         
-                        if (i % 4 === 0) {
-                            tokens_gasto++;
-                            numSpan.innerText = tokens_gasto;
+                        if (i % 4 === 0 && tool === 'none') { 
+                            tokens_gasto++; 
+                            const numSpan = d.querySelector(`#num-${telemetryBadge.id.split('-')[1]}`); 
+                            if(numSpan) numSpan.innerText = tokens_gasto; 
                         }
-
+                        
                         vp.scrollTop = vp.scrollHeight; 
                         setTimeout(type, 2); 
                     } else { 
-                        b.innerHTML = format(content); 
+                        b.innerHTML = format(visualContent); 
                         hljs.highlightAll(); 
                         
                         telemetryBadge.classList.add('completed');
+                        tokens_gasto = Math.floor(content.length / 4) + 12;
                         telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                         
                         vp.scrollTop = vp.scrollHeight; 
@@ -520,15 +633,23 @@
                 } 
                 type(); 
             } else { 
-                b.innerHTML = format(content); 
+                let cleanContent = content;
+                if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) {
+                    cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
+                }
+                if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) {
+                    cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
+                }
+                
+                b.innerHTML = format(cleanContent); 
                 hljs.highlightAll(); 
                 
                 if (role === 'assistant') {
                     const finalTokens = Math.floor(content.length / 4) + 12;
                     const badge = d.querySelector('.telemetry-badge');
-                    if (badge) {
-                        badge.classList.add('completed');
-                        badge.innerHTML = `${finalTokens} TKNS`;
+                    if (badge) { 
+                        badge.classList.add('completed'); 
+                        badge.innerHTML = `${finalTokens} TKNS`; 
                     }
                 }
             } 
@@ -546,8 +667,18 @@
                 sessions.unshift(sess); 
             } 
             
-            display('user', m, false); 
+            display('user', m, false, 'none'); 
             i.value = ''; 
+            
+            // DETETA SE FOI SOLICITADO GOOGLE OU YOUTUBE
+            let toolUsed = 'none';
+            const lowerM = m.toLowerCase();
+            if (lowerM.includes('google') || lowerM.includes('pesquise')) toolUsed = 'google';
+            else if (lowerM.includes('youtube') || lowerM.includes('vídeo') || lowerM.includes('video')) toolUsed = 'youtube';
+
+            // Cria uma mensagem simulada de carregamento com o Ícone
+            display('assistant', '', true, toolUsed);
+            const loadingMsg = vp.lastChild; 
             
             const res = await fetch('/chat', { 
                 method: 'POST', 
@@ -557,20 +688,26 @@
             
             const data = await res.json(); 
             
-            if(data.error) { alert(data.error); return; }
+            // Remove a mensagem de carregamento e coloca a resposta real
+            vp.removeChild(loadingMsg);
 
-            display('assistant', data.response, true); 
+            if(data.error) { 
+                alert(data.error); 
+                return; 
+            }
+
+            display('assistant', data.response, true, toolUsed); 
             
             if (data.title) {
                 document.getElementById('active-title').innerText = "NÚCLEO_" + data.title.toUpperCase();
-                let existingSess = sessions.find(s => s.id === curId);
+                let existingSess = sessions.find(s => s.id === curId); 
                 if (existingSess) existingSess.title = data.title;
                 renderList(); 
             }
 
-            if(data.tokens_restantes !== undefined) {
-                userTokens = data.tokens_restantes;
-                updateUIBasedOnPlanAndTokens();
+            if(data.tokens_restantes !== undefined) { 
+                userTokens = data.tokens_restantes; 
+                updateUIBasedOnPlanAndTokens(); 
             }
         }
 
