@@ -37,7 +37,6 @@
 
         #chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; padding-right: 5px; }
         
-        /* TÍTULOS DAS SESSÕES (FIXADOS / RECENTES / ARQUIVADOS) */
         .section-title { font-size: 11px; font-weight: 900; color: #999; letter-spacing: 2px; margin: 15px 0 5px 5px; text-transform: uppercase; }
 
         .chat-item { 
@@ -47,14 +46,12 @@
         .chat-item:hover, .chat-item.active { background: #F0F0F0; color: #000; }
         .chat-title-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* AÇÕES DO CHAT (Aparecem no Hover) */
         .chat-actions { display: none; align-items: center; gap: 8px; }
         .chat-item:hover .chat-actions { display: flex; }
         .action-btn { background: transparent; border: none; cursor: pointer; padding: 0; opacity: 0.4; transition: 0.2s; display: flex; align-items: center; }
         .action-btn:hover { opacity: 1; transform: scale(1.1); }
         .action-btn.delete:hover { color: #FF4444; opacity: 1; }
 
-        /* RODAPÉ DA SIDEBAR */
         .sidebar-footer { border-top: 2px solid var(--border-color); padding-top: 20px; margin-top: 20px; display: flex; flex-direction: column; gap: 10px;}
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
@@ -211,16 +208,14 @@
         </div>
     </div>
 
-    <!-- BARRA LATERAL (COM FIXADOS E ARQUIVADOS) -->
+    <!-- BARRA LATERAL -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()" alt="ANK">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
         
-        <!-- LOCAL ONDE OS CHATS SÃO INJETADOS -->
         <div id="chat-list"></div>
         
         <div class="sidebar-footer">
-            <!-- BOTÃO PARA ALTERNAR VISÃO DE ARQUIVOS -->
             <button class="settings-btn hover-scale" id="btn-toggle-archive" onclick="toggleArchiveView()">📦 VER ARQUIVADOS</button>
             <button class="settings-btn hover-scale" onclick="switchView('settings')">⚙️ CONFIGURAÇÕES</button>
         </div>
@@ -229,7 +224,7 @@
     <!-- NÚCLEO PRINCIPAL -->
     <main id="main">
         <header class="header">
-            <div class="header-title" id="active-title">NÚCLEO_NOVA SESSÃO</div>
+            <div class="header-title" id="active-title">NÚCLEO_SESSÃO ONLINE</div>
             <div class="header-actions">
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 <div class="profile-area">
@@ -268,7 +263,7 @@
         </div>
     </main>
 
-    <!-- ÍCONES SVG INLINE -->
+    <!-- ÍCONES SVG -->
     <svg style="display:none;">
         <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.6V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.6a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></symbol>
         <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></symbol>
@@ -288,10 +283,13 @@
             renderList(); 
             updateUIBasedOnPlanAndTokens();
             
-            // Carrega o primeiro chat que NÃO esteja arquivado
+            // AGORA AO ENTRAR, ELE CARREGA O CHAT AUTOMATICAMENTE!
             const firstActive = sessions.find(s => !s.archived);
             if(firstActive) {
                 loadChat(firstActive.id, firstActive.title); 
+            } else if (sessions.length > 0) {
+                // Se só tiver arquivados, carrega o primeiro
+                loadChat(sessions[0].id, sessions[0].title);
             }
             
             setTimeout(() => { 
@@ -367,20 +365,16 @@
             renderList();
         }
 
-        // NOVO MOTOR DE RENDERIZAÇÃO DA BARRA LATERAL (Com Pins e Archives)
         function renderList() { 
             const list = document.getElementById('chat-list'); 
             list.innerHTML = ''; 
             
             if (showingArchived) {
-                // VISÃO: ARQUIVADOS
                 const archived = sessions.filter(s => s.archived);
                 list.innerHTML = `<div class="section-title">ARQUIVADOS</div>`;
-                if(archived.length === 0) list.innerHTML += `<div style="font-size:12px; color:#999; padding:15px;">Nenhum chat arquivado.</div>`;
-                
+                if(archived.length === 0) list.innerHTML += `<div style="font-size:12px; color:#999; padding:15px; font-weight:600;">Nenhum chat arquivado.</div>`;
                 archived.forEach(s => list.appendChild(createChatElement(s)));
             } else {
-                // VISÃO: PRINCIPAL (Fixados e Recentes)
                 const pinned = sessions.filter(s => s.pinned && !s.archived);
                 const recents = sessions.filter(s => !s.pinned && !s.archived);
                 
@@ -396,12 +390,10 @@
             }
         }
 
-        // GERAÇÃO DO HTML DE CADA CHAT (Hover Reveal Actions)
         function createChatElement(s) {
             const d = document.createElement('div'); 
             d.className = `chat-item hover-scale ${curId === s.id ? 'active' : ''}`; 
             
-            // Ícones condicionais (Se está fixado, o ícone serve para desfixar, etc)
             const pinColor = s.pinned ? "#000" : "currentColor";
             const archiveTitle = s.archived ? "Desarquivar" : "Arquivar";
 
@@ -423,25 +415,24 @@
             return d;
         }
 
-        // AÇÕES DA BARRA LATERAL (Comunicação com o Servidor)
         async function actionPin(id) {
             const sess = sessions.find(s => s.id === id);
             if(sess) sess.pinned = !sess.pinned;
-            renderList(); // Atualiza UI na hora
+            renderList(); 
             await fetch('/api/toggle_pin', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) });
         }
 
         async function actionArchive(id) {
             const sess = sessions.find(s => s.id === id);
             if(sess) sess.archived = !sess.archived;
-            renderList(); // O chat vai sumir da vista atual animadamente
+            renderList(); 
             await fetch('/api/toggle_archive', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) });
         }
 
         async function actionDelete(id) {
             if(!confirm("ELIMINAR SESSÃO? Esta ação é irreversível.")) return; 
             sessions = sessions.filter(s => s.id !== id);
-            if(curId === id) { vp.innerHTML = ''; curId = null; document.getElementById('active-title').innerText = "NÚCLEO_SESSÃO ONLINE"; }
+            if(curId === id) { vp.innerHTML = ''; curId = null; document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; }
             renderList();
             await fetch('/delete_chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: id}) }); 
         }
@@ -453,7 +444,7 @@
             curId = sess.id;
             document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; 
             vp.innerHTML = '';
-            showingArchived = false; // Volta para a aba principal ao criar chat
+            showingArchived = false; 
             renderList();
         }
 

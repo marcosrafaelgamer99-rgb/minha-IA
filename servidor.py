@@ -38,7 +38,11 @@ LIMITES_TOKENS = {
     "Plus": 50000000
 }
 
+# ==========================================
+# NOVO MOTOR DE BASE DE DADOS (SEM GHOST BUG)
+# ==========================================
 def carregar_db():
+    """Carrega o banco de dados uma única vez por requisição."""
     if os.path.exists(HISTORY_FILE):
         try:
             with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
@@ -47,27 +51,20 @@ def carregar_db():
         except: return {}
     return {}
 
-def salvar_db(dados):
+def salvar_db(db):
+    """Salva a referência única de volta no arquivo."""
     with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-        json.dump(dados, f, ensure_ascii=False, indent=4)
+        json.dump(db, f, ensure_ascii=False, indent=4)
 
-def init_user_if_needed(email):
-    db = carregar_db()
+def obter_usuario(db, email):
+    """Garante que o usuário existe na referência atual do DB."""
     if email not in db:
         db[email] = {
             "sessions": [], 
             "plano": "Grátis", 
             "tokens": LIMITES_TOKENS["Grátis"]
         }
-        salvar_db(db)
     return db[email]
-
-def atualizar_plano_usuario(email, novo_plano):
-    db = carregar_db()
-    init_user_if_needed(email)
-    db[email]["plano"] = novo_plano
-    db[email]["tokens"] = LIMITES_TOKENS.get(novo_plano, 500000)
-    salvar_db(db)
 
 # ==========================================
 # ROTAS FRONTEND E OAUTH
@@ -77,8 +74,10 @@ def index():
     user = session.get('user')
     user_email = user.get("email", "visitante") if user else "visitante"
     
+    db = carregar_db()
     if user:
-        user_data = init_user_if_needed(user_email)
+        user_data = obter_usuario(db, user_email)
+        salvar_db(db) # Salva caso tenha sido a primeira visita
     else:
         user_data = {"sessions": [], "plano": "Visitante", "tokens": 0}
         
@@ -98,9 +97,16 @@ def checkout():
 def upgrade_plano():
     user = session.get('user')
     if not user: return jsonify({"error": "Não autenticado"}), 401
-    data = request.json
-    atualizar_plano_usuario(user["email"], data.get('plan'))
-    return jsonify({"status": "sucesso", "plano": data.get('plan')})
+    
+    novo_plano = request.json.get('plan')
+    db = carregar_db()
+    user_data = obter_usuario(db, user["email"])
+    
+    user_data["plano"] = novo_plano
+    user_data["tokens"] = LIMITES_TOKENS.get(novo_plano, 500000)
+    salvar_db(db)
+    
+    return jsonify({"status": "sucesso", "plano": novo_plano})
 
 @app.route('/login')
 def login(): return google.authorize_redirect(url_for('authorize', _external=True), prompt='select_account')
@@ -117,25 +123,27 @@ def logout():
     return redirect('/')
 
 # ==========================================
-# GESTÃO DE SESSÕES (CHATS, PINS E ARQUIVOS)
+# GESTÃO DE SESSÕES E ARQUIVOS (PERSISTÊNCIA)
 # ==========================================
 @app.route('/new_chat', methods=['POST'])
 def new_chat():
     u_email = session.get('user', {}).get("email", "visitante")
+    
     db = carregar_db()
-    init_user_if_needed(u_email)
+    user_data = obter_usuario(db, u_email)
     
     new_id = str(uuid.uuid4())
-    # ADICIONADO: pinned e archived
     new_sess = {"id": new_id, "title": "NOVA SESSÃO", "messages": [], "pinned": False, "archived": False}
-    db[u_email]["sessions"].insert(0, new_sess)
-    salvar_db(db)
+    user_data["sessions"].insert(0, new_sess)
+    
+    salvar_db(db) # Agora salva de verdade!
     return jsonify(new_sess)
 
 @app.route('/api/toggle_pin', methods=['POST'])
 def toggle_pin():
     cid = request.json.get('id')
     u_email = session.get('user', {}).get("email", "visitante")
+    
     db = carregar_db()
     if u_email in db:
         for s in db[u_email].get("sessions", []):
@@ -149,6 +157,7 @@ def toggle_pin():
 def toggle_archive():
     cid = request.json.get('id')
     u_email = session.get('user', {}).get("email", "visitante")
+    
     db = carregar_db()
     if u_email in db:
         for s in db[u_email].get("sessions", []):
@@ -162,6 +171,7 @@ def toggle_archive():
 def delete_chat():
     cid = request.json.get('id')
     u_email = session.get('user', {}).get("email", "visitante")
+    
     db = carregar_db()
     if u_email in db:
         db[u_email]["sessions"] = [s for s in db[u_email]["sessions"] if s["id"] != cid]
@@ -173,24 +183,27 @@ def get_messages(chat_id):
     u_email = session.get('user', {}).get("email", "visitante")
     db = carregar_db()
     for s in db.get(u_email, {}).get("sessions", []):
-        if s["id"] == chat_id: return jsonify(s["messages"])
+        if s["id"] == chat_id: 
+            return jsonify(s["messages"])
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (CHAT)
+# MOTOR DA IA (CHAT) E TOKENS
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
-    msg, cid = data.get('message'), data.get('chat_id')
+    msg = data.get('message')
+    cid = data.get('chat_id')
     user = session.get('user')
     u_email = user.get("email", "visitante") if user else "visitante"
     
     if u_email == "visitante":
         return jsonify({"error": "Faça login para interagir."}), 401
     
+    # 1. Carrega a DB UMA ÚNICA VEZ
     db = carregar_db()
-    user_data = init_user_if_needed(u_email)
+    user_data = obter_usuario(db, u_email)
     
     if user_data["tokens"] <= 0:
         return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. Atualize o seu plano para continuar operando.", "tokens_restantes": 0})
@@ -198,12 +211,16 @@ def chat():
     sessions = user_data.get("sessions", [])
     sess = next((s for s in sessions if s["id"] == cid), None)
     
-    if not sess: return jsonify({"error": "Sessão não encontrada"}), 404
-    if not sess["messages"]:
+    if not sess: 
+        return jsonify({"error": "Sessão não encontrada"}), 404
+        
+    # LÓGICA DE TÍTULO E MENSAGENS NO OBJETO CORRETO
+    if not sess.get("messages"):
         try:
-            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo de 2 palavras."}, {"role": "user", "content": msg}], max_tokens=8)
+            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resuma a seguinte intenção em 2 ou 3 palavras curtas."}, {"role": "user", "content": msg}], max_tokens=8)
             sess["title"] = res.choices[0].message.content.upper().replace('"', '')
-        except: sess["title"] = "NOVA SESSÃO"
+        except: 
+            sess["title"] = "SESSÃO SOBERANA"
     
     sess["messages"].append({"role": "user", "content": msg})
     
@@ -221,14 +238,18 @@ def chat():
         ans = res.choices[0].message.content
         sess["messages"].append({"role": "assistant", "content": ans})
         
+        # Consumo de tokens
         tokens_gastos = (len(msg) // 4) + (len(ans) // 4) + 12
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
         
+        # 2. SALVA A MESMA DB (Isso resolve o bug de perder as mensagens/títulos)
         salvar_db(db)
+        
         return jsonify({"response": ans, "title": sess["title"], "tokens_restantes": user_data["tokens"]})
         
-    except Exception as e: return jsonify({"response": f"ERRO DE NÚCLEO: {str(e)}"}), 500
+    except Exception as e: 
+        return jsonify({"response": f"ERRO DE NÚCLEO: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
