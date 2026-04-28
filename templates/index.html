@@ -28,7 +28,6 @@
         .loader-logo { width: 250px; filter: invert(1); animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
-        /* SIDEBAR E LISTAS DE CHAT */
         #sidebar { width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
         .logo-nav { width: 110px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
 
@@ -56,7 +55,6 @@
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
 
-        /* TELAS IMERSIVAS */
         .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; }
         .close-view-btn { position: absolute; top: 40px; right: 50px; background: transparent; border: none; font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; }
 
@@ -67,12 +65,10 @@
         .settings-value { font-size: 16px; font-weight: 900; color: #000; display: flex; align-items: center; gap: 10px; }
         .token-badge-large { background: #F0F0F0; padding: 6px 14px; border-radius: 6px; font-size: 14px; color: #000; font-family: 'JetBrains Mono', monospace; font-weight: 900; border: 2px solid var(--border-color); }
 
-        /* ANIMAÇÃO E GRADIENTES UNIVERSAIS */
         @keyframes aura-spin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .text-gradient-pro { background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
         .text-gradient-plus { background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
 
-        /* TELA DE PLANOS */
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
         .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; color: #000;}
         .plans-subtitle { font-size: 18px; color: #555; margin-bottom: 60px; font-weight: 600; }
@@ -98,7 +94,6 @@
         .plan-btn-card.upgrade-pro { background: #FFF; color: #000; }
         .plan-btn-card.upgrade-plus { background: #000; color: #FFF; }
 
-        /* CHAT E MAIN */
         #main { flex: 1; display: flex; flex-direction: column; position: relative; }
         .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
         .header-title { font-size: 18px; font-weight: 900; color: #000000; letter-spacing: 2px; text-transform: uppercase; }
@@ -191,7 +186,8 @@
                 <div class="plan-card pro hover-scale" id="card-pro">
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div>
-                        <div class="plan-price">R$ 25<span>/mês</span></div>
+                        <!-- PREÇO ATUALIZADO: R$ 15 -->
+                        <div class="plan-price">R$ 15<span>/mês</span></div>
                         <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Velocidade 2x</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
@@ -199,7 +195,8 @@
                 <div class="plan-card plus hover-scale" id="card-plus">
                     <div>
                         <div class="plan-name text-gradient-plus">Plus</div>
-                        <div class="plan-price">R$ 60<span>/mês</span></div>
+                        <!-- PREÇO ATUALIZADO: R$ 25 -->
+                        <div class="plan-price">R$ 25<span>/mês</span></div>
                         <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Velocidade Máxima</li><li>Novos Modelos</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-plus btn-scale" id="btn-comprar-plus" onclick="location.href='/checkout?plan=Plus'">ASSINAR PLUS</button>
@@ -208,7 +205,7 @@
         </div>
     </div>
 
-    <!-- BARRA LATERAL -->
+    <!-- BARRA LATERAL (COM FIXADOS E ARQUIVADOS) -->
     <aside id="sidebar">
         <img src="/static/Gemini_Generated_Image_86oers86oers86oe-removebg-preview.png" class="logo-nav hover-scale" onclick="location.reload()" alt="ANK">
         <button class="btn-new hover-scale btn-scale" onclick="createNewChat()">+ NOVA CONVERSA</button>
@@ -224,7 +221,7 @@
     <!-- NÚCLEO PRINCIPAL -->
     <main id="main">
         <header class="header">
-            <div class="header-title" id="active-title">NÚCLEO_SESSÃO ONLINE</div>
+            <div class="header-title" id="active-title">NÚCLEO_NOVA SESSÃO</div>
             <div class="header-actions">
                 <button class="btn-plans-header hover-scale btn-scale" onclick="switchView('plans')">Planos</button>
                 <div class="profile-area">
@@ -263,7 +260,7 @@
         </div>
     </main>
 
-    <!-- ÍCONES SVG -->
+    <!-- ÍCONES SVG INLINE -->
     <svg style="display:none;">
         <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"></line><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.6V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3v4.6a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path></symbol>
         <symbol id="icon-archive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></symbol>
@@ -283,12 +280,10 @@
             renderList(); 
             updateUIBasedOnPlanAndTokens();
             
-            // AGORA AO ENTRAR, ELE CARREGA O CHAT AUTOMATICAMENTE!
             const firstActive = sessions.find(s => !s.archived);
             if(firstActive) {
                 loadChat(firstActive.id, firstActive.title); 
             } else if (sessions.length > 0) {
-                // Se só tiver arquivados, carrega o primeiro
                 loadChat(sessions[0].id, sessions[0].title);
             }
             
@@ -475,11 +470,12 @@
             const d = document.createElement('div'); 
             d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
+            // REMOVIDO O "ANK_CORE", DEIXANDO APENAS "ANK" MAIS O CONTADOR DE TOKENS
             if (role === 'assistant') {
                 const uniqueId = Date.now();
                 d.innerHTML = `
                     <div class="role-tag">
-                        ANK_CORE 
+                        ANK 
                         <span class="telemetry-badge" id="telemetry-${uniqueId}">
                             <div class="status-dot"></div>
                             <span id="num-${uniqueId}">0</span> TKNS

@@ -86,14 +86,15 @@
             <div class="title">Evolução Neural.</div>
             <div class="subtitle">Selecione a capacidade de processamento desejada.</div>
             <div class="cards-grid">
-                <div class="plan-card pro hover-scale" onclick="proceedToPayment('Pro', 25)">
+                <!-- PREÇOS ATUALIZADOS PARA 15 E 25 -->
+                <div class="plan-card pro hover-scale" onclick="proceedToPayment('Pro', 15)">
                     <div class="plan-name">Pro</div>
-                    <div class="plan-price">R$ 25<span>/mês</span></div>
+                    <div class="plan-price">R$ 15<span>/mês</span></div>
                     <button class="select-btn btn-scale">AVANÇAR</button>
                 </div>
-                <div class="plan-card plus hover-scale" onclick="proceedToPayment('Plus', 60)">
+                <div class="plan-card plus hover-scale" onclick="proceedToPayment('Plus', 25)">
                     <div class="plan-name">Plus</div>
-                    <div class="plan-price">R$ 60<span>/mês</span></div>
+                    <div class="plan-price">R$ 25<span>/mês</span></div>
                     <button class="select-btn btn-scale" style="background: #000; color: #FFF;">AVANÇAR</button>
                 </div>
             </div>
@@ -105,7 +106,7 @@
                     <div class="summary-title">Resumo da Assinatura</div>
                     <div class="item-row">
                         <div class="item-name">Plano <span id="selected-plan-name">Pro</span></div>
-                        <div class="item-price">R$ <span id="selected-plan-price">25</span>,00</div>
+                        <div class="item-price">R$ <span id="selected-plan-price">15</span>,00</div>
                     </div>
                     
                     <div class="coupon-box hover-scale">
@@ -116,7 +117,7 @@
                 </div>
                 <div class="total-row">
                     <div class="total-label">Total a pagar hoje</div>
-                    <div class="total-price">R$ <span id="total-price">25</span>,00</div>
+                    <div class="total-price">R$ <span id="total-price">15</span>,00</div>
                 </div>
             </div>
 
@@ -135,7 +136,7 @@
         <div id="step-success">
             <div class="success-icon">✓</div>
             <div class="success-title">Núcleo Atualizado!</div>
-            <div class="success-subtitle">O seu novo plano foi ativado com sucesso através do convite VIP.</div>
+            <div class="success-subtitle">O seu novo plano foi ativado com sucesso.</div>
             <button class="select-btn btn-scale hover-scale" style="background: #000; color: #FFF; width: auto; padding: 15px 40px;" onclick="location.href='/'">
                 ACESSAR SISTEMA SOBERANO
             </button>
@@ -151,8 +152,9 @@
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const plan = urlParams.get('plan');
-            if (plan === 'pro' || plan === 'Pro') proceedToPayment('Pro', 25);
-            else if (plan === 'plus' || plan === 'Plus') proceedToPayment('Plus', 60);
+            // SE VIER COM PLANO NA URL, ATIVA O PREÇO CORRETO
+            if (plan === 'pro' || plan === 'Pro') proceedToPayment('Pro', 15);
+            else if (plan === 'plus' || plan === 'Plus') proceedToPayment('Plus', 25);
             else document.getElementById('step-selection').style.display = 'flex';
         };
 
@@ -201,7 +203,6 @@
         }
 
         async function activateFreePlan() {
-            // AVISAR O SERVIDOR PARA GUARDAR O NOVO PLANO E RESETAR OS TOKENS!
             try {
                 const res = await fetch('/api/upgrade_plano', {
                     method: 'POST',
