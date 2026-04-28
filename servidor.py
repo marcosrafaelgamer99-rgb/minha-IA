@@ -31,7 +31,15 @@ client = OpenAI(
 )
 
 HISTORY_FILE = 'memoria_ank.json'
-LIMITES_TOKENS = {"Grátis": 500000, "Pro": 5000000, "Plus": 50000000}
+
+# ==========================================
+# ECONOMIA DE TOKENS (REDUZIDA PARA O GRÁTIS)
+# ==========================================
+LIMITES_TOKENS = {
+    "Grátis": 15000,     # Era 500.000. Agora queima rápido!
+    "Pro": 5000000,
+    "Plus": 50000000
+}
 
 # ==========================================
 # FERRAMENTAS DA IA (GOOGLE E YOUTUBE)
@@ -114,7 +122,7 @@ def upgrade_plano():
     db = carregar_db()
     user_data = obter_usuario(db, user["email"])
     user_data["plano"] = novo_plano
-    user_data["tokens"] = LIMITES_TOKENS.get(novo_plano, 500000)
+    user_data["tokens"] = LIMITES_TOKENS.get(novo_plano, 15000)
     salvar_db(db)
     return jsonify({"status": "sucesso", "plano": novo_plano})
 
@@ -191,7 +199,7 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (RACIOCÍNIO PROFUNDO)
+# MOTOR DA IA (DEEP REASONING & ONE-FILE CODE)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -208,28 +216,25 @@ def chat():
     user_data = obter_usuario(db, u_email)
     
     if user_data["tokens"] <= 0:
-        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. Atualize o seu plano.", "tokens_restantes": 0})
+        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. O seu plano Grátis esgotou. Adquira o plano Pro ou Plus para continuar com a SOBERANA.", "tokens_restantes": 0})
     
     sessions = user_data.get("sessions", [])
     sess = next((s for s in sessions if s["id"] == cid), None)
     if not sess: return jsonify({"error": "Sessão não encontrada"}), 404
 
-    # === AGENTE INTERCEPTADOR (YOUTUBE & GOOGLE) ===
+    # === AGENTE INTERCEPTADOR ===
     msg_processada = msg_original
     msg_lower = msg_original.lower()
-    
     if "youtube" in msg_lower and "http" in msg_lower:
         url_match = re.search(r'(https?://[^\s]+)', msg_original)
         if url_match:
             dados_youtube = ler_legenda_youtube(url_match.group(1))
             msg_processada = f"{msg_original}\n\n{dados_youtube}"
-            
     elif "google" in msg_lower or "pesquise" in msg_lower:
         termo_busca = msg_original.replace("pesquise no google", "").replace("busque no google", "").strip()
         dados_web = pesquisar_google(termo_busca if termo_busca else msg_original)
         msg_processada = f"{msg_original}\n\n{dados_web}"
 
-    # Salva a mensagem visual
     if not sess.get("messages"):
         try:
             res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo em 2 palavras apenas."}, {"role": "user", "content": msg_original}], max_tokens=8)
@@ -237,24 +242,25 @@ def chat():
         except: sess["title"] = "SESSÃO SOBERANA"
     
     sess["messages"].append({"role": "user", "content": msg_processada})
-    
     plano_atual = user_data.get("plano", "Grátis")
     
     # === A ORDEM DE PENSAMENTO (O SEGREDO DA SOBERANA) ===
     sys_prompt = (
-        "You are ANK 1.0 Soberana, an elite AI. "
-        "You MUST ALWAYS first think step-by-step about the user's request. "
-        "Write your internal reasoning process entirely in ENGLISH, and wrap it tightly inside <think> and </think> tags. "
-        "After the </think> tag, you MUST write your final response directly to the user in elegant PORTUGUESE. "
+        "You are ANK 1.0 Soberana, an absolute elite AI architecture comparable to MiMo-V2.5-Pro. "
+        "1. DEEP REASONING: You MUST ALWAYS think extensively, deeply, and step-by-step before answering. "
+        "Explore multiple angles, logic flaws, and optimizations. "
+        "Write this ENTIRE internal reasoning process in ENGLISH, wrapped tightly inside <think> and </think> tags. Do not skip this. "
+        "2. SINGLE-FILE CODE MANDATE: If the user asks for code, a website, or a script, you MUST provide the ENTIRE, COMPLETE, and RUNNABLE code within ONE SINGLE MARKDOWN BLOCK. NEVER split the code into multiple files, pieces, or parts. Write everything inside one file so the user can just copy and paste it once. "
+        "3. FINAL OUTPUT: After the </think> tag, you MUST write your final response directly to the user in extremely elegant, highly organized PORTUGUESE."
     )
     
-    if plano_atual == "Pro": sys_prompt += "The user is PRO. Provide in-depth reasoning and detailed answers."
-    elif plano_atual == "Plus": sys_prompt += "The user is PLUS. You are an absolute elite agent. Think extensively and provide definitive, masterful answers."
+    if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust technical depth."
+    elif plano_atual == "Plus": sys_prompt += " The user is PLUS. You are an absolute elite agent. Spare no details, make it a masterpiece."
     
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": sys_prompt}] + sess["messages"][-10:],
+            messages=[{"role": "system", "content": sys_prompt}] + sess["messages"][-8:],
             max_tokens=4000
         )
         ans = res.choices[0].message.content
@@ -262,7 +268,9 @@ def chat():
         sess["messages"][-1]["content"] = msg_original
         sess["messages"].append({"role": "assistant", "content": ans})
         
-        tokens_gastos = (len(msg_processada) // 4) + (len(ans) // 4) + 12
+        # === CÁLCULO DE CONSUMO ACELERADO ===
+        # Cada palavra gerada gasta muito mais tokens agora. Queima rápida.
+        tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.5) + 150
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
         

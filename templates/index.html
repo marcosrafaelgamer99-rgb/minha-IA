@@ -19,7 +19,16 @@
         }
 
         * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
-        body { margin: 0; padding: 0; background: var(--bg); color: var(--text-color); font-family: 'Inter', -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        
+        body { 
+            margin: 0; padding: 0; background: var(--bg); color: var(--text-color); 
+            /* TIPOGRAFIA DE ELITE 2026 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex; height: 100vh; overflow: hidden; 
+        }
 
         .hover-scale:hover { transform: scale(1.03); } 
         .btn-scale:active { transform: scale(0.97); }
@@ -117,16 +126,28 @@
         .profile-dropdown button { width: 100%; background: transparent; border: none; color: #444; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 15px; font-weight: 800; border-radius: 12px; }
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
-        /* VIEWPORT, CHAT, E CAIXA DE PENSAMENTO */
+        /* VIEWPORT & TYPOGRAPHY OF LUXURY */
         #viewport { flex: 1; overflow-y: auto; padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; }
         .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
         .role-tag { font-size: 11px; font-weight: 900; color: #555; margin-bottom: 15px; letter-spacing: 2px; display: flex; align-items: center; gap: 15px;}
-        .content { font-size: 17px; line-height: 2; color: #222; font-weight: 500;}
-        .content b { color: #000; font-weight: 900;}
+        
+        /* A MÁGICA DA TIPOGRAFIA: Texto extremamente legível e organizado */
+        .content { 
+            font-size: 16px; 
+            line-height: 1.8; 
+            color: #111111; 
+            font-weight: 500;
+            letter-spacing: -0.2px;
+        }
+        .content p { margin-bottom: 20px; }
+        .content b, .content strong { color: #000; font-weight: 800; }
+        .content h1, .content h2, .content h3 { font-weight: 900; color: #000; margin-top: 30px; margin-bottom: 15px; letter-spacing: -1px; }
+        .content ul { padding-left: 20px; margin-bottom: 20px; }
+        .content li { margin-bottom: 8px; }
 
-        /* A CAIXA DE PENSAMENTO CINZA (DeepSeek/o1 Style) */
+        /* CAIXA DE PENSAMENTO CINZA (DeepSeek/o1 Style) */
         .think-box {
             color: #888888;
             font-size: 14px;
@@ -151,7 +172,6 @@
             letter-spacing: 1px;
         }
 
-        /* TELEMETRIA */
         .telemetry-badge { background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; }
         .status-dot { width: 8px; height: 8px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
         .telemetry-badge.completed { border-color: transparent; background: transparent; box-shadow: none; color: #777; }
@@ -160,6 +180,7 @@
         .icon-google { width: 14px; height: 14px; }
         .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
+        /* DOCK DE INPUT */
         #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
         #dock-capsule { display: flex; align-items: center; background: #FFF; border: 2px solid var(--border-color); padding: 10px 15px 10px 35px; border-radius: 100px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -186,7 +207,7 @@
         <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="settings-container">
             <div class="settings-header">Preferências</div>
-            <div class="settings-row hover-scale"><span class="settings-label">Modelo</span><span class="settings-value">ANK 1.0</span></div>
+            <div class="settings-row hover-scale"><span class="settings-label">Modelo</span><span class="settings-value">ANK 1.0 (MiMo Logic)</span></div>
             <div class="settings-row hover-scale"><span class="settings-label">Plano Ativo</span><span class="settings-value" id="ui-current-plan" style="font-size: 24px;">{{ plano }}</span></div>
             <div class="settings-row hover-scale"><span class="settings-label">Tokens Restantes</span><span class="settings-value"><span class="token-badge-large" id="ui-token-limit" style="background:#000; color:#FFF; border:none;">...</span></span></div>
         </div>
@@ -201,14 +222,14 @@
                 <div class="plan-card hover-scale" id="card-gratis">
                     <div>
                         <div class="plan-name">Grátis</div><div class="plan-price">R$ 0<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>500 Mil Tokens Generosos</li><li>Velocidade Padrão</li></ul>
+                        <ul class="plan-features"><li>Acesso ANK 1.0</li><li>15 Mil Tokens (Degustação)</li><li>Velocidade Padrão</li></ul>
                     </div>
                     <button class="plan-btn-card current btn-scale" id="btn-comprar-gratis">SEU PLANO ATUAL</button>
                 </div>
                 <div class="plan-card pro hover-scale" id="card-pro">
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div><div class="plan-price">R$ 15<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Velocidade 2x</li></ul>
+                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Raciocínio Profundo</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
                 </div>
@@ -267,7 +288,7 @@
         
         <div id="dock-wrapper">
             <div id="dock-capsule" class="hover-scale">
-                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Pesquise no Google sobre...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Escreva um código...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
                 <button class="btn-send btn-scale" onclick="send()">↑</button>
             </div>
         </div>
@@ -368,14 +389,13 @@
             let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
             const r = /```([a-z]*)\n([\s\S]*?)```/g; 
             return s.replace(r, (m, lang, code) => { 
-                return `<div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0;"><div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div><pre><code style="font-family: 'JetBrains Mono', monospace; font-size:15px;">${code.trim()}</code></pre></div>`; 
+                return `<div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0;"><div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div><pre><code style="font-family: 'JetBrains Mono', monospace; font-size:14px; line-height: 1.5;">${code.trim()}</code></pre></div>`; 
             }); 
         }
         
-        // NOVO MOTOR VISUAL: LÊ AS TAGS <think> E SEPARA A RESPOSTA
+        // MOTOR DE RACIOCÍNIO (SEPARA O PENSAMENTO DA RESPOSTA)
         function display(role, content, animate, tool = 'none') { 
-            const d = document.createElement('div'); 
-            d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
+            const d = document.createElement('div'); d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
             if (role === 'assistant') {
                 const uniqueId = Date.now();
@@ -384,33 +404,23 @@
                 if (tool === 'google') toolHTML = `<svg class="icon-google"><use href="#google-logo"></use></svg> BUSCANDO NA WEB...`;
                 else if (tool === 'youtube') toolHTML = `<svg class="icon-youtube"><use href="#youtube-logo"></use></svg> ANALISANDO VÍDEO...`;
 
-                d.innerHTML = `
-                    <div class="role-tag">
-                        ANK 
-                        <span class="telemetry-badge" id="telemetry-${uniqueId}">${toolHTML}</span>
-                    </div>
-                    <div class="content"></div>
-                `;
+                d.innerHTML = `<div class="role-tag">ANK <span class="telemetry-badge" id="telemetry-${uniqueId}">${toolHTML}</span></div><div class="content"></div>`;
             } else {
                 d.innerHTML = `<div class="role-tag">AUTORIDADE</div><div class="content"></div>`; 
             }
             
-            vp.appendChild(d); 
-            const b = d.querySelector('.content'); 
+            vp.appendChild(d); const b = d.querySelector('.content'); 
 
             if(animate && role === 'assistant') { 
                 let i = 0; let tokens_gasto = 12; 
                 const telemetryBadge = d.querySelector('.telemetry-badge');
                 const numSpan = d.querySelector(`#num-${telemetryBadge.id.split('-')[1]}`);
 
-                // LIMPEZA DA STRING DE FERRAMENTAS INVISÍVEIS
                 let cleanContent = content;
                 if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
 
-                // DETETA SE A IA ESTÁ A PENSAR (Extrai a tag <think>)
-                let thoughtText = "";
-                let finalAnswerText = cleanContent;
+                let thoughtText = ""; let finalAnswerText = cleanContent;
                 const thinkMatch = cleanContent.match(/<think>([\s\S]*?)<\/think>/);
                 
                 if (thinkMatch) {
@@ -418,10 +428,8 @@
                     finalAnswerText = cleanContent.replace(/<think>[\s\S]*?<\/think>/, '').trim();
                 }
 
-                // Cria as caixas visuais (Caixa Cinza de Pensamento e a Normal)
                 b.innerHTML = '';
-                let thoughtDiv = null;
-                let answerDiv = document.createElement('div');
+                let thoughtDiv = null; let answerDiv = document.createElement('div');
 
                 if (thoughtText) {
                     thoughtDiv = document.createElement('div');
@@ -437,32 +445,22 @@
 
                 function type() { 
                     if(i < currentText.length) { 
-                        currentTarget.textContent += currentText.charAt(i); 
-                        i++; 
-                        
-                        if (i % 4 === 0 && tool === 'none' && numSpan) { 
-                            tokens_gasto++; numSpan.innerText = tokens_gasto; 
-                        }
+                        currentTarget.textContent += currentText.charAt(i); i++; 
+                        if (i % 2 === 0 && tool === 'none' && numSpan) { tokens_gasto++; numSpan.innerText = tokens_gasto; }
                         vp.scrollTop = vp.scrollHeight; setTimeout(type, 1); 
                     } else { 
                         if (isThinkingPhase) {
-                            // Acabou o pensamento, passa para a resposta final!
-                            isThinkingPhase = false;
-                            currentText = finalAnswerText;
-                            currentTarget = answerDiv;
-                            i = 0;
-                            // Pára o ponto de pulsar na caixa de pensamento
+                            isThinkingPhase = false; currentText = finalAnswerText; currentTarget = answerDiv; i = 0;
                             thoughtDiv.querySelector('.status-dot').style.animation = 'none';
                             thoughtDiv.querySelector('.status-dot').style.opacity = '0.5';
                             setTimeout(type, 1);
                         } else {
-                            // FORMATA TUDO NO FIM
                             if (thoughtText) thoughtDiv.querySelector('.think-content').innerHTML = format(thoughtText);
-                            answerDiv.innerHTML = format(finalAnswerText); 
-                            hljs.highlightAll(); 
-                            
+                            answerDiv.innerHTML = format(finalAnswerText); hljs.highlightAll(); 
                             telemetryBadge.classList.add('completed');
-                            tokens_gasto = Math.floor(content.length / 4) + 12;
+                            
+                            // Matemática simulada de queima rápida para o ecrã bater certo com o servidor
+                            tokens_gasto = Math.floor(content.length * 1.5) + 150;
                             telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                             vp.scrollTop = vp.scrollHeight; 
                         }
@@ -470,13 +468,11 @@
                 } 
                 type(); 
             } else { 
-                // CARREGAR HISTÓRICO ANTIGO SEM ANIMAÇÃO
                 let cleanContent = content;
                 if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 
-                let thoughtText = "";
-                let finalAnswerText = cleanContent;
+                let thoughtText = ""; let finalAnswerText = cleanContent;
                 const thinkMatch = cleanContent.match(/<think>([\s\S]*?)<\/think>/);
                 if (thinkMatch) {
                     thoughtText = thinkMatch[1].trim();
@@ -496,7 +492,7 @@
                 hljs.highlightAll(); 
                 
                 if (role === 'assistant') {
-                    const finalTokens = Math.floor(content.length / 4) + 12;
+                    const finalTokens = Math.floor(content.length * 1.5) + 150;
                     const badge = d.querySelector('.telemetry-badge');
                     if (badge) { badge.classList.add('completed'); badge.innerHTML = `${finalTokens} TKNS`; }
                 }
@@ -519,7 +515,16 @@
             const data = await res.json(); 
             
             vp.removeChild(loadingMsg);
-            if(data.error) { alert(data.error); return; }
+
+            if(data.error) { 
+                // Se der erro de Tokens, mostra uma caixa de aviso no chat e para.
+                const errDiv = document.createElement('div');
+                errDiv.className = 'msg-row assistant';
+                errDiv.innerHTML = `<div class="role-tag">SISTEMA</div><div class="content"><div style="background:#FFF0F0; border:1px solid #FFCCCC; color:#CC0000; padding:20px; border-radius:12px; font-weight:700;">${data.error}</div></div>`;
+                vp.appendChild(errDiv);
+                vp.scrollTop = vp.scrollHeight;
+                return; 
+            }
 
             display('assistant', data.response, true, toolUsed); 
             
