@@ -10,15 +10,25 @@
 
     <style>
         :root { --bg: #FFFFFF; --sidebar-bg: #FFFFFF; --border-color: #E0E0E0; --text-color: #000000; --text-muted: #777777; --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        /* CORREÇÃO DO BUG DA TELA VIRANDO (Horizontal Scroll Fix) */
         * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
-        body { margin: 0; padding: 0; background: var(--bg); color: var(--text-color); font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; display: flex; height: 100vh; overflow: hidden; }
+        html, body { max-width: 100vw; overflow-x: hidden; } /* Trava de tela lateral */
+        
+        body { 
+            margin: 0; padding: 0; background: var(--bg); color: var(--text-color); 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
+            display: flex; height: 100vh; overflow: hidden; 
+        }
+
         .hover-scale:hover { transform: scale(1.03); } .btn-scale:active { transform: scale(0.97); }
 
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .loader-logo { width: 250px; filter: invert(1); animation: pulse 2.5s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 0.2; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1); } }
 
-        #sidebar { width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
+        #sidebar { width: 320px; min-width: 320px; background: var(--sidebar-bg); border-right: 2px solid var(--border-color); display: flex; flex-direction: column; padding: 40px 25px; z-index: 100; }
         .logo-nav { width: 110px; margin-bottom: 40px; filter: invert(1); cursor: pointer; }
         .btn-new { background: #000; color: #FFF; border: none; padding: 18px; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn-new:hover { opacity: 0.8; }
@@ -36,7 +46,7 @@
         .settings-btn { width: 100%; text-align: left; background: none; border: none; font-size: 13px; font-weight: 800; color: #333; padding: 12px; cursor: pointer; border-radius: 10px; }
         .settings-btn:hover { background: #F0F0F0; color: #000; }
 
-        .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; }
+        .immersive-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFFFFF; z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px; overflow-y: auto; overflow-x: hidden; }
         .close-view-btn { position: absolute; top: 40px; right: 50px; background: transparent; border: none; font-size: 32px; font-weight: 900; color: #000; cursor: pointer; padding: 10px; border-radius: 50%; }
         .settings-container { width: 100%; max-width: 600px; text-align: left; margin: auto; }
         .settings-header { font-size: 42px; font-weight: 900; letter-spacing: -2px; margin-bottom: 60px; color: #000; }
@@ -49,7 +59,6 @@
         .text-gradient-pro { background: linear-gradient(to right, #ff007f, #7f00ff, #00d4ff, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
         .text-gradient-plus { background: linear-gradient(to right, #00ff88, #00cc22, #aaff00, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% auto; animation: aura-spin 3s linear infinite; font-weight: 900; }
 
-        /* CARTÕES DE PLANOS COM HOVER VIP */
         .plans-container { width: 100%; max-width: 1100px; text-align: center; margin: auto; }
         .plans-header { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; color: #000;}
         .plans-subtitle { font-size: 18px; color: #555; margin-bottom: 60px; font-weight: 600; }
@@ -84,7 +93,11 @@
         .plan-btn-card.upgrade-plus { background: #00ff88; color: #000; }
 
         /* HEADER E PERFIL COM AURAS */
-        #main { flex: 1; display: flex; flex-direction: column; position: relative; }
+        #main { 
+            flex: 1; display: flex; flex-direction: column; position: relative; 
+            max-width: calc(100vw - 320px); /* Garante que não empurra o ecrã para o lado */
+        }
+        
         .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
         .header-title { font-size: 18px; font-weight: 900; color: #000000; letter-spacing: 2px; text-transform: uppercase; }
         .header-actions { display: flex; align-items: center; gap: 20px; }
@@ -107,32 +120,38 @@
         .profile-dropdown button { width: 100%; background: transparent; border: none; color: #444; padding: 15px 20px; text-align: left; cursor: pointer; font-size: 15px; font-weight: 800; border-radius: 12px; }
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
-        /* VIEWPORT & CHAT */
-        #viewport { flex: 1; overflow-y: auto; padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; }
-        .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; }
+        /* VIEWPORT E FORMATAÇÃO DE TEXTO PARA NÃO QUEBRAR A TELA */
+        #viewport { 
+            flex: 1; overflow-y: auto; overflow-x: hidden; 
+            padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; 
+        }
+        
+        .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; max-width: 100%; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
         .role-tag { font-size: 11px; font-weight: 900; color: #555; margin-bottom: 15px; letter-spacing: 2px; display: flex; align-items: center; gap: 15px;}
-        .content { font-size: 16px; line-height: 1.8; color: #111111; font-weight: 500; letter-spacing: -0.2px; }
+        
+        /* O SEGURANÇA DA CAIXA: Impede que o texto expanda a tela */
+        .content { 
+            font-size: 16px; line-height: 1.8; color: #111111; font-weight: 500; letter-spacing: -0.2px; 
+            max-width: 100%; overflow-wrap: break-word; word-break: break-word; 
+        }
         .content p { margin-bottom: 20px; }
         .content b, .content strong { color: #000; font-weight: 800; }
         .content h1, .content h2, .content h3 { font-weight: 900; color: #000; margin-top: 30px; margin-bottom: 15px; letter-spacing: -1px; }
 
-        /* =========================================
-           A CAIXA DE PENSAMENTO RETRÁTIL (O1 STYLE)
-           ========================================= */
-        .think-box { background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px; margin-bottom: 25px; overflow: hidden; transition: all 0.3s ease; }
+        /* A CAIXA RETRÁTIL (O1 STYLE) */
+        .think-box { background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px; margin-bottom: 25px; overflow: hidden; transition: all 0.3s ease; max-width: 100%; }
         .think-header { padding: 12px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #F4F4F4; user-select: none; }
         .think-header:hover { background: #EEEEEE; }
         .think-title { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 900; color: #777; letter-spacing: 1px; text-transform: uppercase; }
-        .think-content { padding: 18px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13px; color: #888; line-height: 1.6; border-top: 1px solid #E0E0E0; white-space: pre-wrap; }
+        .think-content { padding: 18px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13px; color: #888; line-height: 1.6; border-top: 1px solid #E0E0E0; white-space: pre-wrap; word-wrap: break-word; }
         .think-box.collapsed .think-content { display: none; }
         .think-box.collapsed .chevron { transform: rotate(-90deg); }
         .chevron { transition: transform 0.3s ease; color: #999; }
         .blinking-cursor::after { content: '|'; animation: blink-cursor 1s step-start infinite; color: #7A7A7A; }
         @keyframes blink-cursor { 50% { opacity: 0; } }
 
-        /* TELEMETRIA E DOCK */
         .telemetry-badge { background: #FFFFFF; border: 2px solid #E0E0E0; color: #000; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 800; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); font-variant-numeric: tabular-nums; letter-spacing: 0; }
         .status-dot { width: 8px; height: 8px; background-color: #000; border-radius: 50%; animation: pulse-dot 1s infinite; }
         .telemetry-badge.completed { border-color: transparent; background: transparent; box-shadow: none; color: #777; }
@@ -140,6 +159,7 @@
         .icon-google { width: 14px; height: 14px; }
         .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
+        /* DOCK DE INPUT */
         #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
         #dock-capsule { display: flex; align-items: center; background: #FFF; border: 2px solid var(--border-color); padding: 10px 15px 10px 35px; border-radius: 100px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -353,15 +373,20 @@
         async function createNewChat() { const r = await fetch('/new_chat', { method: 'POST' }); const sess = await r.json(); sessions.unshift(sess); curId = sess.id; document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; vp.innerHTML = ''; showingArchived = false; renderList(); }
         async function loadChat(id, title) { curId = id; document.getElementById('active-title').innerText = "NÚCLEO_" + title.toUpperCase(); vp.innerHTML = ''; const r = await fetch(`/get_messages/${id}`); const ms = await r.json(); ms.forEach(m => display(m.role, m.content, false, 'none')); renderList(); vp.scrollTop = vp.scrollHeight; }
         
+        // CORREÇÃO DO CÓDIGO CAUSAR BUG DE ROLAGEM HORIZONTAL
         function format(t) { 
             let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
             const r = /```([a-z]*)\n([\s\S]*?)```/g; 
             return s.replace(r, (m, lang, code) => { 
-                return `<div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0;"><div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div><pre><code style="font-family: 'JetBrains Mono', monospace; font-size:14px; line-height: 1.5;">${code.trim()}</code></pre></div>`; 
+                return `
+                <div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0; max-width: 100%; overflow-x: auto;">
+                    <div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div>
+                    <pre style="margin: 0;"><code style="font-family: 'JetBrains Mono', monospace; font-size:15px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;">${code.trim()}</code></pre>
+                </div>`; 
             }); 
         }
         
-        // MOTOR DE RACIOCÍNIO BLINDADO
+        // MOTOR VISUAL DE ACORDEÃO (CAIXA RETRÁTIL PARA O PENSAMENTO)
         function display(role, content, animate, tool = 'none') { 
             const d = document.createElement('div'); d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
@@ -399,12 +424,16 @@
                 b.innerHTML = '';
                 let thoughtDiv = null; let answerDiv = document.createElement('div');
 
+                // CONSTRÓI A CAIXA RETRÁTIL (Acordeão)
                 if (thoughtText) {
                     thoughtDiv = document.createElement('div');
                     thoughtDiv.className = 'think-box';
                     thoughtDiv.innerHTML = `
                         <div class="think-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                            <div class="think-title"><div class="status-dot" style="background:#888;"></div><span>PROCESSAMENTO LÓGICO (INGLÊS)</span></div>
+                            <div class="think-title">
+                                <div class="status-dot" style="background:#888;"></div>
+                                <span>PROCESSAMENTO LÓGICO (INGLÊS)</span>
+                            </div>
                             <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="think-content blinking-cursor"></div>
@@ -424,16 +453,22 @@
                         vp.scrollTop = vp.scrollHeight; setTimeout(type, 1); 
                     } else { 
                         if (isThinkingPhase) {
+                            // O PENSAMENTO ACABOU!
                             isThinkingPhase = false; currentText = finalAnswerText; currentTarget = answerDiv; i = 0;
+                            
+                            // FECHA A CAIXA SOZINHA (AUTO-COLLAPSE)
                             thoughtDiv.querySelector('.think-content').classList.remove('blinking-cursor');
                             thoughtDiv.querySelector('.status-dot').style.animation = 'none';
                             thoughtDiv.querySelector('.status-dot').style.opacity = '0.5';
-                            thoughtDiv.classList.add('collapsed');
+                            thoughtDiv.classList.add('collapsed'); 
+                            
                             setTimeout(type, 1);
                         } else {
+                            // FORMATAÇÃO FINAL
                             if (thoughtText) thoughtDiv.querySelector('.think-content').innerHTML = format(thoughtText);
                             answerDiv.innerHTML = format(finalAnswerText); hljs.highlightAll(); 
                             telemetryBadge.classList.add('completed');
+                            
                             tokens_gasto = Math.floor(content.length * 1.5) + 150;
                             telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                             vp.scrollTop = vp.scrollHeight; 
@@ -442,6 +477,7 @@
                 } 
                 type(); 
             } else { 
+                // CARREGAR HISTÓRICO ANTIGO
                 let cleanContent = content;
                 if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
@@ -459,7 +495,10 @@
                     thoughtDiv.className = 'think-box collapsed';
                     thoughtDiv.innerHTML = `
                         <div class="think-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                            <div class="think-title"><div class="status-dot" style="animation:none; opacity:0.5; background:#888;"></div><span>PROCESSAMENTO LÓGICO (INGLÊS)</span></div>
+                            <div class="think-title">
+                                <div class="status-dot" style="animation:none; opacity:0.5; background:#888;"></div>
+                                <span>PROCESSAMENTO LÓGICO (INGLÊS)</span>
+                            </div>
                             <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="think-content">${format(thoughtText)}</div>
@@ -495,11 +534,14 @@
             const data = await res.json(); 
             
             vp.removeChild(loadingMsg);
+
             if(data.error) { 
                 const errDiv = document.createElement('div');
                 errDiv.className = 'msg-row assistant';
                 errDiv.innerHTML = `<div class="role-tag">SISTEMA</div><div class="content"><div style="background:#FFF0F0; border:1px solid #FFCCCC; color:#CC0000; padding:20px; border-radius:12px; font-weight:700;">${data.error}</div></div>`;
-                vp.appendChild(errDiv); vp.scrollTop = vp.scrollHeight; return; 
+                vp.appendChild(errDiv);
+                vp.scrollTop = vp.scrollHeight;
+                return; 
             }
 
             display('assistant', data.response, true, toolUsed); 
