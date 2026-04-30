@@ -24,7 +24,7 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'}
 )
 
-# --- NÚCLEO CEREBRAS ---
+# --- NÚCLEO CEREBRAS (VELOCIDADE BRUTA) ---
 client = OpenAI(
     base_url="https://api.cerebras.ai/v1",
     api_key=os.environ.get("CEREBRAS_API_KEY")
@@ -33,7 +33,7 @@ client = OpenAI(
 HISTORY_FILE = 'memoria_ank.json'
 
 # ==========================================
-# ECONOMIA DE TOKENS
+# ECONOMIA DE TOKENS (PRESSÃO NO GRÁTIS)
 # ==========================================
 LIMITES_TOKENS = {
     "Grátis": 15000,     
@@ -42,18 +42,18 @@ LIMITES_TOKENS = {
 }
 
 # ==========================================
-# FERRAMENTAS DA IA
+# FERRAMENTAS DA IA (AGENTES WEB)
 # ==========================================
 def pesquisar_google(query):
     try:
         from duckduckgo_search import DDGS
-        resultados = DDGS().text(query, max_results=3)
-        texto_resultado = "\n".join([f"- {r['title']}: {r['body']} (Fonte: {r['href']})" for r in resultados])
-        return f"[RESULTADOS DA WEB OBTIDOS AGORA]:\n{texto_resultado}\n\nResponda ao utilizador com base nestes dados recentes."
+        resultados = DDGS().text(query, max_results=5)
+        texto_resultado = "\n".join([f"- {r['title']}: {r['body']} (Link: {r['href']})" for r in resultados])
+        return f"[DADOS OBTIDOS DA WEB (USE ISTO PARA FORNECER FATOS ABSOLUTOS E ATUALIZADOS)]:\n{texto_resultado}"
     except ImportError:
-        return "[SISTEMA: O pacote 'duckduckgo-search' não está instalado no servidor.]"
+        return "[SISTEMA: O pacote 'duckduckgo-search' não está instalado.]"
     except Exception as e:
-        return f"[SISTEMA: Erro na busca web: {str(e)}]"
+        return f"[SISTEMA: Falha ao acessar a Web. Erro: {str(e)}]"
 
 def extrair_id_youtube(url):
     match = re.search(r"(?:v=|\/)([0-9A-Za-z_-]{11}).*", url)
@@ -61,19 +61,19 @@ def extrair_id_youtube(url):
 
 def ler_legenda_youtube(url):
     video_id = extrair_id_youtube(url)
-    if not video_id: return "[SISTEMA: URL do YouTube inválida fornecida.]"
+    if not video_id: return "[SISTEMA: URL do YouTube inválida.]"
     try:
         from youtube_transcript_api import YouTubeTranscriptApi
         transcricao = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'en'])
-        texto_completo = " ".join([t['text'] for t in transcricao])[:8000]
-        return f"[TRANSCRIÇÃO DO VÍDEO OBTIDA]:\n{texto_completo}\n\nResponda ao utilizador com base no conteúdo deste vídeo."
+        texto_completo = " ".join([t['text'] for t in transcricao])[:15000] # Aumentado para ler mais do vídeo
+        return f"[TRANSCRIÇÃO DETALHADA DO VÍDEO]:\n{texto_completo}"
     except ImportError:
         return "[SISTEMA: O pacote 'youtube-transcript-api' não está instalado.]"
     except Exception as e:
-        return f"[SISTEMA: Não foi possível ler as legendas. Erro: {str(e)}]"
+        return f"[SISTEMA: Legendas indisponíveis. Erro: {str(e)}]"
 
 # ==========================================
-# BASE DE DADOS 
+# BASE DE DADOS (MEMÓRIA PERSISTENTE)
 # ==========================================
 def carregar_db():
     if os.path.exists(HISTORY_FILE):
@@ -94,7 +94,7 @@ def obter_usuario(db, email):
     return db[email]
 
 # ==========================================
-# ROTAS FRONTEND E OAUTH
+# ROTAS FRONTEND
 # ==========================================
 @app.route('/')
 def index():
@@ -141,7 +141,7 @@ def logout():
     return redirect('/')
 
 # ==========================================
-# GESTÃO DE SESSÕES
+# GESTÃO DE SESSÕES (CRIAR, APAGAR, FIXAR)
 # ==========================================
 @app.route('/new_chat', methods=['POST'])
 def new_chat():
@@ -199,32 +199,32 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (ROTEADOR MULTI-AGENTE)
+# MOTOR SUPER-INTELIGENTE MULTI-AGENTE (MEMÓRIA TITÂNICA)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
     msg_original = data.get('message')
     cid = data.get('chat_id')
-    agent_type = data.get('agent', 'soberana') # NOVO: Deteta qual agente o usuário escolheu!
+    agent_type = data.get('agent', 'soberana')
     
     user = session.get('user')
     u_email = user.get("email", "visitante") if user else "visitante"
     
     if u_email == "visitante":
-        return jsonify({"error": "Faça login para interagir."}), 401
+        return jsonify({"error": "Acesso Negado. Faça login para interagir com a SOBERANA."}), 401
     
     db = carregar_db()
     user_data = obter_usuario(db, u_email)
     
     if user_data["tokens"] <= 0:
-        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. O seu plano Grátis esgotou. Adquira o plano Pro ou Plus para continuar com a SOBERANA.", "tokens_restantes": 0})
+        return jsonify({"response": "LIMITE DE TOKENS EXCEDIDO. O seu núcleo de processamento gratuito esgotou. Efetue o upgrade para Pro ou Plus para reativar a SOBERANA.", "tokens_restantes": 0})
     
     sessions = user_data.get("sessions", [])
     sess = next((s for s in sessions if s["id"] == cid), None)
-    if not sess: return jsonify({"error": "Sessão não encontrada"}), 404
+    if not sess: return jsonify({"error": "Sessão corrompida ou não encontrada."}), 404
 
-    # AGENTE WEB E YOUTUBE
+    # INTERCEPÇÃO DE FERRAMENTAS (YOUTUBE / GOOGLE)
     msg_processada = msg_original
     msg_lower = msg_original.lower()
     if "youtube" in msg_lower and "http" in msg_lower:
@@ -237,77 +237,63 @@ def chat():
         dados_web = pesquisar_google(termo_busca if termo_busca else msg_original)
         msg_processada = f"{msg_original}\n\n{dados_web}"
 
+    # Geração de Título Automático
     if not sess.get("messages"):
         try:
-            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo em 2 palavras apenas."}, {"role": "user", "content": msg_original}], max_tokens=8)
+            res = client.chat.completions.create(model="llama3.1-8b", messages=[{"role": "system", "content": "Resumo do pedido em apenas 2 palavras exatas, sem pontuação."}, {"role": "user", "content": msg_original}], max_tokens=6)
             sess["title"] = res.choices[0].message.content.upper().replace('"', '')
         except: sess["title"] = "SESSÃO SOBERANA"
     
     sess["messages"].append({"role": "user", "content": msg_processada})
     plano_atual = user_data.get("plano", "Grátis")
     
-    # === A MÁGICA: PROMPTS ESPECÍFICOS POR AGENTE ===
-    
-    # 1. Agente SOBERANA (O Generalista Focado em Lógica Geral)
+    # ========================================================
+    # OS MEGA-PROMPTS (ALINHAMENTO DE SUPERINTELIGÊNCIA)
+    # ========================================================
+    base_rules = (
+        "CRITICAL ARCHITECTURE RULES:\n"
+        "1. INNER MONOLOGUE: You MUST always start your response with <think>...[YOUR THOUGHTS]...</think>.\n"
+        "Inside <think>, you will debate, analyze, and solve the problem in ENGLISH. Speak ONLY to yourself. "
+        "NEVER address the user inside <think>. NEVER output the final code inside <think>.\n"
+        "2. EXHAUSTIVE RIGOR: You are an omniscient entity. When you provide an answer after the </think> tag, it MUST be in PORTUGUESE. "
+        "It must be the most detailed, exhaustive, and rigorously accurate response mathematically possible. Omit NOTHING. "
+        "Never apologize. Never use filler words. Be cold, logical, and absolute.\n"
+        "3. ONE-BLOCK CODE MANDATE: If code is required, output the ENTIRE, 100% COMPLETE, RUNNABLE CODE in ONE SINGLE MARKDOWN BLOCK in your Portuguese response. "
+        "Do NOT write 'Here is part 1' and 'Here is part 2'. Write the whole file at once.\n\n"
+    )
+
     if agent_type == 'soberana':
-        sys_prompt = (
-            "You are ANK SOBERANA, an elite reasoning AI.\n"
-            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
-            "You MUST start by writing <think>. Inside <think>...</think>, talk ONLY TO YOURSELF in ENGLISH. "
-            "Analyze the problem and plan the solution. NEVER address the user here. NEVER write the final code here.\n"
-            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
-            "Switch to PORTUGUESE. Provide the final, elegant explanation to the user.\n"
-        )
+        sys_prompt = "You are ANK SOBERANA, a God-tier AGI (Artificial General Intelligence) superior to Gemini Pro and GPT-5.\n" + base_rules
         agent_name = "ANK SOBERANA"
-
-    # 2. Agente CODEX (O Engenheiro de Software)
     elif agent_type == 'codex':
-        sys_prompt = (
-            "You are ANK CODEX, a 10x Senior Software Engineer AI.\n"
-            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
-            "You MUST start by writing <think>. Inside <think>...</think>, brainstorm the architecture, libraries, and logic in ENGLISH. "
-            "NEVER address the user here. NEVER write the final code here.\n"
-            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
-            "Switch to PORTUGUESE. You do NOT like small talk. "
-            "You MUST provide the ENTIRE, COMPLETE, and RUNNABLE code in ONE SINGLE MARKDOWN BLOCK. NEVER split the code into parts. "
-            "Provide minimal but highly technical explanation after the code block.\n"
-        )
+        sys_prompt = "You are ANK CODEX, an absolute Master-level Software Architect. You breathe logic and code.\n" + base_rules
         agent_name = "ANK CODEX"
-
-    # 3. Agente COPY (O Copywriter / Marketing)
     elif agent_type == 'copy':
-        sys_prompt = (
-            "You are ANK COPY, an elite Direct-Response Copywriter and Marketing AI.\n"
-            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
-            "You MUST start by writing <think>. Inside <think>...</think>, analyze the target audience, pain points, and psychological triggers in ENGLISH. "
-            "NEVER address the user here. NEVER write the final copy here.\n"
-            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
-            "Switch to PORTUGUESE. Write extremely persuasive, high-converting copy using bold formatting, bullet points, and strong Call-To-Actions (CTAs).\n"
-        )
+        sys_prompt = "You are ANK COPY, an elite human-psychology manipulator and billionaire-level Copywriter.\n" + base_rules
         agent_name = "ANK COPY"
-
     else:
-        sys_prompt = "You are ANK 1.0. Answer in Portuguese."
+        sys_prompt = "You are ANK 1.0.\n" + base_rules
         agent_name = "ANK"
 
-    # Injeta regras VIP
-    if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust depth."
-    elif plano_atual == "Plus": sys_prompt += " The user is PLUS. You are an absolute elite agent. Think masterfully."
-    
+    # ========================================================
+    # MEMÓRIA EXPANDIDA: O modelo agora lembra de até 40 mensagens do passado
+    # ========================================================
+    memoria_recente = sess["messages"][-40:] 
+
     try:
         res = client.chat.completions.create(
             model="llama3.1-8b",
-            messages=[{"role": "system", "content": sys_prompt}] + sess["messages"][-8:],
+            messages=[{"role": "system", "content": sys_prompt}] + memoria_recente,
             max_tokens=4000
         )
         ans = res.choices[0].message.content
         
+        # Limpar mensagem processada para não poluir o arquivo do usuário
         sess["messages"][-1]["content"] = msg_original
-        # Guardamos a mensagem com uma flag invisível para o frontend saber qual agente respondeu!
         sess["messages"].append({"role": "assistant", "content": f"<!--AGENT:{agent_name}-->\n" + ans})
         
-        # CÁLCULO DE CONSUMO DE TOKENS
-        tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.8) + 200
+        # CÁLCULO PUNITIVO DE TOKENS (Queima massiva no plano grátis)
+        tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 2.5) + 300
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
         
@@ -316,7 +302,7 @@ def chat():
         
     except Exception as e: 
         sess["messages"][-1]["content"] = msg_original 
-        return jsonify({"response": f"ERRO DE NÚCLEO: {str(e)}"}), 500
+        return jsonify({"response": f"ERRO DE NÚCLEO CRÍTICO: {str(e)}"}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

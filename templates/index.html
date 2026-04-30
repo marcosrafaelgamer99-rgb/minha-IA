@@ -77,7 +77,6 @@
         .tag-gratis { background: #E0E0E0; color: #555; }
         .tag-pro { background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); }
         .tag-plus { background: #00ff88; color: #000; box-shadow: 0 0 10px rgba(0,255,136,0.5); }
-
         .plan-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; color: #000;}
         .pro .plan-price, .plus .plan-price { color: #FFF; }
@@ -132,12 +131,17 @@
         .content b, .content strong { color: #000; font-weight: 800; }
         .content h1, .content h2, .content h3 { font-weight: 900; color: #000; margin-top: 30px; margin-bottom: 15px; letter-spacing: -1px; }
 
-        /* A CAIXA RETRÁTIL (O1 STYLE) */
+        /* A CAIXA RETRÁTIL (O1 STYLE) COM SCROLL INTERNO PARA PENSAMENTOS LONGOS */
         .think-box { background: #F9F9F9; border: 1px solid #E0E0E0; border-radius: 8px; margin-bottom: 25px; overflow: hidden; transition: all 0.3s ease; max-width: 100%; }
         .think-header { padding: 12px 18px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #F4F4F4; user-select: none; }
         .think-header:hover { background: #EEEEEE; }
         .think-title { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 900; color: #777; letter-spacing: 1px; text-transform: uppercase; }
-        .think-content { padding: 18px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13px; color: #888; line-height: 1.6; border-top: 1px solid #E0E0E0; white-space: pre-wrap; word-wrap: break-word; }
+        .think-content { 
+            padding: 18px; font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13px; color: #888; 
+            line-height: 1.6; border-top: 1px solid #E0E0E0; white-space: pre-wrap; word-wrap: break-word; 
+            max-height: 300px; /* Impede a caixa de crescer infinitamente */
+            overflow-y: auto; /* Adiciona scroll interno */
+        }
         .think-box.collapsed .think-content { display: none; }
         .think-box.collapsed .chevron { transform: rotate(-90deg); }
         .chevron { transition: transform 0.3s ease; color: #999; }
@@ -151,11 +155,8 @@
         .icon-google { width: 14px; height: 14px; }
         .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
-        /* =========================================
-           PAINEL MULTI-AGENTE (NOVIDADE)
-           ========================================= */
+        /* PAINEL MULTI-AGENTE */
         #dock-wrapper { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 0 22%; z-index: 100; gap: 10px;}
-        
         .agent-selector { display: flex; gap: 10px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
         .agent-btn { background: transparent; border: none; padding: 8px 16px; border-radius: 50px; font-size: 11px; font-weight: 900; color: #888; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .agent-btn:hover { color: #000; }
@@ -269,7 +270,6 @@
         <div id="viewport"></div>
         
         <div id="dock-wrapper">
-            <!-- SELETOR MULTI-AGENTE -->
             <div class="agent-selector">
                 <button class="agent-btn active" id="btn-agent-soberana" onclick="selectAgent('soberana')">🧠 SOBERANA</button>
                 <button class="agent-btn" id="btn-agent-codex" onclick="selectAgent('codex')">💻 CODEX (DEV)</button>
@@ -286,8 +286,6 @@
     <script>
         let curId = null; let sessions = {{ sessions | tojson | safe }}; const vp = document.getElementById('viewport');
         const userPlan = "{{ plano }}"; let userTokens = {{ tokens }}; let showingArchived = false;
-        
-        // ESTADO DO AGENTE ATUAL
         let currentAgent = 'soberana';
 
         document.querySelectorAll('.plan-card').forEach(card => {
@@ -306,7 +304,6 @@
             setTimeout(() => { const l = document.getElementById('loader'); l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 600); }, 1500); 
         };
 
-        // FUNÇÃO DE SELECIONAR AGENTE
         function selectAgent(agentName) {
             currentAgent = agentName;
             document.querySelectorAll('.agent-btn').forEach(btn => btn.classList.remove('active'));
@@ -403,11 +400,9 @@
             }); 
         }
         
-        // MOTOR VISUAL (Agora deteta qual Agente respondeu)
         function display(role, content, animate, tool = 'none') { 
             const d = document.createElement('div'); d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
-            // Lógica para detetar a tag do Agente vinda do Servidor
             let agentName = "ANK SOBERANA";
             let rawContent = content;
             if (role === 'assistant') {
@@ -457,10 +452,7 @@
                     thoughtDiv.className = 'think-box';
                     thoughtDiv.innerHTML = `
                         <div class="think-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                            <div class="think-title">
-                                <div class="status-dot" style="background:#888;"></div>
-                                <span>PROCESSAMENTO LÓGICO (INGLÊS)</span>
-                            </div>
+                            <div class="think-title"><div class="status-dot" style="background:#888;"></div><span>PROCESSAMENTO LÓGICO (INGLÊS)</span></div>
                             <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="think-content blinking-cursor"></div>
@@ -490,7 +482,7 @@
                             if (thoughtText) thoughtDiv.querySelector('.think-content').innerHTML = format(thoughtText);
                             answerDiv.innerHTML = format(finalAnswerText); hljs.highlightAll(); 
                             telemetryBadge.classList.add('completed');
-                            tokens_gasto = Math.floor(rawContent.length * 1.5) + 150;
+                            tokens_gasto = Math.floor(rawContent.length * 2.5) + 300;
                             telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                             vp.scrollTop = vp.scrollHeight; 
                         }
@@ -528,7 +520,7 @@
                 hljs.highlightAll(); 
                 
                 if (role === 'assistant') {
-                    const finalTokens = Math.floor(rawContent.length * 1.5) + 150;
+                    const finalTokens = Math.floor(rawContent.length * 2.5) + 300;
                     const badge = d.querySelector('.telemetry-badge');
                     if (badge) { badge.classList.add('completed'); badge.innerHTML = `${finalTokens} TKNS`; }
                 }
@@ -547,7 +539,6 @@
 
             display('assistant', '', true, toolUsed); const loadingMsg = vp.lastChild; 
             
-            // ENVIA QUAL AGENTE ESTÁ SELECIONADO PARA O SERVIDOR!
             const res = await fetch('/chat', { 
                 method: 'POST', 
                 headers: {'Content-Type': 'application/json'}, 
