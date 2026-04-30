@@ -11,9 +11,8 @@
     <style>
         :root { --bg: #FFFFFF; --sidebar-bg: #FFFFFF; --border-color: #E0E0E0; --text-color: #000000; --text-muted: #777777; --liquid-ease: cubic-bezier(0.16, 1, 0.3, 1); }
         
-        /* CORREÇÃO DO BUG DA TELA VIRANDO (Horizontal Scroll Fix) */
         * { box-sizing: border-box; outline: none; transition: transform 0.2s var(--liquid-ease), background 0.2s ease, opacity 0.3s ease; }
-        html, body { max-width: 100vw; overflow-x: hidden; } /* Trava de tela lateral */
+        html, body { max-width: 100vw; overflow-x: hidden; } 
         
         body { 
             margin: 0; padding: 0; background: var(--bg); color: var(--text-color); 
@@ -78,6 +77,7 @@
         .tag-gratis { background: #E0E0E0; color: #555; }
         .tag-pro { background: rgba(255,255,255,0.1); color: #FFF; border: 1px solid rgba(255,255,255,0.2); }
         .tag-plus { background: #00ff88; color: #000; box-shadow: 0 0 10px rgba(0,255,136,0.5); }
+
         .plan-name { font-size: 26px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
         .plan-price { font-size: 46px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px; color: #000;}
         .pro .plan-price, .plus .plan-price { color: #FFF; }
@@ -95,7 +95,7 @@
         /* HEADER E PERFIL COM AURAS */
         #main { 
             flex: 1; display: flex; flex-direction: column; position: relative; 
-            max-width: calc(100vw - 320px); /* Garante que não empurra o ecrã para o lado */
+            max-width: calc(100vw - 320px); 
         }
         
         .header { padding: 30px 50px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border-bottom: 2px solid var(--border-color); z-index: 90; }
@@ -121,21 +121,13 @@
         .profile-dropdown button:hover { background: #F0F0F0; color: #000; }
 
         /* VIEWPORT E FORMATAÇÃO DE TEXTO PARA NÃO QUEBRAR A TELA */
-        #viewport { 
-            flex: 1; overflow-y: auto; overflow-x: hidden; 
-            padding: 80px 22% 160px 22%; display: flex; flex-direction: column; gap: 60px; 
-        }
-        
+        #viewport { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 80px 22% 200px 22%; display: flex; flex-direction: column; gap: 60px; }
         .msg-row { opacity: 0; transform: translateY(20px); animation: slideIn 0.8s var(--liquid-ease) forwards; max-width: 100%; }
         @keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
         
         .role-tag { font-size: 11px; font-weight: 900; color: #555; margin-bottom: 15px; letter-spacing: 2px; display: flex; align-items: center; gap: 15px;}
         
-        /* O SEGURANÇA DA CAIXA: Impede que o texto expanda a tela */
-        .content { 
-            font-size: 16px; line-height: 1.8; color: #111111; font-weight: 500; letter-spacing: -0.2px; 
-            max-width: 100%; overflow-wrap: break-word; word-break: break-word; 
-        }
+        .content { font-size: 16px; line-height: 1.8; color: #111111; font-weight: 500; letter-spacing: -0.2px; max-width: 100%; overflow-wrap: break-word; word-break: break-word; }
         .content p { margin-bottom: 20px; }
         .content b, .content strong { color: #000; font-weight: 800; }
         .content h1, .content h2, .content h3 { font-weight: 900; color: #000; margin-top: 30px; margin-bottom: 15px; letter-spacing: -1px; }
@@ -159,8 +151,16 @@
         .icon-google { width: 14px; height: 14px; }
         .icon-youtube { width: 14px; height: 14px; fill: #FF0000; }
 
-        /* DOCK DE INPUT */
-        #dock-wrapper { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; padding: 0 22%; z-index: 100; }
+        /* =========================================
+           PAINEL MULTI-AGENTE (NOVIDADE)
+           ========================================= */
+        #dock-wrapper { position: absolute; bottom: 30px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; padding: 0 22%; z-index: 100; gap: 10px;}
+        
+        .agent-selector { display: flex; gap: 10px; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 5px; border-radius: 50px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .agent-btn { background: transparent; border: none; padding: 8px 16px; border-radius: 50px; font-size: 11px; font-weight: 900; color: #888; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .agent-btn:hover { color: #000; }
+        .agent-btn.active { background: #000; color: #FFF; }
+        
         #dock-capsule { display: flex; align-items: center; background: #FFF; border: 2px solid var(--border-color); padding: 10px 15px 10px 35px; border-radius: 100px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         #dock-capsule:focus-within { border-color: #000; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
         #msg-in { flex: 1; background: transparent; border: none; font-size: 17px; height: 55px; font-weight: 600; color: #000;}
@@ -186,7 +186,7 @@
         <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="settings-container">
             <div class="settings-header">Preferências</div>
-            <div class="settings-row hover-scale"><span class="settings-label">Modelo</span><span class="settings-value">ANK 1.0 (MiMo Logic)</span></div>
+            <div class="settings-row hover-scale"><span class="settings-label">Modelo</span><span class="settings-value">ANK Multi-Agent</span></div>
             <div class="settings-row hover-scale"><span class="settings-label">Plano Ativo</span><span class="settings-value" id="ui-current-plan" style="font-size: 24px;">{{ plano }}</span></div>
             <div class="settings-row hover-scale"><span class="settings-label">Tokens Restantes</span><span class="settings-value"><span class="token-badge-large" id="ui-token-limit" style="background:#000; color:#FFF; border:none;">...</span></span></div>
         </div>
@@ -196,7 +196,7 @@
         <button class="close-view-btn hover-scale btn-scale" onclick="switchView('chat')">✕</button>
         <div class="plans-container">
             <div class="plans-header">Evolua o seu Núcleo.</div>
-            <div class="plans-subtitle">Escolha o poder de processamento da ANK 1.0 Soberana.</div>
+            <div class="plans-subtitle">Acesso a todos os Agentes Especialistas da SOBERANA.</div>
             <div class="plans-grid">
                 <div class="plan-card hover-scale" id="card-gratis">
                     <div class="vip-tag tag-gratis">BÁSICO</div>
@@ -210,7 +210,7 @@
                     <div class="vip-tag tag-pro">MAIS POPULAR</div>
                     <div>
                         <div class="plan-name text-gradient-pro">Pro</div><div class="plan-price">R$ 15<span>/mês</span></div>
-                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Raciocínio Profundo</li></ul>
+                        <ul class="plan-features"><li>Acesso prioritário</li><li>5 Milhões de Tokens</li><li>Agentes Especialistas</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-pro btn-scale" id="btn-comprar-pro" onclick="location.href='/checkout?plan=Pro'">ASSINAR PRO</button>
                 </div>
@@ -218,7 +218,7 @@
                     <div class="vip-tag tag-plus">NÍVEL DEUS</div>
                     <div>
                         <div class="plan-name text-gradient-plus">Plus</div><div class="plan-price">R$ 25<span>/mês</span></div>
-                        <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Velocidade Máxima</li><li>Ferramentas (Web/YouTube)</li></ul>
+                        <ul class="plan-features"><li>50 Milhões de Tokens</li><li>Múltiplos Agentes Ativos</li><li>Ferramentas (Web/YouTube)</li></ul>
                     </div>
                     <button class="plan-btn-card upgrade-plus btn-scale" id="btn-comprar-plus" onclick="location.href='/checkout?plan=Plus'">ASSINAR PLUS</button>
                 </div>
@@ -269,8 +269,15 @@
         <div id="viewport"></div>
         
         <div id="dock-wrapper">
+            <!-- SELETOR MULTI-AGENTE -->
+            <div class="agent-selector">
+                <button class="agent-btn active" id="btn-agent-soberana" onclick="selectAgent('soberana')">🧠 SOBERANA</button>
+                <button class="agent-btn" id="btn-agent-codex" onclick="selectAgent('codex')">💻 CODEX (DEV)</button>
+                <button class="agent-btn" id="btn-agent-copy" onclick="selectAgent('copy')">✍️ COPY (MKT)</button>
+            </div>
+            
             <div id="dock-capsule" class="hover-scale">
-                <input type="text" id="msg-in" placeholder="Transmita comandos (Ex: Escreva um código...)" onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
+                <input type="text" id="msg-in" placeholder="Transmita comandos para ANK SOBERANA..." onkeypress="if(event.key === 'Enter') send()" autocomplete="off">
                 <button class="btn-send btn-scale" onclick="send()">↑</button>
             </div>
         </div>
@@ -279,6 +286,9 @@
     <script>
         let curId = null; let sessions = {{ sessions | tojson | safe }}; const vp = document.getElementById('viewport');
         const userPlan = "{{ plano }}"; let userTokens = {{ tokens }}; let showingArchived = false;
+        
+        // ESTADO DO AGENTE ATUAL
+        let currentAgent = 'soberana';
 
         document.querySelectorAll('.plan-card').forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -295,6 +305,18 @@
             else if (sessions.length > 0) loadChat(sessions[0].id, sessions[0].title);
             setTimeout(() => { const l = document.getElementById('loader'); l.style.opacity = '0'; setTimeout(() => l.style.display = 'none', 600); }, 1500); 
         };
+
+        // FUNÇÃO DE SELECIONAR AGENTE
+        function selectAgent(agentName) {
+            currentAgent = agentName;
+            document.querySelectorAll('.agent-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-agent-${agentName}`).classList.add('active');
+            
+            const inputField = document.getElementById('msg-in');
+            if(agentName === 'soberana') inputField.placeholder = "Transmita comandos para ANK SOBERANA...";
+            else if(agentName === 'codex') inputField.placeholder = "Peça código ao ANK CODEX (Dev)...";
+            else if(agentName === 'copy') inputField.placeholder = "Peça textos persuasivos ao ANK COPY (Mkt)...";
+        }
 
         function formatNumber(num) { return new Intl.NumberFormat('pt-BR').format(num); }
 
@@ -373,23 +395,29 @@
         async function createNewChat() { const r = await fetch('/new_chat', { method: 'POST' }); const sess = await r.json(); sessions.unshift(sess); curId = sess.id; document.getElementById('active-title').innerText = "NÚCLEO_NOVA SESSÃO"; vp.innerHTML = ''; showingArchived = false; renderList(); }
         async function loadChat(id, title) { curId = id; document.getElementById('active-title').innerText = "NÚCLEO_" + title.toUpperCase(); vp.innerHTML = ''; const r = await fetch(`/get_messages/${id}`); const ms = await r.json(); ms.forEach(m => display(m.role, m.content, false, 'none')); renderList(); vp.scrollTop = vp.scrollHeight; }
         
-        // CORREÇÃO DO CÓDIGO CAUSAR BUG DE ROLAGEM HORIZONTAL
         function format(t) { 
             let s = t.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, '<b>$1</b>'); 
             const r = /```([a-z]*)\n([\s\S]*?)```/g; 
             return s.replace(r, (m, lang, code) => { 
-                return `
-                <div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0; max-width: 100%; overflow-x: auto;">
-                    <div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div>
-                    <pre style="margin: 0;"><code style="font-family: 'JetBrains Mono', monospace; font-size:15px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;">${code.trim()}</code></pre>
-                </div>`; 
+                return `<div class="hover-scale" style="background:#F9F9F9; border-radius:12px; padding:30px; margin:30px 0; border:2px solid #E0E0E0; max-width: 100%; overflow-x: auto;"><div style="font-size:12px; color:#555; margin-bottom:15px; font-weight:900;">${lang.toUpperCase()}</div><pre style="margin: 0;"><code style="font-family: 'JetBrains Mono', monospace; font-size:15px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;">${code.trim()}</code></pre></div>`; 
             }); 
         }
         
-        // MOTOR VISUAL DE ACORDEÃO (CAIXA RETRÁTIL PARA O PENSAMENTO)
+        // MOTOR VISUAL (Agora deteta qual Agente respondeu)
         function display(role, content, animate, tool = 'none') { 
             const d = document.createElement('div'); d.className = `msg-row ${role === 'user' ? 'user' : 'assistant'}`; 
             
+            // Lógica para detetar a tag do Agente vinda do Servidor
+            let agentName = "ANK SOBERANA";
+            let rawContent = content;
+            if (role === 'assistant') {
+                const agentMatch = content.match(/<!--AGENT:(.*?)-->\n/);
+                if (agentMatch) {
+                    agentName = agentMatch[1];
+                    rawContent = content.replace(/<!--AGENT:.*?-->\n/, '');
+                }
+            }
+
             if (role === 'assistant') {
                 const uniqueId = Date.now();
                 let toolHTML = `<div class="status-dot"></div><span id="num-${uniqueId}">0</span> TKNS`;
@@ -397,7 +425,7 @@
                 if (tool === 'google') toolHTML = `<svg class="icon-google"><use href="#google-logo"></use></svg> BUSCANDO NA WEB...`;
                 else if (tool === 'youtube') toolHTML = `<svg class="icon-youtube"><use href="#youtube-logo"></use></svg> ANALISANDO VÍDEO...`;
 
-                d.innerHTML = `<div class="role-tag">ANK <span class="telemetry-badge" id="telemetry-${uniqueId}">${toolHTML}</span></div><div class="content"></div>`;
+                d.innerHTML = `<div class="role-tag">${agentName} <span class="telemetry-badge" id="telemetry-${uniqueId}">${toolHTML}</span></div><div class="content"></div>`;
             } else {
                 d.innerHTML = `<div class="role-tag">AUTORIDADE</div><div class="content"></div>`; 
             }
@@ -409,7 +437,7 @@
                 const telemetryBadge = d.querySelector('.telemetry-badge');
                 const numSpan = d.querySelector(`#num-${telemetryBadge.id.split('-')[1]}`);
 
-                let cleanContent = content;
+                let cleanContent = rawContent;
                 if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
 
@@ -424,7 +452,6 @@
                 b.innerHTML = '';
                 let thoughtDiv = null; let answerDiv = document.createElement('div');
 
-                // CONSTRÓI A CAIXA RETRÁTIL (Acordeão)
                 if (thoughtText) {
                     thoughtDiv = document.createElement('div');
                     thoughtDiv.className = 'think-box';
@@ -453,23 +480,17 @@
                         vp.scrollTop = vp.scrollHeight; setTimeout(type, 1); 
                     } else { 
                         if (isThinkingPhase) {
-                            // O PENSAMENTO ACABOU!
                             isThinkingPhase = false; currentText = finalAnswerText; currentTarget = answerDiv; i = 0;
-                            
-                            // FECHA A CAIXA SOZINHA (AUTO-COLLAPSE)
                             thoughtDiv.querySelector('.think-content').classList.remove('blinking-cursor');
                             thoughtDiv.querySelector('.status-dot').style.animation = 'none';
                             thoughtDiv.querySelector('.status-dot').style.opacity = '0.5';
                             thoughtDiv.classList.add('collapsed'); 
-                            
                             setTimeout(type, 1);
                         } else {
-                            // FORMATAÇÃO FINAL
                             if (thoughtText) thoughtDiv.querySelector('.think-content').innerHTML = format(thoughtText);
                             answerDiv.innerHTML = format(finalAnswerText); hljs.highlightAll(); 
                             telemetryBadge.classList.add('completed');
-                            
-                            tokens_gasto = Math.floor(content.length * 1.5) + 150;
+                            tokens_gasto = Math.floor(rawContent.length * 1.5) + 150;
                             telemetryBadge.innerHTML = `✓ ${tokens_gasto} TKNS`;
                             vp.scrollTop = vp.scrollHeight; 
                         }
@@ -477,8 +498,7 @@
                 } 
                 type(); 
             } else { 
-                // CARREGAR HISTÓRICO ANTIGO
-                let cleanContent = content;
+                let cleanContent = rawContent;
                 if (cleanContent.includes("[RESULTADOS DA WEB OBTIDOS AGORA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 if (cleanContent.includes("[TRANSCRIÇÃO DO VÍDEO OBTIDA]:")) cleanContent = cleanContent.split("Responda ao utilizador")[1] || cleanContent;
                 
@@ -495,10 +515,7 @@
                     thoughtDiv.className = 'think-box collapsed';
                     thoughtDiv.innerHTML = `
                         <div class="think-header" onclick="this.parentElement.classList.toggle('collapsed')">
-                            <div class="think-title">
-                                <div class="status-dot" style="animation:none; opacity:0.5; background:#888;"></div>
-                                <span>PROCESSAMENTO LÓGICO (INGLÊS)</span>
-                            </div>
+                            <div class="think-title"><div class="status-dot" style="animation:none; opacity:0.5; background:#888;"></div><span>PROCESSAMENTO LÓGICO (INGLÊS)</span></div>
                             <svg class="chevron" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                         <div class="think-content">${format(thoughtText)}</div>
@@ -511,7 +528,7 @@
                 hljs.highlightAll(); 
                 
                 if (role === 'assistant') {
-                    const finalTokens = Math.floor(content.length * 1.5) + 150;
+                    const finalTokens = Math.floor(rawContent.length * 1.5) + 150;
                     const badge = d.querySelector('.telemetry-badge');
                     if (badge) { badge.classList.add('completed'); badge.innerHTML = `${finalTokens} TKNS`; }
                 }
@@ -530,18 +547,21 @@
 
             display('assistant', '', true, toolUsed); const loadingMsg = vp.lastChild; 
             
-            const res = await fetch('/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message: m, chat_id: curId}) }); 
-            const data = await res.json(); 
+            // ENVIA QUAL AGENTE ESTÁ SELECIONADO PARA O SERVIDOR!
+            const res = await fetch('/chat', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({message: m, chat_id: curId, agent: currentAgent}) 
+            }); 
             
+            const data = await res.json(); 
             vp.removeChild(loadingMsg);
 
             if(data.error) { 
                 const errDiv = document.createElement('div');
                 errDiv.className = 'msg-row assistant';
                 errDiv.innerHTML = `<div class="role-tag">SISTEMA</div><div class="content"><div style="background:#FFF0F0; border:1px solid #FFCCCC; color:#CC0000; padding:20px; border-radius:12px; font-weight:700;">${data.error}</div></div>`;
-                vp.appendChild(errDiv);
-                vp.scrollTop = vp.scrollHeight;
-                return; 
+                vp.appendChild(errDiv); vp.scrollTop = vp.scrollHeight; return; 
             }
 
             display('assistant', data.response, true, toolUsed); 

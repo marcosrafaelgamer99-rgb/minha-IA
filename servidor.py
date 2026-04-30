@@ -33,7 +33,7 @@ client = OpenAI(
 HISTORY_FILE = 'memoria_ank.json'
 
 # ==========================================
-# ECONOMIA DE TOKENS (RÁPIDA QUEIMA NO GRÁTIS)
+# ECONOMIA DE TOKENS
 # ==========================================
 LIMITES_TOKENS = {
     "Grátis": 15000,     
@@ -199,13 +199,15 @@ def get_messages(chat_id):
     return jsonify([])
 
 # ==========================================
-# MOTOR DA IA (O MOLDE DE PENSAMENTO OBRIGATÓRIO)
+# MOTOR DA IA (ROTEADOR MULTI-AGENTE)
 # ==========================================
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.json
     msg_original = data.get('message')
     cid = data.get('chat_id')
+    agent_type = data.get('agent', 'soberana') # NOVO: Deteta qual agente o usuário escolheu!
+    
     user = session.get('user')
     u_email = user.get("email", "visitante") if user else "visitante"
     
@@ -244,21 +246,52 @@ def chat():
     sess["messages"].append({"role": "user", "content": msg_processada})
     plano_atual = user_data.get("plano", "Grátis")
     
-    # === O MOLDE DE RACIOCÍNIO BLINDADO ===
-    sys_prompt = (
-        "You are ANK 1.0 Soberana, an elite reasoning AI.\n"
-        "You MUST format EVERY response exactly like this template:\n\n"
-        "<think>\n"
-        "[Here you MUST write your internal thoughts ONLY in ENGLISH. "
-        "Talk ONLY to yourself using 'I need to...', 'Let me check...'. "
-        "NEVER address the user here. NEVER write the final code here. NEVER say 'hello' here. "
-        "Just plan the solution privately.]\n"
-        "</think>\n"
-        "[Here you MUST write the final response to the user in elegant PORTUGUESE. "
-        "If the user asked for code, you MUST write the ENTIRE, COMPLETE, and RUNNABLE code in ONE SINGLE MARKDOWN BLOCK in this area. NEVER split the code.]"
-    )
+    # === A MÁGICA: PROMPTS ESPECÍFICOS POR AGENTE ===
     
-    if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust technical depth."
+    # 1. Agente SOBERANA (O Generalista Focado em Lógica Geral)
+    if agent_type == 'soberana':
+        sys_prompt = (
+            "You are ANK SOBERANA, an elite reasoning AI.\n"
+            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
+            "You MUST start by writing <think>. Inside <think>...</think>, talk ONLY TO YOURSELF in ENGLISH. "
+            "Analyze the problem and plan the solution. NEVER address the user here. NEVER write the final code here.\n"
+            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
+            "Switch to PORTUGUESE. Provide the final, elegant explanation to the user.\n"
+        )
+        agent_name = "ANK SOBERANA"
+
+    # 2. Agente CODEX (O Engenheiro de Software)
+    elif agent_type == 'codex':
+        sys_prompt = (
+            "You are ANK CODEX, a 10x Senior Software Engineer AI.\n"
+            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
+            "You MUST start by writing <think>. Inside <think>...</think>, brainstorm the architecture, libraries, and logic in ENGLISH. "
+            "NEVER address the user here. NEVER write the final code here.\n"
+            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
+            "Switch to PORTUGUESE. You do NOT like small talk. "
+            "You MUST provide the ENTIRE, COMPLETE, and RUNNABLE code in ONE SINGLE MARKDOWN BLOCK. NEVER split the code into parts. "
+            "Provide minimal but highly technical explanation after the code block.\n"
+        )
+        agent_name = "ANK CODEX"
+
+    # 3. Agente COPY (O Copywriter / Marketing)
+    elif agent_type == 'copy':
+        sys_prompt = (
+            "You are ANK COPY, an elite Direct-Response Copywriter and Marketing AI.\n"
+            "PHASE 1: THE INNER MONOLOGUE (Inside <think> tags)\n"
+            "You MUST start by writing <think>. Inside <think>...</think>, analyze the target audience, pain points, and psychological triggers in ENGLISH. "
+            "NEVER address the user here. NEVER write the final copy here.\n"
+            "PHASE 2: THE FINAL ANSWER (After </think> tag)\n"
+            "Switch to PORTUGUESE. Write extremely persuasive, high-converting copy using bold formatting, bullet points, and strong Call-To-Actions (CTAs).\n"
+        )
+        agent_name = "ANK COPY"
+
+    else:
+        sys_prompt = "You are ANK 1.0. Answer in Portuguese."
+        agent_name = "ANK"
+
+    # Injeta regras VIP
+    if plano_atual == "Pro": sys_prompt += " The user is PRO. Provide highly robust depth."
     elif plano_atual == "Plus": sys_prompt += " The user is PLUS. You are an absolute elite agent. Think masterfully."
     
     try:
@@ -270,15 +303,16 @@ def chat():
         ans = res.choices[0].message.content
         
         sess["messages"][-1]["content"] = msg_original
-        sess["messages"].append({"role": "assistant", "content": ans})
+        # Guardamos a mensagem com uma flag invisível para o frontend saber qual agente respondeu!
+        sess["messages"].append({"role": "assistant", "content": f"<!--AGENT:{agent_name}-->\n" + ans})
         
-        # CÁLCULO DE CONSUMO DE TOKENS (Queima Rápida)
+        # CÁLCULO DE CONSUMO DE TOKENS
         tokens_gastos = (len(msg_processada) // 2) + int(len(ans) * 1.8) + 200
         user_data["tokens"] -= tokens_gastos
         if user_data["tokens"] < 0: user_data["tokens"] = 0
         
         salvar_db(db)
-        return jsonify({"response": ans, "title": sess["title"], "tokens_restantes": user_data["tokens"]})
+        return jsonify({"response": f"<!--AGENT:{agent_name}-->\n" + ans, "title": sess["title"], "tokens_restantes": user_data["tokens"]})
         
     except Exception as e: 
         sess["messages"][-1]["content"] = msg_original 
